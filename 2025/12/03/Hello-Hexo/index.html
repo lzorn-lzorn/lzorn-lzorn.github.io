@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html 
+	lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> 使用 Hexo 配置个人博客 -  LL&#39;s Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link
+			rel="shortcut icon"
+			href="/1.png"
+			type="image/png"
+		/>
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"></head>
+
+	<body>
+		<div
+			class="kira-background"
+			style="background-image: url('/lib/background/bg5.jpg')"
+		></div>
+		<div class="kira-header">
+    <a
+        class="kira-drawer-button mdui-ripple"
+        title="导航栏"
+        onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');"
+    >
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL&#39;s Blog">
+        <img
+			src="/1.png"
+			alt="Lzorn"
+		/>
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img
+				src="/1.png"
+				alt="Lzorn"
+			/>
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>1</div>
+		<div><span>标签</span>0</div>
+		<div><span>分类</span>1</div>
+	</div>
+	<div class="kira-list">
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/"
+			title="回到首页"
+		>
+			<i
+				class="kirafont
+					
+						icon-home
+					"
+			></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/archive.html"
+			title="文章归档"
+		>
+			<i
+				class="kirafont
+					
+						icon-container
+					"
+			></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/about.html"
+			title="关于本人"
+		>
+			<i
+				class="kirafont
+					
+						icon-user
+					"
+			></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a
+				class="mdui-ripple"
+				href="mailto:your-email@example.com"
+				target="_blank"
+				mdui-tooltip="{content: '邮箱'}"
+				style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-link
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://space.bilibili.com/13063107"
+				target="_blank"
+				mdui-tooltip="{content: '哔哩哔哩'}"
+				style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-bilibili
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://github.com/lzorn-lzorn/"
+				target="_blank"
+				mdui-tooltip="{content: 'GitHub'}"
+				style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-github
+					"
+				></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">1</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		&copy; 2025
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br />
+		
+		
+	</div>
+</div>
+<div
+	class="kira-sidebar-modal"
+	id="sidebar-modal"
+	onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"
+></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img />
+                </div>
+                <div class="kira-image-now">
+                    <img />
+                </div>
+                <div class="kira-image-next">
+                    <img />
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img
+				data-src="/lib/background/bg2.jpg"
+				data-sizes="auto"
+				alt="使用 Hexo 配置个人博客"
+				class="lazyload kira-post-cover-image disabled-kira-image"
+			/>
+			<h1>使用 Hexo 配置个人博客</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2025年12月03日</a>
+			<a><i class="kirafont icon-edit-fill"></i>796 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 3 分钟</a>
+		</div>
+		<!-- toc --><html><head></head><body><ul>
+<li><a href="#hello-hexo">Hello Hexo</a></li>
+<li><a href="#%E9%83%A8%E7%BD%B2%E8%87%B3-githubio">部署至 github.io</a></li>
+<li><a href="#%E5%A4%9A%E7%AB%AF%E5%90%8C%E6%AD%A5">多端同步</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="hello-hexo">Hello Hexo</span></h1><p>Hexo 是基于 node.js 的个人博客框架:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">brew install node@18 <span class="hljs-comment"># 可以使用任何包管理器, @之后是版本号</span><br><span class="hljs-comment"># npm 会和 nodejs一起安装</span><br></code></pre></td></tr></tbody></table></figure>
+<p>安装 Hexo:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g hexo-cli <span class="hljs-comment"># 全局安装 Hexo</span><br>hexo init blog-name<br><span class="hljs-built_in">cd</span> blog-name<br>npm install<br></code></pre></td></tr></tbody></table></figure>
+<p>这里的 <code>npm install</code> 是安装 hexo 内的依赖模块, hexo init 时在 node_modules 中写入了依赖项, <code>npm install</code> 是读取了内部的 package.json 然后下载依赖.</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo s -p 4000 <span class="hljs-comment"># hexo 会在本地的 4000 端口启动这个静态界面</span><br></code></pre></td></tr></tbody></table></figure>
+<p>打开浏览器, 输入 localhost:4000 就可以查看到这个静态网页</p>
+<p>可以在 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo Themes</a> 中选择你喜欢的主题, 注意看主题的主页有没有安装教学, 因为有的主题可以通过更少的命令跳过以上 hexo init 这些步骤. 例如 <a href="kira.host/hexo/">kira</a></p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 无须 hexo init, 直接</span><br>npm create kira-hexo@latest blog-name <br>npm i hexo-theme-kira<br></code></pre></td></tr></tbody></table></figure>
+<p>在 <code>_config.yml</code> 中, 将 theme 选项设置为kira, 即 <code>theme: kira</code></p>
+<p>修改完之后, 使用 </p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g <span class="hljs-comment"># 重新生成静态网页</span><br>hexo s -p 4000 <span class="hljs-comment"># 在本地查看效果</span><br></code></pre></td></tr></tbody></table></figure>
+
+<h1><span id="%E9%83%A8%E7%BD%B2%E8%87%B3-githubio">部署至 github.io</span></h1><p>在 blog-name 文件夹中, 使用</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git init <br>git config --global user.name <span class="hljs-string">"your-name"</span><br>git config --global user.email <span class="hljs-string">"your-email@xxx.com"</span><br></code></pre></td></tr></tbody></table></figure>
+<p>来初始化一个 git 仓库, 并生成一个 ssh 密钥</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">"your-email@xxx.com"</span><br></code></pre></td></tr></tbody></table></figure>
+<p>然后根据提示, 三次Enter(回车), 表示yes, 生成 SSH-Key, 通过</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub<br><br><span class="hljs-comment"># Windows Powershell:</span><br>Test-Path <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span> <span class="hljs-comment"># 检查文件是否存在</span><br>Get-Content <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span> <span class="hljs-comment"># 显示文件内容 or</span><br><span class="hljs-built_in">cat</span> <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span><br><br><span class="hljs-comment"># Windows cmd:</span><br><span class="hljs-built_in">type</span> <span class="hljs-string">"%USERPROFILE%.ssh\id_rsa.pub"</span> <br></code></pre></td></tr></tbody></table></figure>
+<p>在 个人的 GitHub 主页: settings &gt; SSH and GPG keys &gt; New SSH key, 将在 ssh-keygen 中生成的密钥复制过来<br>然后, 在本地</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -T git@github.com <span class="hljs-comment"># 首次要授权</span><br></code></pre></td></tr></tbody></table></figure>
+<p>在 <code>_config.yml</code> 中, 填写 deploy, 让hexo知道部署的后端在哪, 如果使用github作为后端, 必须创建一个名为 “{your-github-name}.github.io” 其中 {your-github-name} 必须和你的仓库同名</p>
+<figure class="highlight yml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">deploy:</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>    <span class="hljs-attr">repo:</span> <span class="hljs-string">https://github.com/your-github-name/your-github-name.github.io.git</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span> <span class="hljs-comment"># 也有可能是 master, 在仓库的 settings &gt; general &gt; default branch</span><br></code></pre></td></tr></tbody></table></figure>
+<p>最后安装一个 hexo 插件用于部署</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-deployer-git --save<br></code></pre></td></tr></tbody></table></figure>
+<p>最后重新生成, 然后部署既可</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g<br>hexo d<br></code></pre></td></tr></tbody></table></figure>
+
+<h1><span id="%E5%A4%9A%E7%AB%AF%E5%90%8C%E6%AD%A5">多端同步</span></h1><p>为了可以在不同的电脑上编写和上传博客, 需要将本地的这个 hexo 部分的上传至另一个仓库, 每次换到新的电脑上, 安装好 hexo 环境, 从github拉下该仓库写博客上传, 然后本地部署.<br>注意, 之前虽然 git init 创建了仓库, 也通过 <code>hexo d</code> 部署了博客, 但该仓库依然没有链接至远程仓库, 此时使用</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git remote add origin https://github.com/your-github-name/your-blog-repo-name.git<br></code></pre></td></tr></tbody></table></figure>
+<p>去将该仓库上传至远端, 其中要配置 .gitignore文件, 因为有的东西是 hexo 生成的或者 npm 创建的, 不需要上传</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gitignore">.DS_Store<br>Thumbs.db<br>db.json<br>*.log<br>node_modules/<br>public/<br>.deploy*/<br>_multiconfig.yml<br></code></pre></td></tr></tbody></table></figure>
+<p>同时在新的电脑上依然需要重复一遍上述的 ssh-keygen 的操作, 并在 github 上创建新的 SSH-Key, 因为这个一个电脑一个的</p>
+<hr>
+<!-- ## 音乐播放器
+
+<meting-js
+  server="tencent"
+  type="search"
+  id="魔法使いの夜～メインテーマ"
+  mode="circulation"
+  autoplay="false"
+  mutex="true"
+  listmaxheight="340px"
+  preload="auto"
+  theme="#ad7a86">
+</meting-js> -->
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  </body></html>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2025/12/03/Hello-Hexo/" title="http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;03&#x2F;Hello-Hexo&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;03&#x2F;Hello-Hexo&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			  
+			<!-- 先找到与当前文字相同的目录 -->
+			   
+			<!-- 在找到当前文章所在的 index -->
+			          
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/Hexo/">Hexo</a>
+		
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js"
+      data-repo="-your github username-/-your giscus repo-"
+      data-repo-id="-your giscus repo ID-"
+      data-category="Announcements"
+      data-category-id="-giscus category id-"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="light"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async  
+    ></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column">
+	<a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	</body>
+</html>

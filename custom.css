@@ -1,0 +1,638 @@
+/* 更新时间: 2025-12-10 强制刷新浏览器缓存 */
+
+/* 引入 Iosevka 字体 (英文和代码) */
+@import url('https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5.0.1/index.min.css');
+
+/* 引入圆润可爱的中文字体 - 思源黑体圆体 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+/* 引入站酷小薇（可爱圆润） */
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');
+
+/* 引入站酷庆科黄油体（更圆润 - 用于标题） */
+@import url('https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap');
+
+/* 自定义样式 - 调整背景透明度 */
+.kira-background {
+	opacity: 0.55 !important;
+	/* 增大数值可以让背景更明显，范围 0-1 */
+}
+
+/* ===== 博客正文格子背景 ===== */
+
+/* 主内容区域 - 奶白色背景 + 淡米黄色网格线 */
+.kira-content .kira-main-content {
+	background-color: #faf9f6 !important;
+	/* 奶白色背景 */
+	background-image:
+		linear-gradient(to right, rgba(245, 222, 179, 0.3) 1px, transparent 1px),
+		linear-gradient(to bottom, rgba(245, 222, 179, 0.3) 1px, transparent 1px);
+	/* 淡米黄色网格线 rgba(245, 222, 179) 是wheat小麦色 */
+	background-size: 20px 20px !important;
+	/* 20px x 20px 的格子 */
+}
+
+/* 文章内容区域也添加格子背景 */
+.kira-post article {
+	background-color: transparent !important;
+	/* 让文章内容透明，显示下层的格子背景 */
+}
+
+/* 移除文章封面图片上下的黑色渐变遮罩 */
+.kira-post-cover h1::after {
+	display: none !important;
+	/* 隐藏标题的渐变背景遮罩 */
+}
+
+/* 移除封面容器可能存在的伪元素遮罩 */
+.kira-post-cover::before,
+.kira-post-cover::after {
+	display: none !important;
+}
+
+/* 确保封面图片没有额外的遮罩层 */
+.kira-post-cover {
+	box-shadow: none !important;
+	/* 移除可能的阴影效果 */
+	padding-bottom: 35% !important;
+	/* 调整封面图片高度，默认是40%，改为25%使其更扁 */
+}
+
+/* 如果移除遮罩后标题不清晰，可以给标题添加文字阴影 */
+.kira-post-cover h1 {
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+	/* 文字阴影让标题在任何背景下都清晰可见 */
+}
+
+/* 调整文章元信息标签（日期、字数、阅读时间）的高度 */
+.kira-post .kira-post-meta a {
+	padding: 6px 18px !important;
+	/* 减小上下内边距，从10px改为6px，使标签更扁 */
+	border-radius: 15px !important;
+	/* 相应调整圆角，从20px改为15px */
+}
+
+/* 调整首页文章之间的分割线位置 */
+.kira-content .kira-main-content .kira-posts .kira-hr {
+	margin-top: 6px !important;
+	/* 减小上边距，从12px改为6px，使分割线上移 */
+	margin-bottom: 12px !important;
+	/* 保持下边距不变 */
+}
+
+/* ===== 字体设置 ===== */
+
+/* 全局字体：中文用 Noto Sans SC (圆润)，英文用 Iosevka */
+body,
+.kira-post,
+.kira-sidebar,
+.kira-widget {
+	font-family: 'Iosevka', 'Noto Sans SC', 'ZCOOL XiaoWei', 'ZCOOL QingKe HuangYou', 'Microsoft YaHei', '微软雅黑', 'PingFang SC', 'Hiragino Sans GB', sans-serif !important;
+	font-size: 17px !important;
+	/* 增大正文字体 */
+	line-height: 1.8 !important;
+	/* 增加行高，提升可读性 */
+}
+
+/* 文章标题：使用圆润字体 */
+.kira-post h1,
+.kira-post h2,
+.kira-post h3,
+.kira-post h4,
+article h1,
+article h2,
+article h3,
+article h4 {
+	font-family: 'ZCOOL QingKe HuangYou', 'ZCOOL XiaoWei', 'Noto Sans SC', 'Microsoft YaHei', '微软雅黑', sans-serif !important;
+	font-weight: normal !important;
+	/* 圆润字体不需要加粗 */
+}
+
+/* H5 H6 使用稍微正式一点的字体 */
+.kira-post h5,
+.kira-post h6,
+article h5,
+article h6 {
+	font-family: 'ZCOOL XiaoWei', 'Noto Sans SC', 'Microsoft YaHei', '微软雅黑', sans-serif !important;
+	font-weight: normal !important;
+}
+
+/* 侧边栏标题 */
+.kira-widget-title {
+	font-family: 'Iosevka', 'Noto Sans SC', 'ZCOOL XiaoWei', 'ZCOOL QingKe HuangYou', 'Microsoft YaHei', '微软雅黑', sans-serif !important;
+	font-weight: bold !important;
+}
+
+/* 代码字体：使用 Iosevka */
+code,
+pre,
+.hljs,
+.kira-post code,
+.kira-post pre,
+figure.highlight,
+figure.highlight code,
+figure.highlight pre,
+.highlight code,
+.highlight pre {
+	font-family: 'Iosevka', 'Consolas', 'Monaco', 'Courier New', monospace !important;
+	font-size: 15px !important;
+	/* 增大代码字体 */
+	line-height: 1.7 !important;
+	/* 增加代码行高 */
+}
+
+/* 行内代码 */
+.kira-post p code,
+.kira-post li code {
+	font-family: 'Iosevka', 'Consolas', 'Monaco', monospace !important;
+	font-size: 15px !important;
+	/* 行内代码字体大小 */
+	background: rgba(0, 0, 0, 0.05);
+	padding: 2px 6px;
+	border-radius: 3px;
+}
+
+/* ===== 字体大小优化 ===== */
+
+/* 文章正文段落 - 使用站酷小薇（圆润但比标题更正式） */
+.kira-post article p,
+.kira-post article li,
+.kira-post article div {
+	font-family: 'ZCOOL XiaoWei', 'Noto Sans SC', 'Microsoft YaHei', sans-serif !important;
+	/* 正文使用站酷小薇，圆润且易读 */
+	font-size: 17px !important;
+	line-height: 1.8 !important;
+}
+
+/* 文章标题大小和样式优化 */
+.kira-post article h1 {
+	font-size: 2.2em !important;
+	letter-spacing: 1px !important;
+	/* 增加字间距，让圆润字体更美观 */
+}
+
+.kira-post article h2 {
+	font-size: 1.8em !important;
+	letter-spacing: 0.8px !important;
+}
+
+.kira-post article h3 {
+	font-size: 1.5em !important;
+	letter-spacing: 0.6px !important;
+}
+
+.kira-post article h4 {
+	font-size: 1.3em !important;
+	letter-spacing: 0.5px !important;
+}
+
+.kira-post article h5 {
+	font-size: 1.15em !important;
+}
+
+.kira-post article h6 {
+	font-size: 1.05em !important;
+}
+
+/* 引用块 */
+.kira-post article blockquote {
+	font-size: 16px !important;
+	line-height: 1.7 !important;
+}
+
+/* 表格 */
+.kira-post article table {
+	font-size: 16px !important;
+}
+
+/* 列表 */
+.kira-post article ul,
+.kira-post article ol {
+	font-size: 17px !important;
+}
+
+/* ===== 间距优化 ===== */
+
+/* 段落间距 */
+.kira-post article p {
+	margin: 0.8em 0 !important;
+	/* 段落间距 */
+}
+
+/* 代码块样式 - 美化升级版 */
+.kira-post article figure.highlight {
+	margin: 1.2em 0 !important;
+	/* 代码块与正文之间的间距 */
+	padding: 0 !important;
+	/* 移除figure容器的内边距 */
+	background: linear-gradient(135deg, #e8f4f8 0%, #f0f8fc 100%) !important;
+	/* 淡蓝色渐变背景 */
+	border-radius: 12px !important;
+	/* 更大的圆角 */
+	overflow: hidden !important;
+	/* 确保圆角生效 */
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+		0 2px 4px rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+	/* 立体阴影效果 + 内部高光 */
+	border: 1px solid rgba(232, 244, 248, 0.6) !important;
+	/* 细微边框 */
+	transition: all 0.3s ease !important;
+	/* 平滑过渡动画 */
+	position: relative !important;
+}
+
+/* 代码块悬停效果 */
+.kira-post article figure.highlight:hover {
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12),
+		0 3px 6px rgba(0, 0, 0, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+	/* 悬停时阴影加深 */
+	transform: translateY(-2px) !important;
+	/* 轻微上浮效果 */
+}
+
+/* 代码块的 table 不要有额外间距 */
+.kira-post article figure.highlight table {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* 代码块的 tbody, tr, td 都不要有额外间距 */
+.kira-post article figure.highlight tbody,
+.kira-post article figure.highlight tr,
+.kira-post article figure.highlight td {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* 行号列 (.gutter) 的样式美化 - 强制覆盖 */
+.kira-post article figure.highlight td.gutter,
+figure.highlight td.gutter,
+article figure.highlight td.gutter {
+	padding: 1em 0.3em 1em 0.5em !important;
+	/* 行号区域内边距 - 更紧凑 */
+	background: rgba(255, 255, 255, 0.3) !important;
+	/* 行号区域半透明白色背景 */
+	border-right: 2px solid rgba(255, 99, 71, 0.1) !important;
+	/* 橘红色分隔线 */
+	width: 1% !important;
+	/* 自动适应内容宽度 */
+	white-space: nowrap !important;
+	/* 防止行号换行 */
+	text-align: right !important;
+	/* 行号右对齐 */
+	box-sizing: border-box !important;
+}
+
+/* 行号文字样式 */
+.kira-post article figure.highlight td.gutter pre {
+	padding: 0 !important;
+	margin: 0 !important;
+	background-color: transparent !important;
+	color: rgba(0, 0, 0, 0.35) !important;
+	/* 行号浅灰色 */
+	font-weight: 400 !important;
+	user-select: none !important;
+	/* 防止行号被选中 */
+}
+
+/* 代码列 (.code) 的 pre 标签内边距 - 强制覆盖 */
+.kira-post article figure.highlight td.code pre,
+figure.highlight td.code pre,
+article figure.highlight td.code pre {
+	padding: 0.1em 1em 0.1em 0.05em !important;
+	/* 代码内容紧凑内边距 - 左侧紧贴分隔线 */
+	margin: 0 !important;
+	background-color: transparent !important;
+	/* 让代码区域透明，显示外层的渐变背景 */
+	line-height: 1.6 !important;
+	/* 代码行高 */
+	box-sizing: border-box !important;
+}
+
+/* 强制覆盖 highlight.js 的背景色 */
+.kira-post article figure.highlight pre,
+.kira-post article figure.highlight code,
+.kira-post article pre.hljs,
+.kira-post article code.hljs,
+figure.highlight pre.hljs {
+	background-color: transparent !important;
+	/* 所有代码相关元素都使用透明背景，显示外层的淡蓝色 */
+}
+
+/* 针对 highlight.js 的 bash、shell 等语言 */
+.hljs,
+.hljs-bash,
+.highlight {
+	background-color: transparent !important;
+}
+
+/* ===== 代码高亮颜色 - 适配浅色背景 ===== */
+
+/* 基础代码文字颜色 - 深色 */
+.hljs,
+figure.highlight code,
+figure.highlight .hljs {
+	color: #383a42 !important;
+	/* 深灰色文字 */
+}
+
+/* 关键字 - 紫色 */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+	color: #a626a4 !important;
+}
+
+/* 函数名 - 蓝色 */
+.hljs-function,
+.hljs-title,
+.hljs-name {
+	color: #4078f2 !important;
+}
+
+/* 字符串 - 绿色 */
+.hljs-string,
+.hljs-title.class_,
+.hljs-type {
+	color: #50a14f !important;
+}
+
+/* 注释 - 灰色 */
+.hljs-comment,
+.hljs-quote {
+	color: #a0a1a7 !important;
+	font-style: italic;
+}
+
+/* 数字 - 橙色 */
+.hljs-number,
+.hljs-meta {
+	color: #c18401 !important;
+}
+
+/* 变量 - 红色 */
+.hljs-variable,
+.hljs-attr,
+.hljs-attribute {
+	color: #e45649 !important;
+}
+
+/* 符号 - 深灰 */
+.hljs-symbol,
+.hljs-bullet,
+.hljs-built_in {
+	color: #4078f2 !important;
+}
+
+/* Shell 命令特殊颜色 */
+.hljs-meta.hljs-prompt {
+	color: #50a14f !important;
+	font-weight: bold;
+}
+
+/* 标题与正文之间的间距 */
+.kira-post article h1,
+.kira-post article h2,
+.kira-post article h3,
+.kira-post article h4,
+.kira-post article h5,
+.kira-post article h6 {
+	margin-top: 1.5em !important;
+	/* 标题上方间距 */
+	margin-bottom: 0.6em !important;
+	/* 标题下方间距（减小） */
+}
+
+/* 第一个标题上方不需要太多间距 */
+.kira-post article>h1:first-child,
+.kira-post article>h2:first-child,
+.kira-post article>h3:first-child {
+	margin-top: 0.5em !important;
+}
+
+/* 列表与正文的间距 */
+.kira-post article ul,
+.kira-post article ol {
+	margin: 0.8em 0 !important;
+	/* 与段落间距一致 */
+	padding-left: 1.8em !important;
+	/* 列表缩进 */
+}
+
+/* 列表项之间的间距 */
+.kira-post article li {
+	margin: 0.3em 0 !important;
+	/* 列表项间距 */
+}
+
+/* 嵌套列表的间距 */
+.kira-post article li>ul,
+.kira-post article li>ol {
+	margin: 0.3em 0 !important;
+}
+
+/* 引用块的间距 */
+.kira-post article blockquote {
+	margin: 1em 0 !important;
+	padding: 0.8em 1em !important;
+}
+
+/* 表格的间距 */
+.kira-post article table {
+	margin: 1.2em 0 !important;
+}
+
+/* 图片的间距 */
+.kira-post article img {
+	margin: 1em 0 !important;
+}
+
+/* 水平分割线的间距 */
+.kira-post article hr {
+	margin: 2em 0 !important;
+}
+
+/*
+ * 字体说明：
+ * 
+ * 中文字体推荐：
+ * - 'STKaiti', 'KaiTi' - 楷体（优雅、传统）
+ * - 'STSong', 'SimSun' - 宋体（正式、易读）
+ * - 'STHeiti', 'SimHei' - 黑体（现代、粗体）
+ * - 'STFangsong' - 仿宋（复古风格）
+ * - 'Microsoft YaHei' - 微软雅黑（现代、清晰）
+ * 
+ * 英文字体推荐：
+ * - 'Georgia', serif - 优雅衬线体
+ * - 'Times New Roman', serif - 经典衬线体
+ * - 'Arial', sans-serif - 简洁无衬线
+ * - 'Helvetica', sans-serif - 现代无衬线
+ * - 'Courier New', monospace - 等宽字体
+ * 
+ * 艺术字体推荐（需要额外引入）：
+ * - 'Noto Serif SC' - 思源宋体
+ * - 'Noto Sans SC' - 思源黑体
+ * - 'ZCOOL XiaoWei' - 站酷小薇
+ * - 'Ma Shan Zheng' - 马善政楷书
+ */
+
+/* ===== 侧边栏菜单颜色设置 ===== */
+
+/* 侧边栏菜单项文字颜色 - 橘红色 */
+.kira-sidebar .kira-list .kira-list-item {
+	color: #FF6347 !important;
+	/* 橘红色 (Tomato) */
+	font-weight: bold !important;
+	/* 加粗字体 */
+}
+
+/* 菜单项图标颜色 */
+.kira-sidebar .kira-list .kira-list-item i {
+	color: #FF6347 !important;
+}
+
+/* 菜单项悬停效果 */
+.kira-sidebar .kira-list .kira-list-item:hover {
+	color: #FF4500 !important;
+	/* 悬停时更深的橘红色 */
+	background-color: rgba(255, 99, 71, 0.1) !important;
+}
+
+/* 当前激活的菜单项 */
+.kira-sidebar .kira-list .kira-list-item.current {
+	color: #FF4500 !important;
+	background-color: rgba(255, 99, 71, 0.15) !important;
+	font-weight: bold !important;
+}
+
+/* ===== 侧边栏菜单点击抖动动画 ===== */
+
+/* 定义抖动动画 */
+@keyframes shake {
+
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		transform: translateX(-3px);
+	}
+
+	20%,
+	40%,
+	60%,
+	80% {
+		transform: translateX(3px);
+	}
+}
+
+/* 点击时触发抖动效果 */
+.kira-sidebar .kira-list .kira-list-item:active {
+	animation: shake 0.5s ease-in-out;
+	/* 点击时播放0.5秒的抖动动画 */
+}
+
+/* ===== 代码块额外美化 ===== */
+
+/* 代码选中效果 */
+.kira-post article figure.highlight code::selection,
+.kira-post article figure.highlight pre::selection {
+	background: rgba(255, 99, 71, 0.3) !important;
+	/* 选中时橘红色半透明背景 */
+	color: inherit !important;
+}
+
+/* 代码块滚动条美化 */
+.kira-post article figure.highlight pre::-webkit-scrollbar {
+	height: 8px !important;
+	width: 8px !important;
+}
+
+.kira-post article figure.highlight pre::-webkit-scrollbar-track {
+	background: rgba(255, 255, 255, 0.3) !important;
+	border-radius: 4px !important;
+}
+
+.kira-post article figure.highlight pre::-webkit-scrollbar-thumb {
+	background: rgba(255, 99, 71, 0.3) !important;
+	border-radius: 4px !important;
+	transition: background 0.3s ease !important;
+}
+
+.kira-post article figure.highlight pre::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 99, 71, 0.5) !important;
+}
+
+/* 代码块顶部装饰条（可选） */
+.kira-post article figure.highlight::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, #FF6347 0%, #FF8C69 50%, #FF6347 100%);
+	/* 橘红色渐变装饰条 */
+	border-radius: 12px 12px 0 0;
+}
+
+/* 行号悬停效果 */
+.kira-post article figure.highlight td.gutter pre .line:hover {
+	color: rgba(255, 99, 71, 0.8) !important;
+	font-weight: 500 !important;
+}
+
+/* ===== 代码块复制按钮美化 - 浅色主题 ===== */
+
+/* 复制按钮容器 - 改为浅色背景 */
+.highlight>.kira-codeblock-copy-wrapper {
+	background-color: rgba(255, 255, 255, 0.9) !important;
+	/* 浅色半透明白色背景 */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+	/* 添加阴影增加层次 */
+	border: 1px solid rgba(0, 0, 0, 0.08) !important;
+	/* 淡淡的边框 */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(100,100,100,0.7)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2'/%3E%3C/svg%3E") !important;
+	/* 深灰色图标 */
+	transition: all 0.25s ease !important;
+}
+
+/* 悬停效果 */
+.highlight:hover>.kira-codeblock-copy-wrapper {
+	background-color: rgba(255, 255, 255, 1) !important;
+	/* 悬停时完全不透明 */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+	/* 悬停时阴影加深 */
+	transform: scale(1.05) !important;
+	/* 轻微放大 */
+}
+
+/* 复制成功状态 - 浅色背景 */
+.highlight>.kira-codeblock-copy-wrapper-copied {
+	background-color: rgba(255, 255, 255, 0.95) !important;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' height='20' width='20' stroke='rgba(80,200,120,1)' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4'/%3E%3C/svg%3E") !important;
+	/* 绿色的勾选图标 */
+}
+
+/* "Copied" 提示文字 - 浅色背景 */
+.highlight>.kira-codeblock-copy-wrapper-copied::before {
+	color: rgba(80, 200, 120, 1) !important;
+	/* 绿色文字 */
+	background-color: rgba(255, 255, 255, 0.95) !important;
+	/* 浅色背景 */
+	font-weight: 600 !important;
+	/* 加粗 */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+	/* 阴影 */
+	border: 1px solid rgba(0, 0, 0, 0.08) !important;
+	border-right: none !important;
+}
