@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html 
+	lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> UE-UI 框架:Slate -  LL&#39;s Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link
+			rel="shortcut icon"
+			href="/1.png"
+			type="image/png"
+		/>
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"></head>
+
+	<body>
+		<div
+			class="kira-background"
+			style="background-image: url('/lib/background/bg5.jpg')"
+		></div>
+		<div class="kira-header">
+    <a
+        class="kira-drawer-button mdui-ripple"
+        title="导航栏"
+        onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');"
+    >
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL&#39;s Blog">
+        <img
+			src="/1.png"
+			alt="Lzorn"
+		/>
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img
+				src="/1.png"
+				alt="Lzorn"
+			/>
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>2</div>
+		<div><span>标签</span>2</div>
+		<div><span>分类</span>2</div>
+	</div>
+	<div class="kira-list">
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/"
+			title="回到首页"
+		>
+			<i
+				class="kirafont
+					
+						icon-home
+					"
+			></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/archive.html"
+			title="文章归档"
+		>
+			<i
+				class="kirafont
+					
+						icon-container
+					"
+			></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/about.html"
+			title="关于本人"
+		>
+			<i
+				class="kirafont
+					
+						icon-user
+					"
+			></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a
+				class="mdui-ripple"
+				href="mailto:your-email@example.com"
+				target="_blank"
+				mdui-tooltip="{content: '邮箱'}"
+				style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-link
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://space.bilibili.com/13063107"
+				target="_blank"
+				mdui-tooltip="{content: '哔哩哔哩'}"
+				style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-bilibili
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://github.com/lzorn-lzorn/"
+				target="_blank"
+				mdui-tooltip="{content: 'GitHub'}"
+				style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-github
+					"
+				></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/游戏开发-Unreal-Engine/">
+              游戏开发 Unreal Engine
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/UE/" style="font-size: 10px;">UE</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">2</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		&copy; 2025
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br />
+		
+		
+	</div>
+</div>
+<div
+	class="kira-sidebar-modal"
+	id="sidebar-modal"
+	onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"
+></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img />
+                </div>
+                <div class="kira-image-now">
+                    <img />
+                </div>
+                <div class="kira-image-next">
+                    <img />
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img
+				data-src="/lib/background/bg3.jpg"
+				data-sizes="auto"
+				alt="UE-UI 框架:Slate"
+				class="lazyload kira-post-cover-image disabled-kira-image"
+			/>
+			<h1>UE-UI 框架:Slate</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2025年12月10日</a>
+			<a><i class="kirafont icon-edit-fill"></i>2.3k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 10 分钟</a>
+		</div>
+		<html><head></head><body><h1><span id="ue%E7%9A%84ui%E6%A1%86%E6%9E%B6-slate">UE的UI框架-Slate</span></h1><p>UE 使用 C++ 实现了自己原生的一套UI界面, 这里的 C++ 是纯C++ 并不是使用了 UObject 的C++, 原因是 UObject 系统对于要求流程丝滑的 UI 界面而已太过沉重. 但是对于游戏中用户界面又必须要被整个GC所接管, 例如玩家的血条, 这里的血条控件应该和玩家单位使用同一套回收机制. 所以 UE 使用一个继承自 UObject 的类去包裹 Slate 的对象, 即 UMG 对象. 换句话说, UMG 对象只是 Slate 对象的容器, 真正的逻辑都执行在 Slate 中.</p>
+<p><code>FSlateApplication</code> 是 Slate 系统的入口. <code>FEngineLoop::Tick</code> 通过 <code>FSlateApplication::Tick</code> 渲染 Slate 已经执行其逻辑</p>
+<h3><span id="%E6%8E%A7%E4%BB%B6%E6%A0%91%E6%9C%BA%E5%88%B6">控件树机制</span></h3><p>控件树: 在UI设计中, 窗口之间的逻辑关系是一种树关系, 在不同的系统中使用到了不同的方式来组织管理控件树<br><code>FWidgetPath</code> 是对于控件树的垂直切片(vertical slice), 是从某一个节点A开始到另一个可达子节点B路径的表示. <code>FArrangedChildren</code> 是内部的容器表示, 内部存有 <code>FArrangedWidget</code> (保有控件指针 <code>TSharedRef&lt;SWidget&gt;</code> 和 位置信息 <code>FGeometry</code>)<br><img data-fancybox="gallery" data-sizes="auto" data-src="/images/FWidgetPath.png" alt="FWidgetPath" class="lazyload"></p>
+<h3><span id="%E5%B1%8F%E5%B9%95%E7%BD%91%E6%A0%BC-fhittestgrid">屏幕网格 <code>FHittestGrid</code></span></h3><p>屏幕网格结构 <code>FHittestGrid</code>: 其内部有保有 <code>FCell</code> (本质上持有一个SWideget的句柄数组 <code>TArray&lt;int32&gt; WidgetIndexes</code>)<br><img data-fancybox="gallery" data-sizes="auto" data-src="/images/FHittestGrid.png" alt="FHittestGrid示意图" class="lazyload"></p>
+<h2><span id="slate%E7%9A%84%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B">Slate的渲染流程</span></h2><p>渲染流程的调用<br><code>FEngineLoop::Tick</code> -&gt; <code>FSlateApplication::Tick</code><br>-&gt; <code>FSlateApplication::TickAndDrawWidgets</code><br>-&gt; <code>FSlateApplication::DrawWindows</code><br>-&gt; <code>FSlateApplication::DrawWindowAndChildren(CurrentWindow)</code><br>-&gt; <code>FSlateApplication::DrawWindowAndChildren(CurrentWindow-&gt;GetChildWindow())</code><br>-&gt; <code>SWindow::PaintWindow</code><br>-&gt; <code>FSlateInvlidationRoot::PaintInvalidationRoot</code>: FSlateInvalidationContext 是一次窗口/绘制遍历的”上下文对象”, 携带了画布、绘制参数、剪裁/缩放信息和若干开关, 供 PaintInvalidationRoot(以及递归的子控件绘制逻辑) 使用来决定如何绘制/跳过, 如何构建 hit-test, 以及如何处理缓存的绘制元素<br>-&gt; <code>SWindow::PaintSlowPath</code>: 慢路径绘制, 一次完整的, 保守的从根到叶的遍历——重新评估布局/可见性/几何, 重建/绘制每个 widget, 更新 hit-test 网格, 并重建或刷新绘制元素缓存(CachedElementData). 它保证在任何结构性或状态变化后画面正确, 但开销大; 因此只有在 fast-path 不可用或检测到需要时才使用.<br>对应的 <code>PaintFastPath</code>: 在没有结构性变化时尽量”重用上帧结果”, 只做必要更新(Eg: 几何/变换、剪裁、z 层调整、对少量“最终更新”widget 的重绘、以及同步 hit-test)<br>-&gt; <code>SWidget::Paint</code>: 准备绘制<br>-&gt; <code>Virtual SWidget::OnPaint</code>: 真正的对应控件绘制<br>-&gt; <code>FSlateDrawElement::MakeBox</code>: 工厂绘制方法, 向命令列表添加矩形类型的绘制.<br><code>FSlateDrawElement</code> 是 Slate 渲染流水线里的最小“绘制命令”单元：框架把 UI 的视觉输出描述为按序列出的若干 <code>FSlateDrawElement</code>，这些元素最终被打包成 render batches 并提交到渲染器/GPU</p>
+<p>实际上真正向GPU提交绘制命令并不在Slate层中, FSlateApplication 将所有数据准备好之后, 在 <code>FSlateApplication::PrivateDrawWindows</code> 中调用 <code>Renderer-&gt;DrawWindows</code><br>最后进入 <code>SlateRHIRender::DrawWindow_RenderThread</code> 中调用 <code>FRHICommandList::BeginDrawingViewport</code>(RHICmdList) -&gt;<br><code>FRHICommandList::RHIBeginDrawingViewport</code> (GetContext()), 进入真实运行的在当前系统的 RenderDynamicRHI 封装中 -&gt;<br><code>FRHICommandList::BeginRenderPass</code> (RHICmdList) -&gt;<br><code>FSlateRHIRenderingPolicy::DrawElements</code> (RenderingPolicy) 内部会设置各种和渲染有关的细节(Eg: 顶点着色器, 像素着色器, 纹理, 渲染资源), 其中每一次对 <code>FRHICommandList::DrawIndexedPrimitive</code> 的调用就是一次 DrawCall</p>
+<h2><span id="slate%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94">Slate的事件响应</span></h2><p>Slate 系统的用于处理用户输入的类为 FSlateUser(不仅能处理输入)<br><code>FSlateUser</code> 表示一个逻辑上的用户/输入上下文(包含指针位置、捕获、焦点路径、tooltip 状态、drag-drop 状态等), 一个 <code>FSlateUser</code> 会管理一个或多个指针索引（鼠标、触摸点等）以及与该用户相关的状态, 手柄会控制光标和指针, 所以插入手柄会增加一个 <code>FSlateUser</code>, 但是并不是随便插入一个交互设备就能添加一个 <code>FSlateUser</code>. 其主要负责 Cursor (光标):</p>
+<ul>
+<li>Focus: 聚焦</li>
+<li>Capture: 捕获</li>
+<li>DragDrop: 拖动</li>
+<li>Draw: 绘制<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/j756915370/article/details/121964442">Slate 的事件响应</a></li>
+</ul>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/images/%E7%82%B9%E5%87%BB%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94%E6%B5%81%E7%A8%8B.png" alt="点击事件响应流程" class="lazyload"></p>
+<p>Slate 中基类是 <code>SWidget</code>, 继承 <code>SWidget</code> 的有另外三个基础类:</p>
+<ul>
+<li><code>SPanel</code>&nbsp;: 有多个子节点</li>
+<li><code>SLeafWidget</code>&nbsp;: 没有子节点</li>
+<li><code>SCompoundWidget</code>&nbsp;: 可以有一个子节点</li>
+</ul>
+<h1><span id="ue%E7%9A%84%E6%B8%B8%E6%88%8Fui-umg">UE的游戏UI-UMG</span></h1><h2><span id="ui-%E6%BB%9A%E5%8A%A8%E5%92%8C%E7%82%B9%E5%87%BB">UI 滚动和点击</span></h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1965075031336916853">知乎 - UMG拖拽、滚动、单击、双击兼容解决方案</a></p>
+<h1><span id="%E4%BD%BF%E7%94%A8slate">使用Slate</span></h1><p>Slate 本质上是一个UI框架, 所以你可以基于 Slate 扩展蓝图工具, 亦或者基于 Slate 创建自己的 UMG 控件.<br>在 Slate 中提供了了对用户界面命令元数据的抽象: UI Command, 其描述了一个可在 UI 中表现, 可被快捷键触发, 可被菜单/工具栏/快捷键系统绑定的操作, 但它本身不包含执行逻辑. 并提供 命令提供名字, 显示文本, 提示(tooltip), 类型(按钮/切换/复选等)、以及默认快捷键等信息. 实际的执行行为由命令被映射到的 action/delegate(例如通过 <code>FUICommandList::MapAction</code> 提供的 <code>Execute/CanExecute/IsChecked</code> 委托)来实现</p>
+<blockquote>
+<p>[UI扩展点]<br>编辑器偏好设置 &gt; 其他 &gt; 开发者工具 &gt; 显示UI扩展点 &gt; true<br>Editor Preference &gt; General &gt; Miscellaneous &gt; Developer Tools &gt; Display UI Extension Pointers &gt; true.<br>开启之后, 通过这些绿色的字就说明UI可以扩展的位置.</p>
+</blockquote>
+<p>创建菜单项: 将表项注册至 <code>UToolMenus</code> 中</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">FMyUICommands</span> : <span class="hljs-keyword">public</span> TCommands&lt;FMyUICommands&gt;{<br><span class="hljs-keyword">public</span>:<br>	<span class="hljs-built_in">FMyUICommands</span>()<br>		: <span class="hljs-built_in">TCommands</span>&lt;FMyUICommands&gt;(<br>		<span class="hljs-comment">/* </span><br><span class="hljs-comment">			InContextName: 上下文的唯一名称 (FName), </span><br><span class="hljs-comment">			在 FInputBindingManager 中索引/查找此命令集合 </span><br><span class="hljs-comment">		*/</span><br>			<span class="hljs-built_in">TEXT</span>(<span class="hljs-string">"FMyUICommands"</span>),<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			InContextDesc: 上下文的本地化描述 (FText)</span><br><span class="hljs-comment">		*/</span><br>			<span class="hljs-built_in">NSLOCTEXT</span>(<br>				<span class="hljs-string">"Contexts"</span>,  <span class="hljs-comment">// 是本地化命名空间</span><br>				<span class="hljs-string">"MyEditorTools"</span>,  <span class="hljs-comment">// 键</span><br>				<span class="hljs-string">"MyEditorTools Plugin"</span> <span class="hljs-comment">// 默认文本</span><br>			),<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			InContextParent:上级上下文 (FName), 用于建立命令上下文层级/继承关系</span><br><span class="hljs-comment">			如果不需要父上下文, 用 NAME_None</span><br><span class="hljs-comment">		*/</span><br>			NAME_None,<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			InStyleSetName: 指定样式集</span><br><span class="hljs-comment">			用于在生成工具栏按钮/菜单项时查找图标(Slate 样式表)</span><br><span class="hljs-comment">			通常通过自定义模块 style 的 GetStyleSetName() 提供</span><br><span class="hljs-comment">		*/</span><br>			MyEditorToolsStyle::<span class="hljs-built_in">GetStyleSetName</span>()<br>		)<br>	{<br>	}<br>	<br>	<span class="hljs-comment">/*</span><br><span class="hljs-comment">		Register() 会把命令上下文注册到全局的 FInputBindingManager</span><br><span class="hljs-comment">		以便于快捷键管理/重绑定/菜单自动显示快捷键等</span><br><span class="hljs-comment">	*/</span><br>	<span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">RegisterCommands</span><span class="hljs-params">()</span> <span class="hljs-keyword">override</span> </span>{<br>		<span class="hljs-built_in">UI_COMMAND</span>(<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			MemberVariableName: 要赋值的成员变量名(这里是 PluginAction)</span><br><span class="hljs-comment">			type: TSharedPtr&lt;FUICommandInfo&gt;</span><br><span class="hljs-comment">		*/</span><br>			PluginAction, <br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			FriendlyName: 命令在 UI 中显示的短名称</span><br><span class="hljs-comment">			type: FText 或 const char*，宏会包成 TEXT(...) / LOCTEXT</span><br><span class="hljs-comment">		*/</span><br>			<span class="hljs-string">"MyEditorTools"</span>, <br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			InDescription: 更详细的描述或 tooltip(显示在鼠标悬停等场景)</span><br><span class="hljs-comment">		*/</span><br>			<span class="hljs-string">"Execute MyEditorTools Action"</span>,<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			CommandType: EUserInterfaceActionType，指示命令类型:</span><br><span class="hljs-comment">				Button, ToggleButton, RadioButton, Check</span><br><span class="hljs-comment">			这影响菜单项/工具栏如何呈现以及是否支持切换/选中状态</span><br><span class="hljs-comment">		*/</span><br>			EUserInterfaceActionType::Button,<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			InDefaultChord (或 FInputGesture/FInputChord): 命令的默认快捷键</span><br><span class="hljs-comment">			如果为空或FInputGesture()则无默认快捷键</span><br><span class="hljs-comment">		*/</span><br>			<span class="hljs-built_in">FInputGesture</span>()<br>		)<br>	}<br><span class="hljs-keyword">public</span>:<br>	TSharedPtr&lt;FUICommandInfo&gt; PluginAction;<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>这里涉及到三个内容:<br>MyEditorTools: 用户自定义的插件<br>FMyUICommands: 用户自定义的UI Commands<br>MyEditorToolsStyle: 用户自定义插件的风格化文件<br>他们之间的关系是:</p>
+<ol>
+<li><p>在模块的 StartupModule() 中注册命令集合（只需注册一次）：<br>void FMyModule::StartupModule()<br>{<br>FMyUICommands::Register(); // 创建并注册上下文到 FInputBindingManager<br>// 可选：在此处注册样式（图标等）<br>}</p>
+</li>
+<li><p>在模块或 UI 类中创建命令列表并把命令映射到具体执行回调：<br>// 通常在 Widget/Tool 的构造或初始化中：<br>TSharedRef<fuicommandlist> CommandList = MakeShared<fuicommandlist>();</fuicommandlist></fuicommandlist></p>
+<p>// MapAction 将 FUICommandInfo（元数据）与执行逻辑、是否可执行、是否选中等委托绑定<br>CommandList-&gt;MapAction(<br>FMyUICommands::Get().PluginAction,<br>FExecuteAction::CreateSP(this, &amp;FMyTool::ExecutePluginAction),      // 执行回调<br>FCanExecuteAction::CreateSP(this, &amp;FMyTool::CanExecutePluginAction) // 可选：是否允许执行<br>// 可选 FIsActionChecked 等回调用于 Toggle/Check 类型<br>);</p>
+</li>
+<li><p>在菜单/工具栏生成时使用命令信息（它会自动显示文本和快捷键）：<br>FMenuBuilder MenuBuilder(true, CommandList);<br>MenuBuilder.AddMenuEntry( FMyUICommands::Get().PluginAction );</p>
+<p>或者在工具栏里：<br>FToolBarBuilder ToolBarBuilder(CommandList, FMultiBoxCustomization());<br>ToolBarBuilder.AddToolBarButton(FMyUICommands::Get().PluginAction);</p>
+<p>注意：MenuBuilder/ToolBarBuilder 会使用当前绑定（CommandList）来决定是否绘制启用/禁用/选中状态，<br>  并显示当前的快捷键绑定（不是仅显示默认快捷键，而是显示用户可能重绑定后的实际快捷键）。</p>
+</li>
+<li><p>访问命令集合：<br>// 确保已注册后可安全调用：<br>const FMyUICommands&amp; Commands = FMyUICommands::Get();</p>
+<p>// 获取命令的友好名（FText）：<br>FText Friendly = Commands.PluginAction-&gt;GetLabel();</p>
+</li>
+<li><p>注销（通常在模块的 ShutdownModule() 里）：<br>void FMyModule::ShutdownModule()<br>{<br>FMyUICommands::Unregister();<br>// 注：Unregister 会从 FInputBindingManager 移除上下文并广播 CommandsChanged。<br>}</p>
+</li>
+<li><p>关于本地化（LOCTEXT/NSLOCTEXT）：</p>
+<ul>
+<li>UI_COMMAND 宏期望 LOCTEXT_NAMESPACE 在当前翻译单元已定义（宏内部使用 LOCTEXT 来创建本地化文本）。</li>
+<li>上文示例把上下文描述用 NSLOCTEXT 明确写在构造器中，但 UI_COMMAND 仍将使用 LOCTEXT_NAMESPACE。</li>
+<li>典型做法是在实现 RegisterCommands 的 .cpp 文件顶部写：<br>  #define LOCTEXT_NAMESPACE “FMyUICommands”<br>并在文件末尾写：<br>  #undef LOCTEXT_NAMESPACE</li>
+</ul>
+</li>
+<li><p>关于快捷键（FInputGesture / FInputChord）：</p>
+<ul>
+<li>FInputChord 表示按键组合（例如 Ctrl+Shift+S）。FInputGesture 是较高层的通用类型（在不同引擎版本中细节可能不同）。</li>
+<li>在 UI_COMMAND 中传入空构造表示没有默认绑定；用户或系统可以在运行时通过 FInputBindingManager 修改绑定。</li>
+</ul>
+</li>
+</ol>
+<p>总结：</p>
+<ul>
+<li>UI Command (FUICommandInfo) = 命令的元数据（显示名/描述/默认快捷键/类型/样式信息）。</li>
+<li>TCommands<t> 用于在模块中集中声明和注册这些命令集合（并以上下文名称在全局绑定管理器中注册以便复用）。</t></li>
+<li>命令本身不包含执行逻辑；要把命令变为可执行，需要用 FUICommandList::MapAction 将执行委托绑定到命令上，然后将 CommandList 提供给菜单/工具栏构建器或输入处理逻辑。</li>
+</ul>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  </body></html>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2025/12/10/UE-UI%E6%A1%86%E6%9E%B6Slate/" title="http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;10&#x2F;UE-UI框架Slate&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;10&#x2F;UE-UI框架Slate&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			      
+			<!-- 先找到与当前文字相同的目录 -->
+			   
+			<!-- 在找到当前文章所在的 index -->
+			          
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91-Unreal-Engine/">游戏开发 Unreal Engine</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/UE/" rel="tag">UE</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js"
+      data-repo="-your github username-/-your giscus repo-"
+      data-repo-id="-your giscus repo ID-"
+      data-category="Announcements"
+      data-category-id="-giscus category id-"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="top"
+      data-theme="light"
+      data-lang="en"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async  
+    ></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column">
+	<a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	</body>
+</html>
