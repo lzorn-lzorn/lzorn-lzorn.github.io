@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html 
+	lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> UE-UI框架Slate{1}-使用Slate扩展UI -  LL&#39;s Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link
+			rel="shortcut icon"
+			href="/1.png"
+			type="image/png"
+		/>
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"></head>
+
+	<body>
+		<div
+			class="kira-background"
+			style="background-image: url('/lib/background/bg5.jpg')"
+		></div>
+		<div class="kira-header">
+    <a
+        class="kira-drawer-button mdui-ripple"
+        title="导航栏"
+        onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');"
+    >
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL&#39;s Blog">
+        <img
+			src="/1.png"
+			alt="Lzorn"
+		/>
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img
+				src="/1.png"
+				alt="Lzorn"
+			/>
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>3</div>
+		<div><span>标签</span>2</div>
+		<div><span>分类</span>2</div>
+	</div>
+	<div class="kira-list">
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/"
+			title="回到首页"
+		>
+			<i
+				class="kirafont
+					
+						icon-home
+					"
+			></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/archive.html"
+			title="文章归档"
+		>
+			<i
+				class="kirafont
+					
+						icon-container
+					"
+			></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/about.html"
+			title="关于本人"
+		>
+			<i
+				class="kirafont
+					
+						icon-user
+					"
+			></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a
+				class="mdui-ripple"
+				href="mailto:your-email@example.com"
+				target="_blank"
+				mdui-tooltip="{content: '邮箱'}"
+				style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-link
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://space.bilibili.com/13063107"
+				target="_blank"
+				mdui-tooltip="{content: '哔哩哔哩'}"
+				style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-bilibili
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://github.com/lzorn-lzorn/"
+				target="_blank"
+				mdui-tooltip="{content: 'GitHub'}"
+				style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-github
+					"
+				></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">2</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/UE/" style="font-size: 10px;">UE</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">3</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		&copy; 2025
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br />
+		
+		
+	</div>
+</div>
+<div
+	class="kira-sidebar-modal"
+	id="sidebar-modal"
+	onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"
+></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img />
+                </div>
+                <div class="kira-image-now">
+                    <img />
+                </div>
+                <div class="kira-image-next">
+                    <img />
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img
+				data-src="/lib/background/bg3.jpg"
+				data-sizes="auto"
+				alt="UE-UI框架Slate{1}-使用Slate扩展UI"
+				class="lazyload kira-post-cover-image disabled-kira-image"
+			/>
+			<h1>UE-UI框架Slate{1}-使用Slate扩展UI</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2025年12月10日</a>
+			<a><i class="kirafont icon-edit-fill"></i>2k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 10 分钟</a>
+		</div>
+		<html><head></head><body><h1><span id="%E4%BD%BF%E7%94%A8swidget%E7%9A%84%E5%AE%8F">使用SWidget的宏</span></h1><p>在 <code>DeclarativeSyntaxSupport.h</code> 中定义了大量 Slate 系统中声明 <code>SWidget</code> 需要使用的宏, 在我们定义自己的 Slate Widget 的时候需要使用到这些宏才能和 Slate 中其他组件相互配合, 同时也减少重复代码的方式.</p>
+<h2><span id="slate_begin_args-and-slate_end_args">SLATE_BEGIN_ARGS() And SLATE_END_ARGS()</span></h2><p><code>SLATE_BEGIN_ARGS()</code> And <code>SLATE_END_ARGS()</code> 是 SWidget 中用于声明其类内成员变量使用的宏, 其用法如下:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-comment">/**  </span><br><span class="hljs-comment"> * Widget authors can use SLATE_BEGIN_ARGS and SLATE_END_ARS to add support </span><br><span class="hljs-comment"> * for widget construction via SNew and SAssignNew. </span><br><span class="hljs-comment"> * e.g. </span><br><span class="hljs-comment"> * SLATE_BEGIN_ARGS( SMyWidget )  </span><br><span class="hljs-comment"> *         , _PreferredWidth( 150.0f ) </span><br><span class="hljs-comment"> *         , _ForegroundColor( FLinearColor::White ) </span><br><span class="hljs-comment"> *          {} </span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *     SLATE_ATTRIBUTE(float, PreferredWidth) </span><br><span class="hljs-comment"> *     SLATE_ATTRIBUTE(FSlateColor, ForegroundColor) </span><br><span class="hljs-comment"> * SLATE_END_ARGS() </span><br><span class="hljs-comment"> */</span><br></code></pre></td></tr></tbody></table></figure>
+<p>其内部会给你的类定义一个 <code>FArguments</code> 作为 SWidget 的内置参数(命名参数模式), 只有定义了 <code>FArguments</code> 才可以使用 <code>SNew()</code> 和 <code>SAssignNew()</code> 来创建 <code>SWidget</code> 对象, 具体来说: </p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">SMySlider</span> {<br>    <span class="hljs-built_in">SLATE_BEGIN_ARGS</span>( SMyWidget ) {<span class="hljs-comment">/* 我们自己写的括号 */</span>}<br>    <span class="hljs-built_in">SLATE_END_ARGS</span>()<br>};<br><span class="hljs-comment">// 等价于</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">SMySlider</span> {<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-comment">// SLATE_BEGIN_ARGS</span><br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">FArguments</span> : <span class="hljs-keyword">public</span> TSlateBaseNamedArgs&lt;SMySlider&gt; { <br>        <span class="hljs-keyword">typedef</span> FArguments WidgetArgsType;<br>        <span class="hljs-keyword">typedef</span> SMySlider WidgetType;<br>        <span class="hljs-function">FORCENOINLINE <span class="hljs-title">FArguments</span><span class="hljs-params">()</span></span><br><span class="hljs-function">        </span>{<span class="hljs-comment">/* 我们自己写的括号 */</span>}<br>    }; <span class="hljs-comment">// SLATE_END_ARGS()</span><br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>在这两个 Beign 和 End 开始定义参数, 事件 等等</p>
+<h2><span id="slate_argumentargtype-argname"><code>SLATE_ARGUMENT(ArgType, ArgName)</code></span></h2><p>该宏会定义一个变量和一个同名的Set方法:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-built_in">SLATE_ARGUMENT</span>(ArgType, ArgName)        <span class="hljs-comment">// SLATE_ARGUMENT(int, Value)</span><br><span class="hljs-comment">// 等价于</span><br>ArgType _ArgName;                       <span class="hljs-comment">// int _Value; ArgType _##ArgName</span><br><span class="hljs-comment">// SLATE_PRIVATE_ARGUMENT_FUNCTION</span><br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Value</span><span class="hljs-params">(ArgType InArg)</span>    <span class="hljs-comment">// WidgetArgsType&amp; Value(int InArg)</span></span><br><span class="hljs-function"></span>{<br>    _Value = InArg; <span class="hljs-comment">// _Value 是 _##ArgName 拼接出来的</span><br>    <span class="hljs-comment">// Me() 定义于 TSlateBaseNamedArgs 中用于 链式调用的</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>(); <br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h2><span id="slate_attributeattrtype-attrname"><code>SLATE_ATTRIBUTE(AttrType, AttrName)</code></span></h2><p>Attribute 的语义既可以是一个固定参数(value), 又可以是一个动态绑定(function); 其目的是使得类内成员参数既可以支持静态常量, 又支持随时绑定回调(动态更新), 并在构造接口上以链式调用的方式暴露(<code>SNew(MyWidget).MyAttr(...)</code>)</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">TAttribute&lt;Type&gt; _Attr;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr</span><span class="hljs-params">(TAttribute&lt;Type&gt; InAttribute)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = <span class="hljs-built_in">MoveTemp</span>(InAttribute);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr_Static</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    TIdentity_T&lt;<span class="hljs-keyword">typename</span> TAttribute&lt;Type&gt;::FGetter::<span class="hljs-keyword">template</span> TFuncPtr&lt;VarTypes...&gt;&gt; InFunc,</span></span><br><span class="hljs-params"><span class="hljs-function">    VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;Type&gt;::<span class="hljs-built_in">Create</span>(TAttribute&lt;Type&gt;::FGetter::<span class="hljs-built_in">CreateStatic</span>(InFunc, Vars...));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-comment">// 绑定 Lambda</span><br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr_Lambda</span><span class="hljs-params">(TFunction&lt;Type(<span class="hljs-type">void</span>)&gt;&amp;&amp; InFunctor)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;<span class="hljs-type">float</span>&gt;::<span class="hljs-built_in">Create</span>(Forward&lt;TFunction&lt;<span class="hljs-built_in">Type</span>(<span class="hljs-type">void</span>)&gt;&gt;(InFunctor));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr_Raw</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">     <span class="hljs-keyword">typename</span> TAttribute&lt;Type&gt;::FGetter::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;UserClass, VarTypes...&gt;</span></span><br><span class="hljs-params"><span class="hljs-function">     InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;Type&gt;::<span class="hljs-built_in">Create</span>(TAttribute&lt;Type&gt;::FGetter::<span class="hljs-built_in">CreateRaw</span>(InUserObject, InFunc, Vars...));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr</span><span class="hljs-params">(TSharedRef&lt;UserClass&gt; InUserObjectRef,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-keyword">typename</span> TAttribute&lt;Type&gt;::FGetter::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;UserClass, VarTypes...&gt; InFunc,</span></span><br><span class="hljs-params"><span class="hljs-function">    VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;Type&gt;::<span class="hljs-built_in">Create</span>(TAttribute&lt;Type&gt;::FGetter::<span class="hljs-built_in">CreateSP</span>(InUserObjectRef, InFunc, Vars...));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-keyword">typename</span> TAttribute&lt;Type&gt;::FGetter::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;UserClass, VarTypes...&gt; InFunc,</span></span><br><span class="hljs-params"><span class="hljs-function">    VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;Type&gt;::<span class="hljs-built_in">Create</span>(TAttribute&lt;Type&gt;::FGetter::<span class="hljs-built_in">CreateSP</span>(InUserObject, InFunc, Vars...));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">Attr_UObject</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-keyword">typename</span> TAttribute&lt;Type&gt;::FGetter::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;UserClass, VarTypes...&gt;</span></span><br><span class="hljs-params"><span class="hljs-function">    InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _Attr = TAttribute&lt;Type&gt;::<span class="hljs-built_in">Create</span>(TAttribute&lt;Type&gt;::FGetter::<span class="hljs-built_in">CreateUObject</span>(InUserObject, InFunc, Vars...));<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p><code>SLATE_ATTRIBUTE</code> 本质就是定义一个 TAttibute 对象, <code>TAttribute&lt;T&gt;</code>&nbsp;是 Slate 的”属性”容器: 要么保存一个固定的值, 要么保存一个getter delegate(返回 T 的函数/方法). 使用者通过 <code>Get()</code> 取得当前最新的值. UI 的属性发生变化是 UI 不会主动更新, <code>TAttribute&lt;T&gt;</code> 本质上就是在解决这个问题, 通过绑定各种回调, 来保证调用 <code>Get()</code> 时其值一直是最新的, 例如</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">TAttribute&lt;FText&gt; Label;<br><br><span class="hljs-built_in">SNew</span>(SMyWidget)<br>.<span class="hljs-built_in">Label_Lambda</span>([]() -&gt; FText {<br>    <span class="hljs-keyword">return</span> FText::<span class="hljs-built_in">FromString</span>(FDateTime::<span class="hljs-built_in">Now</span>().<span class="hljs-built_in">ToString</span>());<br>})<br><span class="hljs-comment">// TSharedRef Provider = MakeShared&lt;MyProvider&gt;();</span><br>.<span class="hljs-built_in">Label</span>(Provider, &amp;MyProvider::GetLabel)<br><span class="hljs-comment">// UMyObject* MyObject = xxx;</span><br>.<span class="hljs-built_in">Label_UObject</span>(MyObject, &amp;MyObject::GetLabel)<br><span class="hljs-comment">// 每次 Get() 的时候, 获取当前最新的值</span><br></code></pre></td></tr></tbody></table></figure>
+<p>如果属性背后的数据改变时, 但是没有触发 UI 的重新绘制, UI不会自动重新获取值并更新, 此时在数据改变的调用&nbsp;<code>Widget-&gt;Invalidate(EInvalidateWidgetReason::Paint</code> 就可以强制重新渲染, 但是不要在 FGetter() 中调用开销大的函数, 因为每帧都会调用, 对于开销大的计算要缓存其值.</p>
+<h2><span id="slate_eventdelegatename-eventname">SLATE_EVENT(DelegateName, EventName)</span></h2><p>这个语义与 <code>SLATE_ATTRIBUTE(AttrType, AttrName)</code> 是正好相反的, <code>SLATE_ATTRIBUTE(AttrType, AttrName)</code> 是通过 Getter 来主动拉去变化, 但是 SLATE_EVENT 会定义一个事件, 这个是推送式的, 即 <code>SWidget</code> 在某个时间主动调用 delegate 来通知外部, 而 <code>SLATE_ATTRIBUTE</code> 是 <code>SWidget</code> 主动拉去某个值的变化.<br>该宏希望, 让 widget 的创建者把回调注入到 widget 中, 例如 <code>SNew(SMyWidget).OnClicked(...)</code></p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-built_in">SLATE_EVENT</span>(FOnExSliderValueChangedNative, OnValueChanged) <br><span class="hljs-comment">// 等价于</span><br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(<span class="hljs-type">const</span> FOnExSliderValueChangedNative&amp; InDelegate)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = InDelegate;<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(FOnExSliderValueChangedNative&amp;&amp; InDelegate)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = <span class="hljs-built_in">MoveTemp</span>(InDelegate);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> StaticFuncPtr, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged_Static</span><span class="hljs-params">(StaticFuncPtr InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateStatic</span>(InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> FunctorType, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged_Lambda</span><span class="hljs-params">(FunctorType&amp;&amp; InFunctor, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateLambda</span>(<span class="hljs-built_in">Forward</span>&lt;FunctorType&gt;(InFunctor), Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged_Raw</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">                                   <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TMethodPtr&lt;</span></span><br><span class="hljs-params"><span class="hljs-function">                                       UserClass, VarTypes...&gt; InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateRaw</span>(InUserObject, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged_Raw</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">                                   <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;</span></span><br><span class="hljs-params"><span class="hljs-function">                                       UserClass, VarTypes...&gt; InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateRaw</span>(InUserObject, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(TSharedRef&lt;UserClass&gt; InUserObjectRef,</span></span><br><span class="hljs-params"><span class="hljs-function">                               <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TMethodPtr&lt;UserClass, VarTypes...&gt;</span></span><br><span class="hljs-params"><span class="hljs-function">                               InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateSP</span>(InUserObjectRef, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(TSharedRef&lt;UserClass&gt; InUserObjectRef,</span></span><br><span class="hljs-params"><span class="hljs-function">                               <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;</span></span><br><span class="hljs-params"><span class="hljs-function">                                   UserClass, VarTypes...&gt; InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateSP</span>(InUserObjectRef, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">                               <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TMethodPtr&lt;UserClass, VarTypes...&gt;</span></span><br><span class="hljs-params"><span class="hljs-function">                               InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateSP</span>(InUserObject, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">                               <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TConstMethodPtr&lt;</span></span><br><span class="hljs-params"><span class="hljs-function">                                   UserClass, VarTypes...&gt; InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateSP</span>(InUserObject, InFunc, Vars...);<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br><br><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">UserClass</span>, <span class="hljs-keyword">typename</span>... VarTypes&gt;<br><span class="hljs-function">WidgetArgsType&amp; <span class="hljs-title">OnValueChanged_UObject</span><span class="hljs-params">(UserClass* InUserObject,</span></span><br><span class="hljs-params"><span class="hljs-function">                                       <span class="hljs-keyword">typename</span> FOnExSliderValueChangedNative::<span class="hljs-keyword">template</span> TMethodPtr&lt;</span></span><br><span class="hljs-params"><span class="hljs-function">                                           UserClass, VarTypes...&gt; InFunc, VarTypes... Vars)</span></span><br><span class="hljs-function"></span>{<br>    _OnValueChanged = FOnExSliderValueChangedNative::<span class="hljs-built_in">CreateUObject</span>(InUserObject, InFunc, Vars...); <br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;WidgetArgsType*&gt;(<span class="hljs-keyword">this</span>)-&gt;<span class="hljs-built_in">Me</span>();<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>对于上述例子中 <code>SLATE_EVENT(FOnMyWidgetValueChangedNative, OnValueChanged)</code> 本质上就是定义所有可以定义 <code>FOnMyWidgetValueChangedNative</code> 的方式, 其中 <code>DECLARE_DELEGATE_OneParam(FOnExSliderValueChangedNative, float);</code> 是定义的一个委托 <code>TDelegate&lt;void(float)&gt;</code>. </p>
+<h1><span id="slate-%E6%A1%86%E6%9E%B6%E4%B8%AD%E5%A3%B0%E6%98%8E%E5%BC%8F%E8%AF%AD%E6%B3%95">Slate 框架中声明式语法</span></h1><p>Slate 中每一个控件的操作在 UMG 的界面都可以找到对应, 所以对于常见的 UI 设计, 可以使用 UMG 设计, 然后再将其翻译为 Slate 的声明式语法. 对于 Slate 的声明式语法例如:<br>在以下自定义控件中, 有一系列子控件的 Slot: <code>ChildSlot</code> 该自定义插件继承于 <code>class SCompoundWidget;</code> 其中定义了 <code>FCompoundWidgetOneChildSlot ChildSlot;</code><br>在以下程序中有两个操作符重载:</p>
+<ul>
+<li><code>WidgetArgsType&amp; operator + (typename SlotType::FSlotArguments&amp; SlotToAdd)</code></li>
+<li><code>typename SlotType::FSlotArguments&amp; operator[](TSharedRef&lt;SWidget&gt;&amp;&amp; InChildWidget)</code></li>
+</ul>
+<p>在 <code>[]</code> 中只可以是一个 <code>TSharedRef&lt;SWidget&gt;</code> 类型, 同时 <code>+</code> 后的运算符只能是一个 Slot.<br>同时在 <code>DeclarativeSyntaxSupport.h</code> 中可以看到对于各种宏的使用:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-comment">/**  </span><br><span class="hljs-comment"> * Slate widgets are constructed through SNew and SAssignNew. </span><br><span class="hljs-comment"> * e.g. </span><br><span class="hljs-comment"> * TSharedRef&lt;SButton&gt; MyButton = SNew(SButton);</span><br><span class="hljs-comment"> *      or </span><br><span class="hljs-comment"> * TSharedPtr&lt;SButton&gt; MyButton; </span><br><span class="hljs-comment"> * SAssignNew( MyButton, SButton );</span><br><span class="hljs-comment"> * Using SNew and SAssignNew ensures that widgets are populated |</span><br><span class="hljs-comment"> * 补充另一个例子:</span><br><span class="hljs-comment"> * SHorizontalBox::FArguments BoxArgs;</span><br><span class="hljs-comment"> * ((FSlateBaseNamedArgs&amp;)BoxArgs) = (FSlateBaseNamedArgs)InArgs;</span><br><span class="hljs-comment"> * TSharedRef&lt;SHorizontalBox&gt; HorizontalBox = SArgumentNew(BoxArgs, SHorizontalBox);  </span><br><span class="hljs-comment"> */</span><br></code></pre></td></tr></tbody></table></figure>
+<p>换句话说 <code>SNew(SWidget)</code> 返回的是通过一个类型 <code>SWidget</code> 创建一个局部对象; 而 <code>SAssignNew( SMyWidget, SWidget )</code> 可以将一个对象赋值给另一个对象; <code>SArgumentNew()</code> 则是用已经构造好的命名参数对象( <code>WidgetType::FArguments</code> ) 来构造 <code>SWidget</code></p>
+<ul>
+<li><code>SNew</code> 会构造一个空对象</li>
+<li><code>SArgumentNew()</code> 用已有的参数构造一个对象</li>
+<li><code>SAssignNew()</code> 构造一个对象并赋值给另一个已有的对象<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">ChildSlot  <br>[  <br>    <span class="hljs-built_in">SNew</span>(SHorizontalBox)  <span class="hljs-comment">// 构造一个空的 SHorizontalBox 对象</span><br>    + SHorizontalBox::<span class="hljs-built_in">Slot</span>()  <span class="hljs-comment">// 给 SNew(SHorizontalBox) 添加了一个 Slot </span><br>    .<span class="hljs-built_in">AutoWidth</span>()  <span class="hljs-comment">// 设置 Slot 的各种属性</span><br>    .<span class="hljs-built_in">VAlign</span>(VAlign_Center)  <br>    .<span class="hljs-built_in">Padding</span>(<span class="hljs-number">2.0f</span>)  <br>    [  <span class="hljs-comment">// 在 Slot 中添加一个子控件</span><br>       <span class="hljs-built_in">SAssignNew</span>(SubButton, SButton)  <br>       .<span class="hljs-built_in">OnClicked</span>(<span class="hljs-keyword">this</span>, &amp;SExSlider::HandleSubClicked)  <span class="hljs-comment">// 绑定 Clicked 回调, 返回 FArguments</span><br>       [  <span class="hljs-comment">// SetText() 是 TextBlock 自带的方式, 不是 Slot 中的方法</span><br>          <span class="hljs-built_in">SNew</span>(STextBlock).<span class="hljs-built_in">Text</span>(FText::<span class="hljs-built_in">FromString</span>(<span class="hljs-built_in">TEXT</span>(<span class="hljs-string">"-"</span>)))  <br>       ]  <br>    ]  <br>];<br></code></pre></td></tr></tbody></table></figure>
+对应如下图<br><img data-fancybox="gallery" data-sizes="auto" data-src="/./images/Slate%E5%92%8CUMG%E6%93%8D%E4%BD%9C%E7%9A%84%E5%AF%B9%E5%BA%94.png" alt="Slate和UMG操作的对应.png" class="lazyload"></li>
+</ul>
+<h1><span id="%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BC%96%E8%BE%91%E5%99%A8%E6%8F%92%E4%BB%B6%E7%9A%84%E5%88%9B%E5%BB%BA">第三方编辑器插件的创建</span></h1><h1><span id="%E6%89%A9%E5%B1%95%E7%BC%96%E8%BE%91%E5%99%A8%E6%A8%A1%E5%9D%97">扩展编辑器模块</span></h1><h1><span id="%E8%87%AA%E5%AE%9A%E4%B9%89umg%E7%B1%BB">自定义UMG类</span></h1>
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  </body></html>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2025/12/10/UE-UI%E6%A1%86%E6%9E%B6Slate-1-%E4%BD%BF%E7%94%A8Slate%E6%89%A9%E5%B1%95UI/" title="http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;10&#x2F;UE-UI框架Slate-1-使用Slate扩展UI&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;example.com&#x2F;2025&#x2F;12&#x2F;10&#x2F;UE-UI框架Slate-1-使用Slate扩展UI&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			      
+			<!-- 先找到与当前文字相同的目录 -->
+			      
+			<!-- 在找到当前文章所在的 index -->
+			    
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2025/12/10/UE-UI%E6%A1%86%E6%9E%B6Slate/"> UE-UI框架Slate{0}-UI设计及Slate的机制</a>
+			</div>
+			          
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/UE/">UE</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/UE/" rel="tag">UE</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column">
+	<a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	</body>
+</html>
