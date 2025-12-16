@@ -342,7 +342,22 @@
 			<a><i class="kirafont icon-edit-fill"></i>2k 字</a>
 			<a><i class="kirafont icon-time-circle-fill"></i>大概 10 分钟</a>
 		</div>
-		<html><head></head><body><h1><span id="%E4%BD%BF%E7%94%A8swidget%E7%9A%84%E5%AE%8F">使用SWidget的宏</span></h1><p>在 <code>DeclarativeSyntaxSupport.h</code> 中定义了大量 Slate 系统中声明 <code>SWidget</code> 需要使用的宏, 在我们定义自己的 Slate Widget 的时候需要使用到这些宏才能和 Slate 中其他组件相互配合, 同时也减少重复代码的方式.</p>
+		<!-- toc --><html><head></head><body><ul>
+<li><a href="#%E4%BD%BF%E7%94%A8swidget%E7%9A%84%E5%AE%8F">使用SWidget的宏</a><ul>
+<li><a href="#slate_begin_args-and-slate_end_args">SLATE_BEGIN_ARGS() And SLATE_END_ARGS()</a></li>
+<li><a href="#slate_argumentargtype-argname"><code>SLATE_ARGUMENT(ArgType, ArgName)</code></a></li>
+<li><a href="#slate_attributeattrtype-attrname"><code>SLATE_ATTRIBUTE(AttrType, AttrName)</code></a></li>
+<li><a href="#slate_eventdelegatename-eventname">SLATE_EVENT(DelegateName, EventName)</a></li>
+</ul>
+</li>
+<li><a href="#slate-%E6%A1%86%E6%9E%B6%E4%B8%AD%E5%A3%B0%E6%98%8E%E5%BC%8F%E8%AF%AD%E6%B3%95">Slate 框架中声明式语法</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BC%96%E8%BE%91%E5%99%A8%E6%8F%92%E4%BB%B6%E7%9A%84%E5%88%9B%E5%BB%BA">第三方编辑器插件的创建</a></li>
+<li><a href="#%E6%89%A9%E5%B1%95%E7%BC%96%E8%BE%91%E5%99%A8%E6%A8%A1%E5%9D%97">扩展编辑器模块</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89umg%E7%B1%BB">自定义UMG类</a></li>
+</ul>
+<!-- tocstop -->
+
+<h1><span id="%E4%BD%BF%E7%94%A8swidget%E7%9A%84%E5%AE%8F">使用SWidget的宏</span></h1><p>在 <code>DeclarativeSyntaxSupport.h</code> 中定义了大量 Slate 系统中声明 <code>SWidget</code> 需要使用的宏, 在我们定义自己的 Slate Widget 的时候需要使用到这些宏才能和 Slate 中其他组件相互配合, 同时也减少重复代码的方式.</p>
 <h2><span id="slate_begin_args-and-slate_end_args">SLATE_BEGIN_ARGS() And SLATE_END_ARGS()</span></h2><p><code>SLATE_BEGIN_ARGS()</code> And <code>SLATE_END_ARGS()</code> 是 SWidget 中用于声明其类内成员变量使用的宏, 其用法如下:</p>
 <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-comment">/**  </span><br><span class="hljs-comment"> * Widget authors can use SLATE_BEGIN_ARGS and SLATE_END_ARS to add support </span><br><span class="hljs-comment"> * for widget construction via SNew and SAssignNew. </span><br><span class="hljs-comment"> * e.g. </span><br><span class="hljs-comment"> * SLATE_BEGIN_ARGS( SMyWidget )  </span><br><span class="hljs-comment"> *         , _PreferredWidth( 150.0f ) </span><br><span class="hljs-comment"> *         , _ForegroundColor( FLinearColor::White ) </span><br><span class="hljs-comment"> *          {} </span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *     SLATE_ATTRIBUTE(float, PreferredWidth) </span><br><span class="hljs-comment"> *     SLATE_ATTRIBUTE(FSlateColor, ForegroundColor) </span><br><span class="hljs-comment"> * SLATE_END_ARGS() </span><br><span class="hljs-comment"> */</span><br></code></pre></td></tr></tbody></table></figure>
 <p>其内部会给你的类定义一个 <code>FArguments</code> 作为 SWidget 的内置参数(命名参数模式), 只有定义了 <code>FArguments</code> 才可以使用 <code>SNew()</code> 和 <code>SAssignNew()</code> 来创建 <code>SWidget</code> 对象, 具体来说: </p>
