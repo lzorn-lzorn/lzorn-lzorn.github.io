@@ -339,56 +339,13 @@
 		
 		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
 			<a><i class="kirafont icon-calendar-fill"></i>2025年12月03日</a>
-			<a><i class="kirafont icon-edit-fill"></i>908 字</a>
-			<a><i class="kirafont icon-time-circle-fill"></i>大概 4 分钟</a>
+			<a><i class="kirafont icon-edit-fill"></i>70 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 1 分钟</a>
 		</div>
-		<!-- toc --><html><head></head><body><ul>
-<li><a href="#hello-hexo">Hello Hexo</a></li>
-<li><a href="#%E9%83%A8%E7%BD%B2%E8%87%B3-githubio">部署至 github.io</a></li>
-<li><a href="#%E5%A4%9A%E7%AB%AF%E5%90%8C%E6%AD%A5">多端同步</a></li>
-<li><a href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E6%9D%A1%E5%8D%9A%E5%AE%A2">创建一条博客</a></li>
-</ul>
-<!-- tocstop -->
-
-<h1><span id="hello-hexo">Hello Hexo</span></h1><p>Hexo 是基于 node.js 的个人博客框架:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">brew install node@18 <span class="hljs-comment"># 可以使用任何包管理器, @之后是版本号</span><br><span class="hljs-comment"># npm 会和 nodejs一起安装</span><br></code></pre></td></tr></tbody></table></figure>
-<p>安装 Hexo:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install -g hexo-cli <span class="hljs-comment"># 全局安装 Hexo</span><br>hexo init blog-name<br><span class="hljs-built_in">cd</span> blog-name<br>npm install<br></code></pre></td></tr></tbody></table></figure>
-<p>这里的 <code>npm install</code> 是安装 hexo 内的依赖模块, hexo init 时在 node_modules 中写入了依赖项, <code>npm install</code> 是读取了内部的 package.json 然后下载依赖.</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo s -p 4000 <span class="hljs-comment"># hexo 会在本地的 4000 端口启动这个静态界面</span><br></code></pre></td></tr></tbody></table></figure>
-<p>打开浏览器, 输入 localhost:4000 就可以查看到这个静态网页</p>
-<p>可以在 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo Themes</a> 中选择你喜欢的主题, 注意看主题的主页有没有安装教学, 因为有的主题可以通过更少的命令跳过以上 hexo init 这些步骤. 例如 <a href="kira.host/hexo/">kira</a></p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 无须 hexo init, 直接</span><br>npm create kira-hexo@latest blog-name <br>npm i hexo-theme-kira<br></code></pre></td></tr></tbody></table></figure>
-<p>在 <code>_config.yml</code> 中, 将 theme 选项设置为kira, 即 <code>theme: kira</code></p>
-<p>修改完之后, 使用 </p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g <span class="hljs-comment"># 重新生成静态网页</span><br>hexo s -p 4000 <span class="hljs-comment"># 在本地查看效果</span><br></code></pre></td></tr></tbody></table></figure>
-
-<h1><span id="%E9%83%A8%E7%BD%B2%E8%87%B3-githubio">部署至 github.io</span></h1><p>在 blog-name 文件夹中, 使用</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git init <br>git config --global user.name <span class="hljs-string">"your-name"</span><br>git config --global user.email <span class="hljs-string">"your-email@xxx.com"</span><br></code></pre></td></tr></tbody></table></figure>
-<p>来初始化一个 git 仓库, 并生成一个 ssh 密钥</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh-keygen -t rsa -C <span class="hljs-string">"your-email@xxx.com"</span><br></code></pre></td></tr></tbody></table></figure>
-<p>然后根据提示, 三次Enter(回车), 表示yes, 生成 SSH-Key, 通过</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Bash"><span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub<br><br><span class="hljs-comment"># Windows Powershell:</span><br>Test-Path <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span> <span class="hljs-comment"># 检查文件是否存在</span><br>Get-Content <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span> <span class="hljs-comment"># 显示文件内容 or</span><br><span class="hljs-built_in">cat</span> <span class="hljs-string">"<span class="hljs-variable">$env</span>:USERPROFILE.ssh\id_rsa.pub"</span><br><br><span class="hljs-comment"># Windows cmd:</span><br><span class="hljs-built_in">type</span> <span class="hljs-string">"%USERPROFILE%.ssh\id_rsa.pub"</span> <br></code></pre></td></tr></tbody></table></figure>
-<p>在 个人的 GitHub 主页: settings &gt; SSH and GPG keys &gt; New SSH key, 将在 ssh-keygen 中生成的密钥复制过来<br>然后, 在本地</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ssh -T git@github.com <span class="hljs-comment"># 首次要授权</span><br></code></pre></td></tr></tbody></table></figure>
-<p>在 <code>_config.yml</code> 中, 填写 deploy, 让hexo知道部署的后端在哪, 如果使用github作为后端, 必须创建一个名为 “{your-github-name}.github.io” 其中 {your-github-name} 必须和你的仓库同名</p>
-<figure class="highlight yml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">deploy:</span><br>    <span class="hljs-attr">type:</span> <span class="hljs-string">git</span><br>    <span class="hljs-attr">repo:</span> <span class="hljs-string">https://github.com/your-github-name/your-github-name.github.io.git</span><br>    <span class="hljs-attr">branch:</span> <span class="hljs-string">main</span> <span class="hljs-comment"># 也有可能是 master, 在仓库的 settings &gt; general &gt; default branch</span><br></code></pre></td></tr></tbody></table></figure>
-<p>最后安装一个 hexo 插件用于部署</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install hexo-deployer-git --save<br></code></pre></td></tr></tbody></table></figure>
-<p>最后重新生成, 然后部署既可</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo g<br>hexo d<br></code></pre></td></tr></tbody></table></figure>
-
-<h1><span id="%E5%A4%9A%E7%AB%AF%E5%90%8C%E6%AD%A5">多端同步</span></h1><p>为了可以在不同的电脑上编写和上传博客, 需要将本地的这个 hexo 部分的上传至另一个仓库, 每次换到新的电脑上, 安装好 hexo 环境, 从github拉下该仓库写博客上传, 然后本地部署.<br>注意, 之前虽然 git init 创建了仓库, 也通过 <code>hexo d</code> 部署了博客, 但该仓库依然没有链接至远程仓库, 此时使用</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git remote add origin https://github.com/your-github-name/your-blog-repo-name.git<br></code></pre></td></tr></tbody></table></figure>
-<p>去将该仓库上传至远端, 其中要配置 .gitignore文件, 因为有的东西是 hexo 生成的或者 npm 创建的, 不需要上传</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs gitignore">.DS_Store<br>Thumbs.db<br>db.json<br>*.log<br>node_modules/<br>public/<br>.deploy*/<br>_multiconfig.yml<br></code></pre></td></tr></tbody></table></figure>
-<p>同时在新的电脑上依然需要重复一遍上述的 ssh-keygen 的操作, 并在 github 上创建新的 SSH-Key, 因为这个一个电脑一个的</p>
-<h1><span id="%E5%88%9B%E5%BB%BA%E4%B8%80%E6%9D%A1%E5%8D%9A%E5%AE%A2">创建一条博客</span></h1><p>使用 Hexo 创建博客, 可以使用命令</p>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo new post <span class="hljs-string">"blog_name"</span><br></code></pre></td></tr></tbody></table></figure>
-<p>然后 Hexo 会在 source/_posts/ 下创建一个新的 md 文件 “blog_name.md”. 然后你就可以开始写博客了.</p>
-<p>在这个过程中, 如果你想给你的博客添加图片, 在 source/ 下创建 images/ 目录, 并将图片放入其中, 并在 blog 的 md 文件中引用:</p>
-<figure class="highlight md"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">![<span class="hljs-string">your_image_name_in_blog</span>](<span class="hljs-link">/images/your_image_name.png</span>)<br></code></pre></td></tr></tbody></table></figure>
-<p>即可</p>
+		<!-- toc --><!-- tocstop --><html><head></head><body><p>` 即可自动生成目录.</p>
+<p>为了方便, 你可以写一个脚本来帮你进行 </p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Bash">hexo g; hexo d;<br>git commit -a -m <span class="hljs-string">""</span>;<br>git push;<br></code></pre></td></tr></tbody></table></figure>
+<p>等操作(对于python可以使用<code>subprocess.Popen</code> 来执行命令行命令, 从而实现一个跨平台的自动部署脚本)</p>
 
     <div id="global-aplayer"></div>
     <script>
