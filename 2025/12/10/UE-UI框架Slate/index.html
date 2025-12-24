@@ -347,7 +347,7 @@
 		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
 			<a><i class="kirafont icon-calendar-fill"></i>2025年12月10日</a>
 			<a><i class="kirafont icon-edit-fill"></i>5.4k 字</a>
-			<a><i class="kirafont icon-time-circle-fill"></i>大概 23 分钟</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 24 分钟</a>
 		</div>
 		<!-- toc --><html><head></head><body><ul>
 <li><a href="#ue%E7%9A%84ui%E6%A1%86%E6%9E%B6-slate">UE的UI框架-Slate</a></li>
@@ -429,8 +429,8 @@
 <p>如果父控件失效了, 则其失效标记会扩散到子控件. 对于一些经常变化颜色和UI动画应该设置 <code>Volatility</code> 往往是比较保险的</p>
 <p>在UE的UI中还有常见的两种优化策略:</p>
 <ul>
-<li>合批优化: 其本质是, 对于满足一些条件UI元素进行合并 Draw-Call, 可以只使用一次 Draw-Call 来批量绘制UI元素</li>
-<li>重绘盒优化:</li>
+<li>合批优化: 其本质是, 对于满足一些条件UI元素进行合并 Draw-Call, 可以只使用一次 Draw-Call 来批量绘制UI元素. 具体见后 {UE-UI框架Slate-2-Slate的监控和优化}</li>
+<li>重绘盒优化: 具体见后 {UE-UI框架Slate-2-Slate的监控和优化}</li>
 </ul>
 <h2><span id="%E5%AE%9E%E9%99%85%E7%9A%84%E7%BB%98%E5%88%B6%E8%B0%83%E7%94%A8draw-call">实际的绘制调用(Draw-Call)</span></h2><p>最后, 实际上真正向GPU提交绘制命令并不在Slate层中, FSlateApplication 将所有数据准备好之后, 在 <code>FSlateApplication::PrivateDrawWindows</code> 中调用 <code>Renderer-&gt;DrawWindows</code><br>最后进入 <code>SlateRHIRender::DrawWindow_RenderThread</code> 中调用 <code>FRHICommandList::BeginDrawingViewport</code> (RHICmdList) -&gt;<br><code>FRHICommandList::RHIBeginDrawingViewport</code> (GetContext()), 进入真实运行的在当前系统的 RenderDynamicRHI 封装中 -&gt;<br><code>FRHICommandList::BeginRenderPass</code> (RHICmdList) -&gt;<br><code>FSlateRHIRenderingPolicy::DrawElements</code> (RenderingPolicy) 内部会设置各种和渲染有关的细节(Eg: 顶点着色器, 像素着色器, 纹理, 渲染资源), 其中每一次对 <code>FRHICommandList::DrawIndexedPrimitive</code> 的调用就是一次 DrawCall, 具体流程如下:<br><img data-fancybox="gallery" data-sizes="auto" data-src="/./images/%E5%AE%9E%E9%99%85%E7%9A%84%E6%B8%B2%E6%9F%93Draw-Call.png" alt="实际的渲染Draw-Call" class="lazyload"><br>更详细的来说, GPU(同时包括渲染API)只是渲染最基础的各种图元和定点信息和片段信息, 而这些信息会在之前的 SlateApplication 阶段就基本已经处理好, 在 Render 中只是将这些基本的 WindowElement 转化为顶点数据和片段数据(像素数据), 由于UE对各种渲染API的封装, 所以不必关心具体的渲染细节, 例如: 在 Vulkan 中实际上已经没有 VBO, EBO这种结构, 已经被 Vulkan 抽象为一个缓冲区等.</p>
 <h1><span id="%E7%AA%97%E5%8F%A3%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94">窗口的事件响应</span></h1><h2><span id="%E5%B1%8F%E5%B9%95%E7%BD%91%E6%A0%BC">屏幕网格</span></h2><p>屏幕网格结构 <code>FHittestGrid</code>: 其内部有保有 <code>FCell</code> (本质上持有一个SWideget的句柄数组 <code>TArray&lt;int32&gt; WidgetIndexes</code>)<br><img data-fancybox="gallery" data-sizes="auto" data-src="/./images/FHittestGrid.png" alt="FHittestGrid示意图" class="lazyload"></p>
