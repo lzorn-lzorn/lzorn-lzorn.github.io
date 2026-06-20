@@ -57,7 +57,7 @@
 <script src="/deps/js/APlayer.min.js"></script>
 <script src="/deps/js/Meting.min.js"></script>
 
-	<meta name="generator" content="Hexo 7.3.0"></head>
+	<meta name="generator" content="Hexo 8.1.2"></head>
 
 	<body>
 		<div
@@ -90,9 +90,9 @@
 		</a>
 	</div>
 	<div class="kira-count">
-		<div><span>文章</span>8</div>
-		<div><span>标签</span>2</div>
-		<div><span>分类</span>4</div>
+		<div><span>文章</span>9</div>
+		<div><span>标签</span>3</div>
+		<div><span>分类</span>5</div>
 	</div>
 	<div class="kira-list">
 		
@@ -236,6 +236,13 @@
             <span class="category-list-count">3</span>
           </li>
         
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -244,7 +251,7 @@
 			
 	<div class="kira-widget-wrap">
 		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
-			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 10px;">UE</a>
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a>
 		</div>
 		
 	</div>
@@ -257,7 +264,7 @@
 			Archive
 		</h3>
 		<div class="kira-widget">
-			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
 		</div>
 	</div>
 
@@ -359,116 +366,135 @@
 			<a><i class="kirafont icon-edit-fill"></i>1.9k 字</a>
 			<a><i class="kirafont icon-time-circle-fill"></i>大概 8 分钟</a>
 		</div>
-		<html><head></head><body><h1><span id="ue%E7%9A%84%E8%BE%93%E5%85%A5%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B">UE的输入处理流程</span></h1><p>在引擎初始化的时候会初始化其UI系统: Slate, 具体来说: 当玩家通过设备输入某个”键位”的时候, 这个按键首先会被对应操作系统捕获, 例如: <code>FWindowsApplication</code> 下的 Window API; <code>FLinuxApplication</code> 下的 SDL. 通过这些平台将输入信号传导至 <code>FSlateApplication</code> 中的形如 OnXXX 的信号处理函数中, 从而被 Slate 捕获. 然后 Slate 尝试处理这些输入信号(详情见: [[Slate{0}-UI设计的机制#UE的UI框架-Slate]]), 如果 Slate 无法处理这些信号, 这些信号则会穿透 Slate 系统, 进入 PlayerController 中. 进入 <code>APlayerController::InputKey</code> (或者 <code>InputAxis</code>, 但是还是会调用到 <code>InputKey</code> ), 所以如果想模拟虚拟输入只要手动调用 <code>APlayerController::InputKey</code> 即可.<br>在 <code>APlayerController::InputKey</code> 中, 输入信号会被转发至 <code>UPlayerInput::InputKey</code> 中, 然后将状态写入 <code>UPlayerInput</code> 的成员 <code>TMap&lt;FKey,FKeyState&gt; KeyStateMap;</code> 中, 由于 <code>APlayerController::ProcessPlayerInput</code> 是每帧调用的所以会在下一帧的处理来自玩家的所有输入, 完整的流程如下(省略不必要的性能测量):</p>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">APlayerController::ProcessPlayerInput</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> DeltaTime, <span class="hljs-type">const</span> <span class="hljs-type">bool</span> bGamePaused)</span>  </span>{  <br>    <span class="hljs-type">static</span> TArray&lt;UInputComponent*&gt; InputStack;  <br>    <span class="hljs-comment">// process all input components in the stack, top down </span><br>    <span class="hljs-built_in">BuildInputStack</span>(InputStack);<br><br>    <span class="hljs-comment">// process the desired components  </span><br>    PlayerInput-&gt;<span class="hljs-built_in">ProcessInputStack</span>(InputStack, DeltaTime, bGamePaused);<br>    InputStack.<span class="hljs-built_in">Reset</span>();  <br>}<br></code></pre></td></tr></tbody></table></figure>
-
-
+		<html><head></head><body><h1><span id="ue%E7%9A%84%E8%BE%93%E5%85%A5%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B">UE的输入处理流程</span></h1>
+<p>在引擎初始化的时候会初始化其UI系统: Slate, 具体来说:
+当玩家通过设备输入某个”键位”的时候, 这个按键首先会被对应操作系统捕获,
+例如: <code>FWindowsApplication</code> 下的 Window API;
+<code>FLinuxApplication</code> 下的 SDL. 通过这些平台将输入信号传导至
+<code>FSlateApplication</code> 中的形如 OnXXX 的信号处理函数中, 从而被
+Slate 捕获. 然后 Slate 尝试处理这些输入信号(详情见:
+[[Slate{0}-UI设计的机制#UE的UI框架-Slate]]), 如果 Slate
+无法处理这些信号, 这些信号则会穿透 Slate 系统, 进入 PlayerController 中.
+进入 <code>APlayerController::InputKey</code> (或者
+<code>InputAxis</code>, 但是还是会调用到 <code>InputKey</code> ),
+所以如果想模拟虚拟输入只要手动调用
+<code>APlayerController::InputKey</code> 即可. 在
+<code>APlayerController::InputKey</code> 中, 输入信号会被转发至
+<code>UPlayerInput::InputKey</code> 中, 然后将状态写入
+<code>UPlayerInput</code> 的成员
+<code>TMap&lt;FKey,FKeyState&gt; KeyStateMap;</code> 中, 由于
+<code>APlayerController::ProcessPlayerInput</code>
+是每帧调用的所以会在下一帧的处理来自玩家的所有输入,
+完整的流程如下(省略不必要的性能测量): </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">APlayerController::ProcessPlayerInput</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">float</span> DeltaTime, <span class="hljs-type">const</span> <span class="hljs-type">bool</span> bGamePaused)</span>  </span>{  <br>    <span class="hljs-type">static</span> TArray&lt;UInputComponent*&gt; InputStack;  <br>    <span class="hljs-comment">// process all input components in the stack, top down </span><br>    <span class="hljs-built_in">BuildInputStack</span>(InputStack);<br><br>    <span class="hljs-comment">// process the desired components  </span><br>    PlayerInput-&gt;<span class="hljs-built_in">ProcessInputStack</span>(InputStack, DeltaTime, bGamePaused);<br>    InputStack.<span class="hljs-built_in">Reset</span>();  <br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
 <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * @brief 对 InputStack 进行优先级的排序, 这个优先级的大方向是在函数中定死: </span><br><span class="hljs-comment"> *     控制器控制的那个 Pawn 的优先级 &lt; 关卡蓝图 ALevelScriptActor &lt; 控制器自己</span><br><span class="hljs-comment"> *     其中:</span><br><span class="hljs-comment"> *         - APawn* ControlledPawn 就是走正常的输入: 经典输入, 增强输入</span><br><span class="hljs-comment"> *         - ULevel* Level : GetWorld()-&gt;GetLevels(): 关卡蓝图, 遍历每一个 Level 并 Push </span><br><span class="hljs-comment"> *         - InputEnabled(): 控制器自身的输入, 用于各种快捷键或者调试</span><br><span class="hljs-comment"> *         - CurrentInputStack: 表示手动 Push 的进来的 Input,(手动调用 PushInputComponent(UInputComponent* InInputComponent)) 其拥有最高的优先级</span><br><span class="hljs-comment"> *     这个之所以叫做 Stack, 是因为其在获取元素时是从尾开始遍历的, 用于模拟真正 Stack 的 Pop,</span><br><span class="hljs-comment"> *     所以后插入的优先级反而更高    </span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">APlayerController::BuildInputStack</span><span class="hljs-params">(TArray&lt;UInputComponent*&gt;&amp; InputStack)</span> </span>{  <br>    <span class="hljs-comment">// Controlled pawn gets last dibs on the input stack  </span><br>    APawn* ControlledPawn = <span class="hljs-built_in">GetPawnOrSpectator</span>();  <br>    <span class="hljs-keyword">if</span> (ControlledPawn) {  <br>           <span class="hljs-keyword">if</span> (ControlledPawn-&gt;<span class="hljs-built_in">InputEnabled</span>()) {  <br>                  <span class="hljs-comment">// Get the explicit input component that is created upon Pawn possession. This one gets last dibs.  </span><br>                  <span class="hljs-keyword">if</span> (ControlledPawn-&gt;InputComponent)  <br>                      InputStack.<span class="hljs-built_in">Push</span>(ControlledPawn-&gt;InputComponent);  <br><br>                  <span class="hljs-comment">// See if there is another InputComponent that was added to the Pawn's components array (possibly by script).  </span><br>                  <span class="hljs-keyword">for</span> (UActorComponent* ActorComponent : ControlledPawn-&gt;<span class="hljs-built_in">GetComponents</span>()) {  <br>                         UInputComponent* PawnInputComponent = <span class="hljs-built_in">Cast</span>&lt;UInputComponent&gt;(ActorComponent);  <br>                         <span class="hljs-keyword">if</span> (PawnInputComponent &amp;&amp; PawnInputComponent != ControlledPawn-&gt;InputComponent)  <br>                             InputStack.<span class="hljs-built_in">Push</span>(PawnInputComponent);    <br>                  }  <br>           }  <br>    }  <br><br>    <span class="hljs-comment">// LevelScriptActors are put on the stack next  </span><br>    <span class="hljs-keyword">for</span> (ULevel* Level : <span class="hljs-built_in">GetWorld</span>()-&gt;<span class="hljs-built_in">GetLevels</span>()) {  <br>        ALevelScriptActor* ScriptActor = Level-&gt;<span class="hljs-built_in">GetLevelScriptActor</span>();  <br>        <span class="hljs-keyword">if</span> (ScriptActor)  <br>            <span class="hljs-keyword">if</span> (ScriptActor-&gt;<span class="hljs-built_in">InputEnabled</span>() &amp;&amp; ScriptActor-&gt;InputComponent)  <br>                   InputStack.<span class="hljs-built_in">Push</span>(ScriptActor-&gt;InputComponent);  <br>    }  <br>  <br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">InputEnabled</span>())  <br>        InputStack.<span class="hljs-built_in">Push</span>(InputComponent);  <br>  <br>        <span class="hljs-comment">// Components pushed on to the stack get priority  </span><br>    <span class="hljs-keyword">for</span> (int32 Idx=<span class="hljs-number">0</span>; Idx&lt;CurrentInputStack.<span class="hljs-built_in">Num</span>(); ++Idx)  {  <br>           UInputComponent* IC = CurrentInputStack[Idx].<span class="hljs-built_in">Get</span>();  <br>           <span class="hljs-keyword">if</span> (<span class="hljs-built_in">IsValid</span>(IC))  <br>               InputStack.<span class="hljs-built_in">Push</span>(IC);   <br>           <span class="hljs-keyword">else</span>  <br>               CurrentInputStack.<span class="hljs-built_in">RemoveAt</span>(Idx--);<br>    }  <br>}<br></code></pre></td></tr></tbody></table></figure>
-
 <blockquote>
-<p>需要注意的是:</p>
-<ul>
-<li><code>UInputComponent</code> 本身也有 <code>Priority</code> 成员</li>
-<li>每帧 <code>BuildInputStack</code> 是必要的, 因为输入对象的状态 <code>InputEnabled()</code> 可能随时都会被改变, 所有每帧接收的输入可能都不一样</li>
-</ul>
+<p>需要注意的是: - <code>UInputComponent</code> 本身也有
+<code>Priority</code> 成员 - 每帧 <code>BuildInputStack</code> 是必要的,
+因为输入对象的状态 <code>InputEnabled()</code> 可能随时都会被改变,
+所有每帧接收的输入可能都不一样</p>
 </blockquote>
-<p>在 <code>PlayerInput-&gt;ProcessInputStack(InputStack, DeltaTime, bGamePaused);</code> 其会</p>
-<ol>
-<li>收集所有 Key 的状态: <code>EvaluateKeyMapState(DeltaTime, bGamePaused, OUT KeysWithEvents);</code> </li>
-<li>触发所有收集到的 Key 的 Delegate: <code>EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code> 逆序地遍历并发送 Delegate</li>
-<li>重置 PlayerInput 中的 <code>KeyStateMap</code></li>
-</ol>
+<p>在
+<code>PlayerInput-&gt;ProcessInputStack(InputStack, DeltaTime, bGamePaused);</code>
+其会 1. 收集所有 Key 的状态:
+<code>EvaluateKeyMapState(DeltaTime, bGamePaused, OUT KeysWithEvents);</code>
+2. 触发所有收集到的 Key 的 Delegate:
+<code>EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code>
+逆序地遍历并发送 Delegate 3. 重置 PlayerInput 中的
+<code>KeyStateMap</code></p>
 <blockquote>
-<p>PlayerController 中的&nbsp;<code>InputStack</code> 的含义是: 本帧谁来处理输入, 按什么优先级. 即表示本帧参与处理输入的 InputComponent 列表<br>PlayerInput 中的&nbsp;<code>KeyStateMap</code> 的含义是: 本地设备输入的事实状态库</p>
+<p>PlayerController 中的&nbsp;<code>InputStack</code> 的含义是:
+本帧谁来处理输入, 按什么优先级. 即表示本帧参与处理输入的 InputComponent
+列表 PlayerInput 中的&nbsp;<code>KeyStateMap</code> 的含义是:
+本地设备输入的事实状态库 # 增强输入系统</p>
 </blockquote>
-<h1><span id="%E5%A2%9E%E5%BC%BA%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F">增强输入系统</span></h1><p>UE5 引入了增强输入系统, 用于替代原有的输入系统. 增强输入并没有修改底层的输入, 而是从中途接管逻辑输入.<br>增强输入在中途接管的方式就是重新定义了新的子类, 核心对象:</p>
-<ul>
-<li><code>UEnhancedPlayerInput : public UPlayerInput {};</code> EPI: 增强输入<ul>
-<li><code>UPlayerInput</code> 将 Key 映射至 ActionName / AxisName; <code>UEnhancedPlayerInput</code> 将 Key 映射至 <code>InputAction</code></li>
-</ul>
-</li>
-<li><code>UEnhancedInputComponent : public UInputComponent {};</code> EIC: 输入组件<ul>
-<li><code>UInputComponent</code>: 将 ActionName / AxisName 映射为 Delegate; <code>UEnhancedInputComponent</code> 将 <code>InputAction</code> 映射至 Delegate</li>
-</ul>
-</li>
-<li><code>UInputAction</code> IA: 输入动作, 具体来说, 一个按键如何触发, 触发时执行哪个回调<ul>
-<li>绑定方式, 例如: <code>EnhancedInputComponent-&gt;BindAction(MoveAction, ETriggerEvent::Triggered, this, &amp;AMyPlayerCharacter::Move);</code></li>
-<li>回调的传递的参数C++: <ul>
-<li>回调 type 为 <code>void()</code> 例如 Jump</li>
-<li>回调 type 为 <code>void(const FInputActionValue&amp;)</code></li>
-<li>回调 type 为 <code>void(const FInputActionInstance&amp;)</code></li>
-</ul>
-</li>
-<li>回调的传递的参数BP: <code>void(FInputActionValue ActionValue, float ElapsedTime, float TriggeredTime)</code></li>
-</ul>
-</li>
-<li><code>UInputModifier</code> IM: 输入修改器<ul>
-<li>DeadZone: 限定范围的值</li>
-<li>Scalar: 缩放标量</li>
-<li>Negate: 取反</li>
-<li>Smooth: 多帧平滑</li>
-<li>CurveExponential: 指数曲线, XYZ</li>
-<li>CurveUser: 自定义用户曲线, CurveFloat</li>
-<li>FOVScaling: FOV缩放</li>
-<li>ToWorldSpace: 输入设备坐标系向世界坐标系转换 (调换XYZ顺序)</li>
-<li>SwizzleAxis: 互换轴值</li>
-<li>Collection: 嵌套子修改器集合</li>
-</ul>
-</li>
-<li><code>UInputTrigger</code> IT: 输入触发器: [[TriggerState转换自动机.excalidraw]] 同时有若干子类作为Trigger方式<ul>
-<li><code>UInputTriggerDown</code>: 值大于阈值(默认0.5)触发</li>
-<li><code>UInputTriggerPressed</code>: 不激活到激活</li>
-<li><code>UInputTriggerReleased</code>: 激活到不激活</li>
-<li><code>UInputTriggerHold</code>: 按住大于某个时间</li>
-<li><code>UInputTriggerHoldAndRelease</code>: 按住大于某个时间松开</li>
-<li><code>UInputTriggerTap</code>: 按下后快速抬起(默认0.2)</li>
-<li><code>UInputTriggerChorded</code>: 根据别的Action联动触发</li>
-</ul>
-</li>
-<li><code>UInputMappingContext</code> IMC: 输入映射上下文: Key 到 Action 的映射集合(高优先级的Key会覆盖低优先级的)</li>
-</ul>
-<p>![[UML-UE-InputSystem.excalidraw]]<br>所以优势在于 ActionName / AxisName 只是一个字符串, 而 <code>InputAction</code> 作为一个对象, 其能够存储更多的操作和信息.<br>增强输入的核心设计其分离了按键逻辑和具体按键, 例如: 将 长按某一个键的逻辑 和 实际是哪个键 逻辑进行分离.<br>新的输入流程和旧的输入流程几乎一样, 在原来的 <code>PlayerInput-&gt;ProcessInputStack(InputStack, DeltaTime, bGamePaused);</code> 中, 有两个操作:</p>
-<ol>
-<li><code>EvaluateKeyMapState(DeltaTime, bGamePaused, OUT KeysWithEvents);</code>: 收集所有 Key 的状态</li>
-<li><code>EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code>: 触发所有收集到的 Key 的 Delegate:, 逆序地遍历并发送 Delegate</li>
-<li>重置 PlayerInput 中的 <code>KeyStateMap</code></li>
-</ol>
-<p>在 EnhancedInput 中, 将 <code>EvaluateKeyMapState</code> 和 <code>EvaluateInputDelegates</code> 重写, 其中 <code>EvaluateKeyMapState</code> 的流程修改不大, 主要是做兼容, 最后还是会调用 <code>Super::EvaluateKeyMapState</code>.<br>在 <code>EvaluateInputDelegates</code> 中的支持了全新的流程: </p>
-<ul>
-<li><code>ProcessActionMappingEvent</code></li>
-<li>处理 Mapping 的 Modifier 和 Trigger</li>
-<li>处理 Action 的 Modifier 和 Trigger</li>
-<li><code>Super::EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code></li>
-</ul>
-<p>所以局部的(Mapping) 和 全局的(Action) 的 Modifier 会同时触发, 会有负负得正的现象</p>
+<p>UE5 引入了增强输入系统, 用于替代原有的输入系统.
+增强输入并没有修改底层的输入, 而是从中途接管逻辑输入.
+增强输入在中途接管的方式就是重新定义了新的子类, 核心对象: -
+<code>UEnhancedPlayerInput : public UPlayerInput {};</code> EPI:
+增强输入 - <code>UPlayerInput</code> 将 Key 映射至 ActionName /
+AxisName; <code>UEnhancedPlayerInput</code> 将 Key 映射至
+<code>InputAction</code> -
+<code>UEnhancedInputComponent : public UInputComponent {};</code> EIC:
+输入组件 - <code>UInputComponent</code>: 将 ActionName / AxisName 映射为
+Delegate; <code>UEnhancedInputComponent</code> 将
+<code>InputAction</code> 映射至 Delegate - <code>UInputAction</code> IA:
+输入动作, 具体来说, 一个按键如何触发, 触发时执行哪个回调 - 绑定方式,
+例如:
+<code>EnhancedInputComponent-&gt;BindAction(MoveAction, ETriggerEvent::Triggered, this, &amp;AMyPlayerCharacter::Move);</code>
+- 回调的传递的参数C++: - 回调 type 为 <code>void()</code> 例如 Jump -
+回调 type 为 <code>void(const FInputActionValue&amp;)</code> - 回调 type
+为 <code>void(const FInputActionInstance&amp;)</code> -
+回调的传递的参数BP:
+<code>void(FInputActionValue ActionValue, float ElapsedTime, float TriggeredTime)</code>
+- <code>UInputModifier</code> IM: 输入修改器 - DeadZone: 限定范围的值 -
+Scalar: 缩放标量 - Negate: 取反 - Smooth: 多帧平滑 - CurveExponential:
+指数曲线, XYZ - CurveUser: 自定义用户曲线, CurveFloat - FOVScaling:
+FOV缩放 - ToWorldSpace: 输入设备坐标系向世界坐标系转换 (调换XYZ顺序) -
+SwizzleAxis: 互换轴值 - Collection: 嵌套子修改器集合 -
+<code>UInputTrigger</code> IT: 输入触发器:
+[[TriggerState转换自动机.excalidraw]] 同时有若干子类作为Trigger方式 -
+<code>UInputTriggerDown</code>: 值大于阈值(默认0.5)触发 -
+<code>UInputTriggerPressed</code>: 不激活到激活 -
+<code>UInputTriggerReleased</code>: 激活到不激活 -
+<code>UInputTriggerHold</code>: 按住大于某个时间 -
+<code>UInputTriggerHoldAndRelease</code>: 按住大于某个时间松开 -
+<code>UInputTriggerTap</code>: 按下后快速抬起(默认0.2) -
+<code>UInputTriggerChorded</code>: 根据别的Action联动触发 -
+<code>UInputMappingContext</code> IMC: 输入映射上下文: Key 到 Action
+的映射集合(高优先级的Key会覆盖低优先级的)</p>
+<p>![[UML-UE-InputSystem.excalidraw]] 所以优势在于 ActionName / AxisName
+只是一个字符串, 而 <code>InputAction</code> 作为一个对象,
+其能够存储更多的操作和信息.
+增强输入的核心设计其分离了按键逻辑和具体按键, 例如: 将
+长按某一个键的逻辑 和 实际是哪个键 逻辑进行分离.
+新的输入流程和旧的输入流程几乎一样, 在原来的
+<code>PlayerInput-&gt;ProcessInputStack(InputStack, DeltaTime, bGamePaused);</code>
+中, 有两个操作: 1.
+<code>EvaluateKeyMapState(DeltaTime, bGamePaused, OUT KeysWithEvents);</code>:
+收集所有 Key 的状态 2.
+<code>EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code>:
+触发所有收集到的 Key 的 Delegate:, 逆序地遍历并发送 Delegate 3. 重置
+PlayerInput 中的 <code>KeyStateMap</code></p>
+<p>在 EnhancedInput 中, 将 <code>EvaluateKeyMapState</code> 和
+<code>EvaluateInputDelegates</code> 重写, 其中
+<code>EvaluateKeyMapState</code> 的流程修改不大, 主要是做兼容,
+最后还是会调用 <code>Super::EvaluateKeyMapState</code>. 在
+<code>EvaluateInputDelegates</code> 中的支持了全新的流程: -
+<code>ProcessActionMappingEvent</code> - 处理 Mapping 的 Modifier 和
+Trigger - 处理 Action 的 Modifier 和 Trigger -
+<code>Super::EvaluateInputDelegates(InputComponentStack, DeltaTime, bGamePaused, KeysWithEvents);</code></p>
+<p>所以局部的(Mapping) 和 全局的(Action) 的 Modifier 会同时触发,
+会有负负得正的现象</p>
 <blockquote>
-<p>[!note] 实践</p>
-<ul>
-<li>按照类型使用局部的 <code>UInputMappingContext</code> , 不要设置全局的 触发器 和 修改器.</li>
-<li>在对应的玩家操控的 Character 或 Pawn 的派生类的 <code>BeginPlay()</code> 中调用 AddMappingContext, 例如: <code>EnhancedInputSubsystem-&gt;AddMappingContext(DefaultPlayerMappingContext, 0);</code></li>
-<li>在 SetupInputComponent 中调用 BindAction, 例如: <code>EnhancedInputComponent-&gt;BindAction(MoveAction, ETriggerEvent::Triggered, this, &amp;AMyPlayerCharacter::Move);</code></li>
-<li><code>AMyPawn::UnPossessed()</code> 中 <code>RemoveMappingContext(); Super::UnPossessed();</code></li>
-</ul>
+<p>[!note] 实践 - 按照类型使用局部的 <code>UInputMappingContext</code> ,
+不要设置全局的 触发器 和 修改器. - 在对应的玩家操控的 Character 或 Pawn
+的派生类的 <code>BeginPlay()</code> 中调用 AddMappingContext, 例如:
+<code>EnhancedInputSubsystem-&gt;AddMappingContext(DefaultPlayerMappingContext, 0);</code>
+- 在 SetupInputComponent 中调用 BindAction, 例如:
+<code>EnhancedInputComponent-&gt;BindAction(MoveAction, ETriggerEvent::Triggered, this, &amp;AMyPlayerCharacter::Move);</code>
+- <code>AMyPawn::UnPossessed()</code> 中
+<code>RemoveMappingContext(); Super::UnPossessed();</code></p>
 </blockquote>
-<h2><span id="uinputtrigger-%E4%BD%BF%E7%94%A8">UInputTrigger 使用</span></h2><h3><span id="uinputtriggerchorded-%E5%92%8C%E5%BC%A6%E8%A7%A6%E5%8F%91%E5%99%A8">UInputTriggerChorded 和弦触发器</span></h3><p>要求: 实现按住鼠标左键旋转视角, 松开则无法旋转.<br>实现: 一个基础的 Look</p>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookAction, ETriggerEvent::Triggered, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::Look);<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AMyPlayerCharacter::Look</span><span class="hljs-params">(<span class="hljs-type">const</span> FInputActionValue&amp; Value)</span>  </span><br><span class="hljs-function"></span>{  <br>    FVector2D LookAxisVector = Value.<span class="hljs-built_in">Get</span>&lt;FVector2D&gt;();     <br>    <span class="hljs-keyword">if</span> (Controller)  <br>    {  <br>      <span class="hljs-built_in">AddControllerYawInput</span>(LookAxisVector.X);  <br>      <span class="hljs-built_in">AddControllerPitchInput</span>(LookAxisVector.Y);  <br>    }  <br>}<br></code></pre></td></tr></tbody></table></figure>
-<p>创建一个新的 Action: <code>IA_LookHold</code> 值为 <code>bool</code>, 在 IMC 中添加鼠标左键的映射, 同时在 <code>LookAction</code> 中添加 Trigger: Chorded Action, 并将其设置为 <code>IA_LookHold</code>, 即只有在 <code>IA_LookHold</code> 触发时 <code>LookAction</code> 才能触发<br>追加绑定:</p>
-<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookHoldAction, ETriggerEvent::Started, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::LookHoldStarted);  <br>EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookHoldAction, ETriggerEvent::Completed, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::LookHoldCompleted);<br></code></pre></td></tr></tbody></table></figure>
-<p>其目的是在按下左键的时候同时能做其他处理</p>
-<h2><span id="debug-%E5%91%BD%E4%BB%A4">Debug 命令</span></h2><ul>
-<li><code>Input.action ActionName Value</code>: 强制添加某个Action的输入</li>
-<li><code>Input.action ActionName</code>: 移除添加某个Action的输入</li>
-<li><code>Input.+key Key Value</code>: 添加某个 Key 的输入</li>
-<li><code>Input.-key Key Value</code>: 移除某个 Key 的输入</li>
-<li><code>ShowDebug EnhancedInput</code>: 显示调试界面</li>
-</ul>
-<p>参考:</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TM41197Dv/?spm_id_from=333.337.search-card.all.click&amp;vd_source=75cdf78dd1707c1077825f0501243c43">虚幻引擎倾囊相授计划：增强输入系统教程</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/470949422">知乎: UE5 EnhancedInput(增强输入系统)</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14r4y1r7nz/?spm_id_from=444.41.0.0&amp;vd_source=75cdf78dd1707c1077825f0501243c43">虚化引擎官方: 虎跳龙拿–新一代增强输入框架EnhancedInput</a></li>
-<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/393346131">知乎 UE4对玩家输入的处理流程</a></li>
-</ul>
+<h2><span id="uinputtrigger-%E4%BD%BF%E7%94%A8">UInputTrigger 使用</span></h2>
+<h3><span id="uinputtriggerchorded%0A%E5%92%8C%E5%BC%A6%E8%A7%A6%E5%8F%91%E5%99%A8">UInputTriggerChorded
+和弦触发器</span></h3>
+<p>要求: 实现按住鼠标左键旋转视角, 松开则无法旋转. 实现: 一个基础的 Look
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookAction, ETriggerEvent::Triggered, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::Look);<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">AMyPlayerCharacter::Look</span><span class="hljs-params">(<span class="hljs-type">const</span> FInputActionValue&amp; Value)</span>  </span><br><span class="hljs-function"></span>{  <br>    FVector2D LookAxisVector = Value.<span class="hljs-built_in">Get</span>&lt;FVector2D&gt;();     <br>    <span class="hljs-keyword">if</span> (Controller)  <br>    {  <br>      <span class="hljs-built_in">AddControllerYawInput</span>(LookAxisVector.X);  <br>      <span class="hljs-built_in">AddControllerPitchInput</span>(LookAxisVector.Y);  <br>    }  <br>}<br></code></pre></td></tr></tbody></table></figure> 创建一个新的 Action: <code>IA_LookHold</code> 值为
+<code>bool</code>, 在 IMC 中添加鼠标左键的映射, 同时在
+<code>LookAction</code> 中添加 Trigger: Chorded Action, 并将其设置为
+<code>IA_LookHold</code>, 即只有在 <code>IA_LookHold</code> 触发时
+<code>LookAction</code> 才能触发 追加绑定: <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookHoldAction, ETriggerEvent::Started, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::LookHoldStarted);  <br>EnhancedInputComponent-&gt;<span class="hljs-built_in">BindAction</span>(LookHoldAction, ETriggerEvent::Completed, <span class="hljs-keyword">this</span>, &amp;AMyPlayerCharacter::LookHoldCompleted);<br></code></pre></td></tr></tbody></table></figure>
+其目的是在按下左键的时候同时能做其他处理 ## Debug 命令 -
+<code>Input.action ActionName Value</code>: 强制添加某个Action的输入 -
+<code>Input.action ActionName</code>: 移除添加某个Action的输入 -
+<code>Input.+key Key Value</code>: 添加某个 Key 的输入 -
+<code>Input.-key Key Value</code>: 移除某个 Key 的输入 -
+<code>ShowDebug EnhancedInput</code>: 显示调试界面<p></p>
+<p>参考: - <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1TM41197Dv/?spm_id_from=333.337.search-card.all.click&amp;vd_source=75cdf78dd1707c1077825f0501243c43">虚幻引擎倾囊相授计划：增强输入系统教程</a>
+- <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/470949422">知乎: UE5
+EnhancedInput(增强输入系统)</a> - <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV14r4y1r7nz/?spm_id_from=444.41.0.0&amp;vd_source=75cdf78dd1707c1077825f0501243c43">虚化引擎官方:
+虎跳龙拿–新一代增强输入框架EnhancedInput</a> - <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/393346131">知乎
+UE4对玩家输入的处理流程</a></p>
 
     <div id="global-aplayer"></div>
     <script>
@@ -513,7 +539,7 @@
   
 	<div class="kira-post-nav">
 		<nav class="post-nav">
-			        
+			          
 		</nav>
 	</div>
 	
