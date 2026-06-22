@@ -350,7 +350,7 @@
 		
 		<div class="kira-post-cover">
 			<img
-				data-src="/lib/background/bg13.jpeg"
+				data-src="/lib/background/bg14.jpg"
 				data-sizes="auto"
 				alt="原子操作(Atomic)和内存一致性模型(Memory Order)"
 				class="lazyload kira-post-cover-image disabled-kira-image"
@@ -416,9 +416,9 @@ char, bool, long 等这类常见类型, 其对应的例如
 <code>notify_one()</code> / <code>notify_all()</code>: 通知 {任意一个}/
 {所有} 等待线程结束等待<p></p>
 <blockquote>
-<p>[!note] Atomic 的无锁实现 ^atomic-and-lockfree C++ 标准规定: 除了
-std::atomic_flag 以外, 所有的原子类型都不保证一定是互斥体实现还是使用
-CPU 原子指令, 所以可以使用 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/is_lock_free.html"><code>atomic&lt;T&gt;::is_lock_free</code></a>
+<p>Atomic 的无锁实现 C++ 标准规定: 除了 std::atomic_flag 以外,
+所有的原子类型都不保证一定是互斥体实现还是使用 CPU 原子指令,
+所以可以使用 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/is_lock_free.html"><code>atomic&lt;T&gt;::is_lock_free</code></a>
 来查看, 如果返回 <code>true</code> 则是使用了原子指令. 实际上,
 对于基本类型的原子类型而言, 其都是使用 CPU 的原子指令而不是互斥体实现.
 对于自定义类型,
@@ -447,10 +447,11 @@ CPU 原子指令, 所以可以使用 <a target="_blank" rel="noopener" href="htt
 <p><code>compare_exchange_strong</code> 的行为相当于: </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Ty&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">atomic</span>{<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">compare_exchange_strong</span><span class="hljs-params">(Ty &amp;expected, <span class="hljs-type">const</span> Ty&amp; new_value)</span></span>{<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m)</span></span>;<br>        <span class="hljs-keyword">if</span> (val == expected) {<br>            val = new_value;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        }<br>        expected = val;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    }<br><span class="hljs-keyword">private</span>:<br>    Ty val;<br>    std::mutex m;<br>};<br></code></pre></td></tr></tbody></table></figure>
 只是使用对应 CPU 提供的原子指令完成<p></p>
 <blockquote>
-<p>[!note] CAS 操作 ^cas <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1980446889984946486">知乎: 理解
-C++无锁编程 compare_exchange_weak</a> <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange">Cppref:
-compare_exchange</a>
-<code>bool compare_exchange_weak(T&amp; expected, T desired, memory_order success, memory_order failure);</code>
+<p>CAS 操作 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1980446889984946486">知乎: 理解
+C++无锁编程 compare_exchange_weak</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange">Cppref:
+compare_exchange</a></p>
+<p><code>bool compare_exchange_weak(T&amp; expected, T desired, memory_order success, memory_order failure);</code>
 <code>bool compare_exchange_weak(T&amp; expected, T desired, memory_order order = memory_order_seq_cst);</code>
 其参数含义如下: - <code>expected</code>: 一个引用, 指向存储期望值的变量.
 如果比较成功, 原子变量会被更新为 <code>desired</code>; 如果失败,
@@ -462,7 +463,8 @@ compare_exchange</a>
 即原子变量的当前值与期望值相等, 操作也会失败,
 通常是为了在某些硬件平台上实现更高的性能. 由于
 <code>compare_exchange_weak</code> 的伪失败特性, 它通常需要在循环中使用,
-直到操作成功为止 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">T old_val = expected;<br><span class="hljs-keyword">while</span> (!atomic_var.<span class="hljs-built_in">compare_exchange_weak</span>(old_val, desired, std::memory_order_release, std::memory_order_relaxed)) {<br>   <span class="hljs-comment">// 重试逻辑</span><br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+直到操作成功为止</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">T old_val = expected;<br><span class="hljs-keyword">while</span> (!atomic_var.<span class="hljs-built_in">compare_exchange_weak</span>(old_val, desired, std::memory_order_release, std::memory_order_relaxed)) {<br>   <span class="hljs-comment">// 重试逻辑</span><br>}<br></code></pre></td></tr></tbody></table></figure>
 </blockquote>
 <h1><span id="memory-order">Memory Order</span></h1>
 <p>C++ 编译器默认程序单线程的,
