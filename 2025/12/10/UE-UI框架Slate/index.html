@@ -434,7 +434,7 @@ UMG 对象只是 Slate 对象的容器, 真正的逻辑都执行在 Slate
 <code>FSlateApplication::DrawWindows</code> 这个函数开始,
 正式进入渲染的流程, 如下图</p>
 <figure>
-<img data-fancybox="gallery" data-sizes="auto" data-src="../images/UE-UI的渲染入口.png" alt="UE-UI的渲染入口" class="lazyload">
+<img data-fancybox="gallery" data-sizes="auto" data-src="/images/UE-UI的渲染入口.png" alt="UE-UI的渲染入口" class="lazyload">
 <figcaption aria-hidden="true">UE-UI的渲染入口</figcaption>
 </figure>
 <p>在这里设计到一个概念: <font color="#c0504d">模态窗口(Modal
@@ -453,7 +453,7 @@ Window)</font>, 这个是一个在UI设计中常用的概念:
 <code>DrawPrepass()</code> 其目的主要是处理窗口和控件的各种尺寸 2.
 正式进行渲染数据的处理: <code>DrawWindowAndChildren()</code></p>
 <h2><span id="%E5%AF%B9%E4%BA%8E%E6%B8%B2%E6%9F%93%E7%9A%84%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C-%E5%BF%AB%E6%85%A2%E8%B7%AF%E5%BE%84%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B">对于渲染的数据操作-快慢路径绘制流程</span></h2>
-<p>对于正在进行渲染数据的处理流程: 如下图 <img data-fancybox="gallery" data-sizes="auto" data-src="../images/渲染单个窗口进行数据操作.png" alt="渲染单个窗口进行数据操作.png" class="lazyload"> 这里出现了第二个概念:
+<p>对于正在进行渲染数据的处理流程: 如下图 <img data-fancybox="gallery" data-sizes="auto" data-src="/images/渲染单个窗口进行数据操作.png" alt="渲染单个窗口进行数据操作.png" class="lazyload"> 这里出现了第二个概念:
 <font color="#c0504d">快路径渲染和慢路径渲染</font>,
 同时需要介绍UE这里的缓存机制: UI 框架为了优化渲染性能,
 尽可能减少渲染次数, 在很多时候不会对窗口进行重新绘制,
@@ -518,7 +518,7 @@ hit-test)</p>
 内部会设置各种和渲染有关的细节(Eg: 顶点着色器, 像素着色器, 纹理,
 渲染资源), 其中每一次对
 <code>FRHICommandList::DrawIndexedPrimitive</code> 的调用就是一次
-DrawCall, 具体流程如下: <img data-fancybox="gallery" data-sizes="auto" data-src="../images/实际的渲染Draw-Call.png" alt="实际的渲染Draw-Call" class="lazyload"> 更详细的来说,
+DrawCall, 具体流程如下: <img data-fancybox="gallery" data-sizes="auto" data-src="/images/实际的渲染Draw-Call.png" alt="实际的渲染Draw-Call" class="lazyload"> 更详细的来说,
 GPU(同时包括渲染API)只是渲染最基础的各种图元和定点信息和片段信息,
 而这些信息会在之前的 SlateApplication 阶段就基本已经处理好, 在 Render
 中只是将这些基本的 WindowElement 转化为顶点数据和片段数据(像素数据),
@@ -528,7 +528,7 @@ GPU(同时包括渲染API)只是渲染最基础的各种图元和定点信息和
 <h2><span id="%E5%B1%8F%E5%B9%95%E7%BD%91%E6%A0%BC">屏幕网格</span></h2>
 <p>屏幕网格结构 <code>FHittestGrid</code>: 其内部有保有
 <code>FCell</code> (本质上持有一个SWideget的句柄数组
-<code>TArray&lt;int32&gt; WidgetIndexes</code>) <img data-fancybox="gallery" data-sizes="auto" data-src="../images/FHittestGrid.png" alt="FHittestGrid示意图" class="lazyload"></p>
+<code>TArray&lt;int32&gt; WidgetIndexes</code>) <img data-fancybox="gallery" data-sizes="auto" data-src="/images/FHittestGrid.png" alt="FHittestGrid示意图" class="lazyload"></p>
 <h2><span id="slate%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%93%8D%E5%BA%94">Slate的事件响应</span></h2>
 <p>Slate 系统的用于处理用户输入的类为 FSlateUser(不仅能处理输入)
 <code>FSlateUser</code>
@@ -541,7 +541,7 @@ GPU(同时包括渲染API)只是渲染最基础的各种图元和定点信息和
 - Draw: 绘制 <a target="_blank" rel="noopener" href="https://blog.csdn.net/j756915370/article/details/121964442">Slate
 的事件响应</a></p>
 <figure>
-<img data-fancybox="gallery" data-sizes="auto" data-src="../images/点击事件响应流程.png" alt="点击事件响应流程.png" class="lazyload">
+<img data-fancybox="gallery" data-sizes="auto" data-src="/images/点击事件响应流程.png" alt="点击事件响应流程.png" class="lazyload">
 <figcaption aria-hidden="true">点击事件响应流程.png</figcaption>
 </figure>
 <h1><span id="%E6%8E%A7%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E9%80%BB%E8%BE%91%E7%9A%84%E5%85%B3%E7%B3%BB">控件之间的逻辑的关系</span></h1>
@@ -558,7 +558,7 @@ GPU(同时包括渲染API)只是渲染最基础的各种图元和定点信息和
 <code>TSharedRef&lt;SWidget&gt;</code> 和 位置信息
 <code>FGeometry</code>)</p>
 <figure>
-<img data-fancybox="gallery" data-sizes="auto" data-src="../images/FWidgetPath.png" alt="FWidgetPath" class="lazyload">
+<img data-fancybox="gallery" data-sizes="auto" data-src="/images/FWidgetPath.png" alt="FWidgetPath" class="lazyload">
 <figcaption aria-hidden="true">FWidgetPath</figcaption>
 </figure>
 <h1><span id="%E6%8E%A7%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BD%8D%E7%BD%AE%E5%85%B3%E7%B3%BB">控件之间的位置关系</span></h1>

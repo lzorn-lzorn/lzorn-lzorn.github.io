@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html 
+	lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> 原子操作(Atomic)和内存一致性模型(Memory Order) -  LL&#39;s Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link
+			rel="shortcut icon"
+			href="/1.png"
+			type="image/png"
+		/>
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 8.1.2"></head>
+
+	<body>
+		<div
+			class="kira-background"
+			style="background-image: url('/lib/background/bg5.jpg')"
+		></div>
+		<div class="kira-header">
+    <a
+        class="kira-drawer-button mdui-ripple"
+        title="导航栏"
+        onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');"
+    >
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL&#39;s Blog">
+        <img
+			src="/1.png"
+			alt="Lzorn"
+		/>
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img
+				src="/1.png"
+				alt="Lzorn"
+			/>
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>9</div>
+		<div><span>标签</span>3</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/"
+			title="回到首页"
+		>
+			<i
+				class="kirafont
+					
+						icon-home
+					"
+			></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/archive.html"
+			title="文章归档"
+		>
+			<i
+				class="kirafont
+					
+						icon-container
+					"
+			></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/about.html"
+			title="关于本人"
+		>
+			<i
+				class="kirafont
+					
+						icon-user
+					"
+			></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a
+				class="mdui-ripple"
+				href="mailto:your-email@example.com"
+				target="_blank"
+				mdui-tooltip="{content: '邮箱'}"
+				style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-link
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://space.bilibili.com/13063107"
+				target="_blank"
+				mdui-tooltip="{content: '哔哩哔哩'}"
+				style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-bilibili
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://github.com/lzorn-lzorn/"
+				target="_blank"
+				mdui-tooltip="{content: 'GitHub'}"
+				style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-github
+					"
+				></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">3</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">3</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/UE-UI/">
+              UE-UI
+            </a>
+            <span class="category-list-count">3</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		&copy; 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br />
+		
+		
+	</div>
+</div>
+<div
+	class="kira-sidebar-modal"
+	id="sidebar-modal"
+	onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"
+></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img />
+                </div>
+                <div class="kira-image-now">
+                    <img />
+                </div>
+                <div class="kira-image-next">
+                    <img />
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img
+				data-src="/lib/background/bg13.jpeg"
+				data-sizes="auto"
+				alt="原子操作(Atomic)和内存一致性模型(Memory Order)"
+				class="lazyload kira-post-cover-image disabled-kira-image"
+			/>
+			<h1>原子操作(Atomic)和内存一致性模型(Memory Order)</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年03月09日</a>
+			<a><i class="kirafont icon-edit-fill"></i>2.6k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 11 分钟</a>
+		</div>
+		<!-- toc --><html><head></head><body><ul>
+<li><a href="#atomic">Atomic</a>
+<ul>
+<li><a href="#stdatomic">std::atomic</a>
+<ul>
+<li><a href="#stdatomic_flag">std::atomic_flag</a></li>
+<li><a href="#compare--swap-cas-%E6%93%8D%E4%BD%9C">Compare &amp; Swap,
+CAS 操作</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#memory-order">Memory Order</a></li>
+</ul>
+<!-- tocstop -->
+<h1><span id="atomic">Atomic</span></h1>
+<p><a target="_blank" rel="noopener" href="https://preshing.com/20130929/double-checked-locking-is-fixed-in-cpp11/">Double-Checked
+Locking 的正确性</a> 原子操作是指在多线程环境中, 某个操作要么全部完成,
+要么完全不执行. <code>int b = a + 3;</code> 这个操作实际上不是原子的.
+编译器会将其翻译成3 个操作: </p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs asm">&nbsp;mov &nbsp; &nbsp; eax, DWORD PTR [rbp-4]<br>&nbsp;add &nbsp; &nbsp; eax, 3<br>&nbsp;mov &nbsp; &nbsp; DWORD PTR [rbp-8], eax<br></code></pre></td></tr></tbody></table></figure>
+而在多线程环境中这个操作会被穿插, 导致程序出现与预期不一致的情况. ##
+std::atomic 在 C++中, <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic.html"><code>std atomic</code></a>
+变量整合了原子性和保证内存序的功能. 在语义上, <code>std::atomic</code>
+有三个操作方式: - load 操作: <u>读取</u>一个原子变量中的值 - store 操作:
+往一个原子变量中<u>写入</u>值 - read modify write: RMW 操作, 即先读取,
+再修改, 最后写入的一套操作 <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">atomic_int</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br><span class="hljs-type">int</span> value = atomic_int. <span class="hljs-built_in">load</span>(); <span class="hljs-comment">// 读取原子变量的值</span><br>atomic_int. <span class="hljs-built_in">store</span>(<span class="hljs-number">10</span>);          <span class="hljs-comment">// 存储值到原子变量</span><br></code></pre></td></tr></tbody></table></figure> 注意:
+<code>std::atomic&lt;T&gt;</code> 中的类型 <code>T</code>
+必须是可平凡拷贝的类型(<a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/named_req/TriviallyCopyable.%20html">TrivaiallyCopyable</a>,
+即可以使用 <code>memcopy</code> 的类型). 但是对于常见的类型, 例如 int,
+char, bool, long 等这类常见类型, 其对应的例如
+<code>std::atomic&lt;int&gt;</code> 只是对应
+<code>std::atomic_int</code> 的别名, 但是总得来说,
+只有整数类型才提供了别名的实现 <code>std::atomic&lt;Integral&gt;</code>.
+同时, 虽然 C++ 重载了 <code>atomic::operator=</code> 来使得
+<code>int value = atomic_int;</code> 这样的隐式类型转换可以成立.
+但是依旧不推荐使用这个隐式转换, 因为这将无法指定我们需要的内存序.<p></p>
+<h3><span id="stdatomic_flag">std::atomic_flag</span></h3>
+<p>C++ 标准并不保证 <code>std::atomic&lt;T&gt;</code>
+这个”任意”原子操作必须使用 CPU
+底层的原子操作指令还是使用锁机制来实现(可以通过
+<code>is_lock_free()</code> 来查看, 如果是无锁返回 <code>true</code>,
+详情见 <a href="#%5Eatomic-and-lockfree">Atomic 的无锁实现</a>.
+但是标准保证必然使用 CPU 原子指令实现的类型只有 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic_flag.%20html"><code>atomic_flag</code></a>
+该类型的语义虽然是一个 bool 类型的原子变量, 但是不等价于
+<code>atomic&lt;bool&gt;</code>, 因为其不提供 load 和 store 操作. 例如:
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 初始化: </span><br>std::atomic_flag flag = ATOMIC_FLAG_INIT;<br>std::atomic_flag flag = <span class="hljs-number">0</span>;<br>std::atomic_flag flag {}; <span class="hljs-comment">// 在 C++20 以前, 行为未定义; C++20 以后默认为 false</span><br><span class="hljs-comment">// 修改:</span><br>flag.<span class="hljs-built_in">clear</span>(<span class="hljs-comment">/* memory_order m = memory_order_seq_cst */</span>); <span class="hljs-comment">// 将其设置为 false;</span><br>flag.<span class="hljs-built_in">test_and_set</span>(); <span class="hljs-comment">// 原子地将其设置为 true;</span><br></code></pre></td></tr></tbody></table></figure> 例如: 一个自定义自旋锁(spin lock)的实现 <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">spin_lock</span>{<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">lock</span><span class="hljs-params">()</span> </span>{<br>        <span class="hljs-keyword">while</span>(flag. <span class="hljs-built_in">test_and_set</span>(std::memory_order_acquire)){}<br>    }<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">unlock</span><span class="hljs-params">()</span> </span>{<br>        flag.<span class="hljs-built_in">clear</span>(std::memory_order_release);<br>    }<br><span class="hljs-keyword">private</span>:<br>    std::atomic_flag flag = ATOMIC_FLAG_INIT;<br>};<br><span class="hljs-comment">/*</span><br><span class="hljs-comment"> * C++中关于 BasicLockable, 实现了 lock 和 unlock 函数的类型. </span><br><span class="hljs-comment"> * 对于 std::lock_guard 等, 可以调用 BasicLockable 的对象</span><br><span class="hljs-comment"> */</span><br></code></pre></td></tr></tbody></table></figure>
+以上只是一个例子, 实际上不要自定义实现自旋锁,
+因为这会导致等待该锁的线程一直处于 while 的轮询状态.
+本质原因是对于系统的调度器而言, 用户态实现的 <code>spin_lock</code>
+是不可见的, 系统调度器无法优化这个等待行为. 在 C++20 中
+<code>std::atomic_flag</code> 的使用得到了进一步改善 -
+<code>test()</code>: 读取 - <code>wait(old_val)</code>: 等待条件的达成 -
+<code>notify_one()</code> / <code>notify_all()</code>: 通知 {任意一个}/
+{所有} 等待线程结束等待<p></p>
+<blockquote>
+<p>[!note] Atomic 的无锁实现 ^atomic-and-lockfree C++ 标准规定: 除了
+std::atomic_flag 以外, 所有的原子类型都不保证一定是互斥体实现还是使用
+CPU 原子指令, 所以可以使用 <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/is_lock_free.html"><code>atomic&lt;T&gt;::is_lock_free</code></a>
+来查看, 如果返回 <code>true</code> 则是使用了原子指令. 实际上,
+对于基本类型的原子类型而言, 其都是使用 CPU 的原子指令而不是互斥体实现.
+对于自定义类型,
+这主要取决于自定义类型首先要满足内存对齐为默认的对齐方式,
+以及内存占用要是有2 的幂次, 同时查看当前 CPU 支持多少位原子操作,
+才能确定其是否能调用 CPU 的原子指令</p>
+</blockquote>
+<h3><span id="compare--swap-cas-%E6%93%8D%E4%BD%9C">Compare &amp; Swap, CAS 操作</span></h3>
+<p>CAS 操作常常用于原子地更新一个原子变量的值 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">atomic_int</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br>atomic_int. <span class="hljs-built_in">fetch_add</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 原子的加1 操作</span><br>atomic_int. <span class="hljs-built_in">fetch_sub</span>(<span class="hljs-number">1</span>); <span class="hljs-comment">// 原子的减1 操作</span><br></code></pre></td></tr></tbody></table></figure>
+只能使用其给定的接口来加或者减, 因为对于
+<code>atomic_int = atomic_int + 1;</code> 等价于
+<code>atomic_int. store(atomicInt. load() + 1);</code>
+这个操作依旧不是原子的. 在 <code>fetch_add</code>
+的内部实际上会使用硬件指令锁住地址总线来保证其操作的原子性.<p></p>
+<p>如果我们希望比较并交换(从 C++角度来看比较突然,
+但这是硬件的一个常用指令 CAS), <code>compare_exchange_strong()</code> 和
+<code>compare_exchange_weak()</code> 用于比较并交换操作(详情见 <a href="#%5Ecas">C++中的 CAS 指令</a>), 即在变量等于某个期望值时,
+将其替换为新值. 这两者的区别在于, strong 版本的接口成功交换一定返回
+<code>ture</code>, 但是 weak 版本的接口即便是成功之后也有可能返回
+<code>false</code>. 这是因为有很多硬件平台本身不能保证内存顺序一致性,
+所以在这些如内存序的平台上 weak 生成比 strong 更加高效的硬件指令.
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">atomic_int</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br><span class="hljs-type">int</span> expected = <span class="hljs-number">0</span>;<br><span class="hljs-type">bool</span> exchanged = atomic_int.<span class="hljs-built_in">compare_exchange_strong</span>(expected, <span class="hljs-number">10</span>);<br><span class="hljs-comment">// 如果 atomicInt 的值是 expected( 即0 ), 则将其改为10, 返回 true; 否则返回 false</span><br></code></pre></td></tr></tbody></table></figure><p></p>
+<p>如果只是单纯的交换, 则可以 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::atomic&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">atomic_int</span><span class="hljs-params">(<span class="hljs-number">0</span>)</span></span>;<br><span class="hljs-type">int</span> expected = <span class="hljs-number">0</span>;<br><span class="hljs-type">bool</span> exchanged = atomic_int.<span class="hljs-built_in">compare_exchange_strong</span>(expected, <span class="hljs-number">10</span>);<br><span class="hljs-comment">// 如果 atomicInt 的值是 expected( 即0 ), 则将其改为10, 返回 true; 否则返回 false</span><br></code></pre></td></tr></tbody></table></figure><p></p>
+<p>有了 <code>compare_exchange_strong</code> 就可以自己写复合需求的
+<code>fetch</code>, </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">double</span> <span class="hljs-title">fetch_square</span><span class="hljs-params">(std::atomic&lt;T&gt; num)</span></span>{<br>	<span class="hljs-keyword">auto</span> old_num = num. <span class="hljs-built_in">load</span>();<br>	<span class="hljs-keyword">do</span>{<br>		<span class="hljs-keyword">auto</span> new_num = old_num * old_num;<br>	}<span class="hljs-keyword">while</span>(!num.<span class="hljs-built_in">compare_exchange_strong</span>(old_num, new_num))<br><span class="hljs-comment">// 如果 num 的值是 old_num, 将其改为 new_num. 返回 true;</span><br><span class="hljs-comment">// 由于这里使用的 while 的循环, 所以如果要照顾弱内存序平台的话, 可以使用</span><br><span class="hljs-comment">// compare_exchange_weak 这个接口, 反正错了就多循环几次.</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">double</span>&gt;(old_num);<br>}<br><span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">fetch_multiply</span><span class="hljs-params">(std::atomic&lt;T&gt;&amp; value, <span class="hljs-type">int</span> multiplier)</span></span>{<br>    <span class="hljs-type">int</span> old_val = value. <span class="hljs-built_in">load</span>();<br>    <span class="hljs-type">int</span> desired;<br>    <span class="hljs-keyword">do</span> {<br>        desired = old_val * multiplier;<br>    } <span class="hljs-keyword">while</span>(!value.<span class="hljs-built_in">compare_exchange_strong</span>(old_value, desired));<br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+<p><code>compare_exchange_strong</code> 的行为相当于: </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Ty&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">atomic</span>{<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">compare_exchange_strong</span><span class="hljs-params">(Ty &amp;expected, <span class="hljs-type">const</span> Ty&amp; new_value)</span></span>{<br>        <span class="hljs-function">std::lock_guard&lt;std::mutex&gt; <span class="hljs-title">lock</span><span class="hljs-params">(m)</span></span>;<br>        <span class="hljs-keyword">if</span> (val == expected) {<br>            val = new_value;<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        }<br>        expected = val;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    }<br><span class="hljs-keyword">private</span>:<br>    Ty val;<br>    std::mutex m;<br>};<br></code></pre></td></tr></tbody></table></figure>
+只是使用对应 CPU 提供的原子指令完成<p></p>
+<blockquote>
+<p>[!note] CAS 操作 ^cas <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1980446889984946486">知乎: 理解
+C++无锁编程 compare_exchange_weak</a> <a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange">Cppref:
+compare_exchange</a>
+<code>bool compare_exchange_weak(T&amp; expected, T desired, memory_order success, memory_order failure);</code>
+<code>bool compare_exchange_weak(T&amp; expected, T desired, memory_order order = memory_order_seq_cst);</code>
+其参数含义如下: - <code>expected</code>: 一个引用, 指向存储期望值的变量.
+如果比较成功, 原子变量会被更新为 <code>desired</code>; 如果失败,
+<code>expected</code> 会被更新为原子变量的当前值 - <code>desired</code>:
+要设置的新值 - <code>success</code>:
+指定在比较成功时使用的内存顺序(memory order) - <code>failure</code>:
+指定在比较失败时使用的内存顺序</p>
+<p>strong‌‌ 和 weak 的不同在于, weak 可能出现伪失败(spurious failure),
+即原子变量的当前值与期望值相等, 操作也会失败,
+通常是为了在某些硬件平台上实现更高的性能. 由于
+<code>compare_exchange_weak</code> 的伪失败特性, 它通常需要在循环中使用,
+直到操作成功为止 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs cpp">T old_val = expected;<br><span class="hljs-keyword">while</span> (!atomic_var.<span class="hljs-built_in">compare_exchange_weak</span>(old_val, desired, std::memory_order_release, std::memory_order_relaxed)) {<br>   <span class="hljs-comment">// 重试逻辑</span><br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+</blockquote>
+<h1><span id="memory-order">Memory Order</span></h1>
+<p>C++ 编译器默认程序单线程的,
+所以多线程的没有任何保护措施的写入是未定义行为. 具体来说,
+由于单线程假设,
+编译器在优化时可以在保证正确性的前提下随意交换指令顺序以优化性能.</p>
+<p>现实的 CPU 会将所有数据写入缓存, 再通过缓存将数据写入内存, 这对于所有
+CPU 来说都是一样的. 所以在多核CPU语境下,
+缓存数据和内存数据同步时会因为编译器默认的指令优化而出现各种数据错误的情况.
+所以在涉及到多核 CPU 缓存向内存同步数据时,
+应该保证有某种确定顺序进行同步, 即内存序问题.</p>
+<p>对于多线程的情况下, 不同线程执行的顺序有快有慢,
+所有线程内的各种语句顺序会互相穿插,
+但是无论如何穿插我们都希望最后实际的执行的顺序中,
+同一个线程内的指令相对顺序的稳定, 而不会被编译器优化,
+即内存一致性问题.</p>
+<p>内存顺序一致性模型是由计算机科学家 Leslie Lamport 在1979
+年提出的一种内存一致性模型. 根据顺序一致性模型,
+所有线程中的操作都按照某个全局的、单一的顺序执行,
+这个顺序对所有线程来说是一致的. 换句话说,
+程序中的所有操作看起来就像是按照某个特定的顺序依次执行的,
+而不涉及实际的并行执行.</p>
+<p>例如,</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">std::thread <span class="hljs-title">th1</span><span class="hljs-params">([&amp;](){</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-comment">// 指令 1</span></span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-comment">// 指令 2</span></span></span><br><span class="hljs-params"><span class="hljs-function">})</span></span>;<br><span class="hljs-function">std::thread <span class="hljs-title">th2</span><span class="hljs-params">([&amp;](){</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-comment">// 指令 3</span></span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-comment">// 指令 4</span></span></span><br><span class="hljs-params"><span class="hljs-function">})</span></span>;<br></code></pre></td></tr></tbody></table></figure>
+<p>上述四条指令在实际运行时会相互穿插. 所以实际的执行顺序可能有以下:</p>
+<ul>
+<li>1, 2, 3, 4</li>
+<li>1, 3, 4, 2</li>
+<li>1, 3, 2, 4</li>
+<li>3, 1, 2, 4</li>
+<li>3, 1, 4, 2</li>
+<li>3, 4, 1, 2</li>
+</ul>
+<p>这其中必须保证 1, 2 和 3, 4 的相对位置.
+这也各种操作系统上所讲的多线程模型.
+这种关系叫做<font color="#c0504d">全序一致性</font>.
+即我们不允许编译器因为代码优化导致代码的相对位置被改变,
+但同时编译器也不能完全放弃优化.</p>
+<p><font color="#c0504d">多线程的不一致问题出现的根本原因就是对共享数据的读写操作</font>.
+所以以共享数据的读写操作为锚点, 阻止编译器改变代码执行顺序,
+成为了一个解决方案, 也是目前支持最广泛的方式.</p>
+<p>C++标准中提供以下<a target="_blank" rel="noopener" href="https://cppreference.com/cpp/atomic/memory_order">内存序</a>:</p>
+<ul>
+<li><code>memory_order_relaxed</code>: 只保证变量是一个原子变量,
+不关心代码顺序的问题</li>
+<li><code>memory_order_acquire</code>: 把内存中的值读到缓存里去,
+所以编译器要保证不能把后面的代码优化到前面, 防止提前读入错误数据</li>
+<li><code>memory_order_release</code>: 把缓存中的值同步到内存里去,
+所以编译器要保证不能把前面的语句优化到该语句的后面,
+防止往内存中写入错误数据</li>
+<li><code>memory_order_acq_rel</code>: <code>memory_order_release</code>
++ <code>memory_order_acquire</code></li>
+<li><code>memory_order_seq_cst</code>: 全序一致性,
+不要更换任何代码顺序</li>
+</ul>
+<p>如图: <img data-fancybox="gallery" data-sizes="auto" data-src="/images/Cache-Memory模型.png" alt="Cache-Memory模型" class="lazyload"></p>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  </body></html>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/03/09/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C(Atomic)%E5%92%8C%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B(Memory%20Order)/" title="http:&#x2F;&#x2F;example.com&#x2F;2026&#x2F;03&#x2F;09&#x2F;原子操作(Atomic)和内存一致性模型(Memory Order)&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;example.com&#x2F;2026&#x2F;03&#x2F;09&#x2F;原子操作(Atomic)和内存一致性模型(Memory Order)&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			  
+			<!-- 先找到与当前文字相同的目录 -->
+			   
+			<!-- 在找到当前文章所在的 index -->
+			       
+			<!-- 下一篇文章 -->
+			<div class="new">
+				<span>下一章</span>
+				<a href="/2026/06/12/C-%E7%B1%BB%E5%9E%8B%E6%93%A6%E9%99%A4/"> C++类型擦除</a>
+			</div>
+			                                 
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/cpp/">C++</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column">
+	<a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	</body>
+</html>
