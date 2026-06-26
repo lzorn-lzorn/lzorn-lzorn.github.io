@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html 
+	lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> C++内存分配器 -  LL&#39;s Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link
+			rel="shortcut icon"
+			href="/1.png"
+			type="image/png"
+		/>
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 8.1.2"></head>
+
+	<body>
+		<div
+			class="kira-background"
+			style="background-image: url('/lib/background/bg5.jpg')"
+		></div>
+		<div class="kira-header">
+    <a
+        class="kira-drawer-button mdui-ripple"
+        title="导航栏"
+        onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');"
+    >
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL&#39;s Blog">
+        <img
+			src="/1.png"
+			alt="Lzorn"
+		/>
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img
+				src="/1.png"
+				alt="Lzorn"
+			/>
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>10</div>
+		<div><span>标签</span>3</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/"
+			title="回到首页"
+		>
+			<i
+				class="kirafont
+					
+						icon-home
+					"
+			></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/archive.html"
+			title="文章归档"
+		>
+			<i
+				class="kirafont
+					
+						icon-container
+					"
+			></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a
+			class="kira-list-item mdui-ripple false"
+			href="/about.html"
+			title="关于本人"
+		>
+			<i
+				class="kirafont
+					
+						icon-user
+					"
+			></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a
+				class="mdui-ripple"
+				href="mailto:your-email@example.com"
+				target="_blank"
+				mdui-tooltip="{content: '邮箱'}"
+				style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-link
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://space.bilibili.com/13063107"
+				target="_blank"
+				mdui-tooltip="{content: '哔哩哔哩'}"
+				style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-bilibili
+					"
+				></i>
+			</a>
+		
+			<a
+				class="mdui-ripple"
+				href="https://github.com/lzorn-lzorn/"
+				target="_blank"
+				mdui-tooltip="{content: 'GitHub'}"
+				style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);"
+			>
+				<i
+					class="kirafont
+					
+						icon-github
+					"
+				></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">4</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">3</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/UE-UI/">
+              UE-UI
+            </a>
+            <span class="category-list-count">3</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 10px;">数学</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		&copy; 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br />
+		
+		
+	</div>
+</div>
+<div
+	class="kira-sidebar-modal"
+	id="sidebar-modal"
+	onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"
+></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img />
+                </div>
+                <div class="kira-image-now">
+                    <img />
+                </div>
+                <div class="kira-image-next">
+                    <img />
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img
+				data-src="/lib/background/bg14.jpg"
+				data-sizes="auto"
+				alt="C++内存分配器"
+				class="lazyload kira-post-cover-image disabled-kira-image"
+			/>
+			<h1>C++内存分配器</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年06月26日</a>
+			<a><i class="kirafont icon-edit-fill"></i>4.2k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 19 分钟</a>
+		</div>
+		<html><head></head><body><h1><span id="new-%E5%92%8C-delete">new 和 delete</span></h1>
+<h2><span id="new">new</span></h2>
+<p>new operator
+是C++的保留关键字，当其成功调用时会调用两个函数：<code>operator new()</code>
+和 <code>placement new()</code> [tips] 这两个函数是可以重载的.
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp">string * sp = <span class="hljs-keyword">new</span> <span class="hljs-built_in">string</span>(<span class="hljs-string">"hello"</span>);<br></code></pre></td></tr></tbody></table></figure> 等价于： <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 申请原始空间，类似于malloc</span><br>woid * raw = <span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(<span class="hljs-built_in">strlen</span>(<span class="hljs-string">"hello"</span>));<br><span class="hljs-comment">// 通过 placement new调用string类构造函数，初始化申请空间</span><br><span class="hljs-keyword">new</span> (raw) <span class="hljs-built_in">string</span>(<span class="hljs-string">"hello"</span>);<br><span class="hljs-comment">// 返回对象指针</span><br>string * sp = <span class="hljs-built_in">static_cast</span>&lt;string *&gt;(raw);<br></code></pre></td></tr></tbody></table></figure> new
+这个关键字底层仍然是malloc，区别于malloc的是：new会调用相应的构造函数，虽然我们经常这么说。实际上
+new 是由两个步骤的:<p></p>
+<ol type="1">
+<li>调用 <code>operator new()</code> / <code>operator new[]()</code>
+分配内存，这部分相当于malloc</li>
+<li>调用对应的构造函数</li>
+</ol>
+<blockquote>
+<p>对齐内存分配 在 C++17 之后, 可以在 <code>new</code> 中指定对齐
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(std::<span class="hljs-type">size_t</span> size, std::<span class="hljs-type">align_val_t</span> align)</span></span>; <br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr, std::<span class="hljs-type">size_t</span> size, std::<span class="hljs-type">align_val_t</span> align)</span> <span class="hljs-keyword">noexcept</span></span>;<br></code></pre></td></tr></tbody></table></figure><p></p>
+</blockquote>
+<h2><span id="operator-new">operator new()</span></h2>
+<p>new 这个关键字之所以可以发挥作用, 主要是调用了 operator new()
+这个函数，所以可以用过重载 <code>operator new()</code> 来改变其行为
+<code>operator new()</code> 用于申请 Heap 空间，功能类似于 C 的 malloc,
+尝试从堆上获取一段内存空间，如果成功则直接返回，如果失败则转去调用 new
+handler，然后抛出一个 <code>bad_alloc</code> 异常 其函数原型是：
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(std::<span class="hljs-type">size_t</span> size)</span> <span class="hljs-title">throw</span> <span class="hljs-params">(std::bad::alloc)</span></span>;<br></code></pre></td></tr></tbody></table></figure> 其具体实现： <figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">szie_t</span> size)</span> <span class="hljs-title">throw</span> <span class="hljs-params">(std::bad_alloc)</span></span>{<br>	<span class="hljs-type">void</span> * p;<br>	<span class="hljs-keyword">while</span>((p=<span class="hljs-built_in">malloc</span>(size)) == <span class="hljs-number">0</span>)<br>		<span class="hljs-keyword">if</span>(_callnewh(size) == <span class="hljs-number">0</span>){<br>			<span class="hljs-type">static</span> <span class="hljs-type">const</span> std::bad_alloc nomem;<br>			_RAISE(nomem);      <br>		<span class="hljs-comment">// #define _RAISE(x)::std::_Throw(x) 抛出nomen异常</span><br>		}<br>	<span class="hljs-keyword">return</span> (p);<br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+<blockquote>
+<p>new handler new_handler 是一个函数指针, 用于在内存分配时调用.
+其定义包含在 <code>&lt;new&gt;</code> 中 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">namespace</span> std {<br><span class="hljs-keyword">using</span> new_handler = <span class="hljs-built_in">void</span> (*)();<br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+<p>分配失败时, 触发 new_handler, 然后循环分配并调用 new_handler, 直到(即
+new_handler 的必须满足的三种合法行为):</p>
+<ul>
+<li>别的内存释放, 分配成功</li>
+<li>new_handler 抛出异常 <code>bad_alloc</code></li>
+<li>new_handler 调用 <code>std::abort</code></li>
+</ul>
+<p>如果没有设置 new_handler, 则直接抛出异常 <code>bad_alloc</code>.
+可以通过
+<code>std::new_handler set_new_handler(new_handler new_p) noexcept;</code>
+设置全局 new_handler, 或者是在局部定义 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;iostream&gt;</span> #<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;new&gt;</span> struct BigObject { </span><br>    <span class="hljs-comment">// 静态存储本类专属handler </span><br>    <span class="hljs-type">static</span> std::new_handler class_handler; <br>    <span class="hljs-comment">// 类专属set_new_handler </span><br>    <span class="hljs-function"><span class="hljs-type">static</span> std::new_handler <span class="hljs-title">set_new_handler</span><span class="hljs-params">(new_handler h)</span> <span class="hljs-keyword">noexcept</span> </span>{ <br>        std::new_handler old = class_handler; <br>        class_handler = h; <br>        <span class="hljs-keyword">return</span> old; <br>     } <br>     <span class="hljs-comment">// 重载类专属 operator new </span><br>     <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span> </span>{ <br>         <span class="hljs-type">void</span>* ptr; <br>         <span class="hljs-comment">// 循环分配，使用本类handler </span><br>         <span class="hljs-keyword">while</span> ((ptr = ::<span class="hljs-keyword">operator</span> <span class="hljs-built_in">new</span>(size, std::nothrow)) == <span class="hljs-literal">nullptr</span>) { <br>             <span class="hljs-keyword">if</span> (class_handler == <span class="hljs-literal">nullptr</span>) <span class="hljs-keyword">throw</span> std::<span class="hljs-built_in">bad_alloc</span>(); <br>             <br>             <span class="hljs-built_in">class_handler</span>(); <br>         } <br>         <span class="hljs-keyword">return</span> ptr; <br>     } <br>     <span class="hljs-type">char</span> data[<span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>]; <br> }; <br> <span class="hljs-comment">// 静态成员初始化 </span><br> std::new_handler BigObject::class_handler = <span class="hljs-literal">nullptr</span>; <br> <span class="hljs-comment">// 仅BigObject分配失败触发的回调 </span><br> <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">big_obj_oom_handler</span><span class="hljs-params">()</span> </span>{ <br>     std::cerr &lt;&lt; <span class="hljs-string">"分配BigObject内存不足\n"</span>; <br>     <span class="hljs-keyword">throw</span> std::<span class="hljs-built_in">bad_alloc</span>(); <br> } <br> <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{ <br>     BigObject::<span class="hljs-built_in">set_new_handler</span>(big_obj_oom_handler); <br>     <span class="hljs-keyword">try</span> { <br>         <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) { <span class="hljs-keyword">new</span> BigObject; } <br>     } <span class="hljs-built_in">catch</span> (...) { std::cerr &lt;&lt; <span class="hljs-string">"BigObject内存分配失败\n"</span>; } <br>     <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; <br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+<p>如果定义 new 为 <code>noexcept</code> 则分配失败是不会调用
+new_hander, 例如: <code>char* p = new(nothrow) char[1024];</code> pmr
+的内存耗尽时也会直接抛出 new_hander 不会调用全局 new_hander. 但实际上,
+new_hander 其实很难出发, 因为操作系统往往会做出超量分配承诺,
+因为操作系统内部是会维护虚拟内存的, 同时多个进程都在时时刻刻分配和释放,
+所以系统即便内存也会给应用程序承诺会分配,
+因为可能未来不久就会有新的内存被释放. 同时即便操作系统承诺分配内存,
+真正的内存也不会马上分配, 而是在真正被用到时才会分配.</p>
+<h2><span id="placement-new">placement new()</span></h2>
+<p>一般来说，使用new申请空间时，是从系统的”堆”(heap)中分配空间。申请所得的空间的位置时根据当时的内存的实际使用情况决定的。但是,
+在某些特殊情况下，可能需要在程序员指定的特定内存创建对象，这就是所谓的”定位放置new”(placement
+new)操作。</p>
+</blockquote>
+<p>定位放置new操作的语法形式不同于普通的new操作。例如，一般都用如下语句
+<code>A* p=new A;</code> 申请空间，而定位放置new操作则使用如下语句
+<code>A* p=new (ptr) A;</code>
+申请空间，其中ptr就是程序员指定的内存首地址.</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">int</span> *p=(<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-built_in">sizeof</span>(<span class="hljs-type">int</span>)*<span class="hljs-number">10</span>);<br><span class="hljs-type">int</span> *p0 = <span class="hljs-built_in">new</span>(p)<span class="hljs-built_in">int</span>(<span class="hljs-number">10</span>);<span class="hljs-comment">//表示将10放在p的空间的第一位</span><br></code></pre></td></tr></tbody></table></figure>
+<p>[注意]</p>
+<ol type="1">
+<li>用定位放置new操作，既可以在栈(stack)上生成对象，也可以在堆（heap）上生成对象。</li>
+<li>使用语句 <code>A* p=new (mem) A;</code>
+定位生成对象时，指针p和数组名 mem 指向同一片存储区。所以，与其说定位放置
+new
+操作是申请空间，还不如说是利用已经请好的空间，真正的申请空间的工作是在此之前完成的</li>
+<li>使用语句 <code>A * p=new (mem) A;</code>
+定位生成对象是，会自动调用类A的构造函数，但是由于对象的空间不会自动释放（对象实际上是借用别人的空间），所以必须显示的调用类的析构函数，如本例中的
+<code>p-&gt;~A()</code>.</li>
+<li><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> * <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span>, <span class="hljs-type">void</span> *location)</span></span>{ <br>    <span class="hljs-keyword">return</span> location; <br>}<br></code></pre></td></tr></tbody></table></figure></li>
+</ol>
+<p>它也是new操作符的一个使用方法，须要使用一个额外的变量（buffer）。当new操作符隐含调用operator
+new函数时。把这个变量传递给它。被调用的operator
+new函数除了带有强制的參数size_t外，还必须接受void*
+指针參数。指向构造对象占用的内存空间。如果要将一个元素放在其他下标位置中，可以重载new</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span><span class="hljs-params">(<span class="hljs-type">size_t</span> sz,<span class="hljs-type">void</span> *ptr,<span class="hljs-type">int</span> pos)</span></span>{<br><span class="hljs-comment">//第1个参数必须但不需要传递，由new自动计算的，第2个参数传递void*指针，第3个参数传递位置</span><br>    <span class="hljs-keyword">return</span> &amp;ptr[pos];<br>}<br><span class="hljs-keyword">new</span>(p,<span class="hljs-number">3</span>)<span class="hljs-built_in">int</span>(<span class="hljs-number">10</span>);    <span class="hljs-comment">//将10放在下标为3的空间中</span><br></code></pre></td></tr></tbody></table></figure>
+<p>[ 注意 ]：<code>operator new()</code> 和
+<code>operator new[]()</code>
+都是不负责初始化得到的内存的，所有这部分要取决于具体编译器的实现. 在
+C++17 之后 placement new 被封装为 <code>std::construct_at</code></p>
+<h2><span id="delete">delete</span></h2>
+<p>对于每一个 <code>new</code> 都有一个对应的 <code>delete</code>
+来进行释放.. 你需要做到 每一种new和delete对应，<code>new[]</code> 和
+<code>delete[]</code> 对应，构造和析构的new
+delete要对应。但是这些都不是我们所提倡的做法，我们现在更加提倡的是使用智能指针，也就是应该RAII思想。
+对应于operator new()，delete关键字也同理于new: 1. 会在调用解构函数 2.
+调用 <code>operator delete()</code> /
+<code>operator delete[]() ()</code> 所以可以通过重写
+<code>operator delete()</code> 来改变delete的行为 重载delete：
+</p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-keyword">delete</span>[](<span class="hljs-type">void</span> *p){<br>	<span class="hljs-built_in">free</span>(p);<br>}<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span><span class="hljs-params">(<span class="hljs-type">void</span> *p)</span></span>{<br>    <span class="hljs-built_in">free</span>(p);<br>}<br></code></pre></td></tr></tbody></table></figure><p></p>
+<h1><span id="allocator">Allocator</span></h1>
+<p>在 C++ 的设计中, 标准内存分配器并不是 C 语言中传统的
+<code>malloc</code> 和 <code>free</code>, 而是一种内存安全的类型分配器,
+即在使用时需要指定具体类型, 而不是将 <code>void*</code>
+进行强制类型转换. 即 </p><figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">_Ty</span>&gt;  <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">allocator</span> {<br>    <span class="hljs-function">T* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">(T* p, <span class="hljs-type">size_t</span> n)</span> <span class="hljs-keyword">noexcept</span></span>;<br>};<br></code></pre></td></tr></tbody></table></figure><p></p>
+<p>在 C++ 中一个标准的内存分配器(无论是否有状态),
+都需要包含以下信息:</p>
+<ul>
+<li><code>value_type</code>: 指明分配类型</li>
+<li><code>pointer_type</code>: 对应的指针类型</li>
+<li><code>const_pointer</code>: const pointer版本</li>
+<li><code>reference</code>: 对应的引用类型</li>
+<li><code>const_reference</code>: 对应引用类型的 const 版本</li>
+<li><code>size_type</code>: 内存分配器能表达的最大内存块元素数量, 默认
+无符号数字(size_t), 也是用于在 64 位大内存场景溢出时,
+无法区分”数量”和”偏差值”的问题.</li>
+<li><code>difference_type</code>: 两个指针之间的差值所返回的类型,
+默认&nbsp;<code>std::ptrdiff_t</code>&nbsp;(有符号整数 int). 主要是为了防止 64
+位超大数组超出 int
+的范围导致标准库算法&nbsp;<code>distance</code>,&nbsp;<code>advance</code>&nbsp;报错.</li>
+<li><code>propagate_on_container_move_assignment</code>:
+分配器传播规则</li>
+</ul>
+<p>但是对于无状态的内存分配器而言这些都是差不多的,
+很多都是在&nbsp;<code>value_type</code>&nbsp;的基础上预定义的.
+所以标准在&nbsp;<code>allocator_traits</code>&nbsp;中已经提前写好了一份.
+所以你可以:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Ty&gt;<br><span class="hljs-keyword">class</span> <span class="hljs-title class_">YourAllocator</span> {<br>    <span class="hljs-keyword">using</span> value_type = Ty;<br>    <span class="hljs-built_in">YourAllocator</span>() = <span class="hljs-keyword">default</span>;<br>    <span class="hljs-comment">// rebind</span><br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> U&gt;</span><br><span class="hljs-function">    <span class="hljs-title">YourAllocator</span><span class="hljs-params">(<span class="hljs-type">const</span> YourAllocator&lt;U&gt;&amp;)</span> <span class="hljs-keyword">noexcept</span> </span>{}<br>    <span class="hljs-function">Ty* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span>)</span> </span>{}<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">()</span> </span>{}<br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>你无需定义其他的东西,&nbsp;<code>allocator_traits</code>&nbsp;会全部补齐.<br>
+同时, 如果你也没有定义该类型应该如何构造和析构,
+在&nbsp;<code>allocator_traits</code>&nbsp;中也会有默认的&nbsp;<code>constrcut</code>&nbsp;和&nbsp;<code>destroy</code><br>
+等等你需要的一切都会在&nbsp;<code>allocator_traits</code>&nbsp;中有默认实现.</p>
+<p>在标准库中所有带有显式分配器的容器,
+例如&nbsp;<code>vector</code>,&nbsp;<code>string</code>&nbsp;其内部都会通过&nbsp;<code>allocator_traits</code>&nbsp;来访问对应的内容.
+例如:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> Ty, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>=std::allocator&lt;Ty&gt;&gt;<br><span class="hljs-keyword">class</span> vector{<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-keyword">using</span> allocator_type = Alloc;<br>    <span class="hljs-keyword">using</span> size_type = std::allocator_traits&lt;Ty&gt;::size_type;<br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>来获取对应的静态信息, 所以如果要实现自定义容器同时有希望兼容标准,
+实现这里的类型则也是兼容的一环.</p>
+<p>为什么标准库要进行一个”舍近求远”的操作, 将问题复杂化呢?
+因为这一切都是为了实现<font color="#c0504d">有状态的内存分配器</font>.
+例如: 内存池, 内存追踪分析器,
+他们内部不仅要分配内存还要对分配出去的内存做管理和统计,
+此时上述的标签就变得至关重要. 其中详细讲述 rebind 和 propagate 规则</p>
+<h2><span id="rebind-%E9%87%8D%E7%BB%91%E5%AE%9A%E8%A7%84%E5%88%99">rebind 重绑定规则</span></h2>
+<p>对于一个链表对象而言, 外部调用者往往会使用</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs Cpp">std::list&lt;<span class="hljs-type">int</span>&gt; l;<br></code></pre></td></tr></tbody></table></figure>
+<p>来进行声明, 但是在 <code>list</code> 内部其真正分配并不是一个
+<code>int</code>, 而是一个 <code>ListNode&lt;int&gt;</code> 的类型,
+此时在内部就需要将标准内存分配器从 <code>int</code> 类型 Rebind 到
+<code>ListNode&lt;int&gt;</code> 类型, 即</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Ty</span>, <span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span> = std::allocator&lt;Ty&gt;&gt;<br><span class="hljs-keyword">struct</span> list {<br>    <span class="hljs-keyword">using</span> NodeAlloc = <span class="hljs-keyword">typename</span> Alloc::<span class="hljs-keyword">template</span> rebind&lt;Node&gt;::other;<br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>在 C++17 之后的版本, 显示 rebind 操作已经可以通过 <a target="_blank" rel="noopener" href="https://cppreference.com/cpp/memory/allocator_traits"><code>allocator_traits</code></a>
+推导得出.</p>
+<p>例如, 对于一个 FixedAllocator:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T, <span class="hljs-type">size_t</span> PoolSize&gt; <span class="hljs-keyword">struct</span> <span class="hljs-title class_">FixedAlloc</span> { <br>    <span class="hljs-type">char</span> pool[PoolSize]; <span class="hljs-comment">// 手动自定义rebind，保留第二个模板参数 </span><br>    <span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> U&gt; <span class="hljs-keyword">struct</span> <span class="hljs-title class_">rebind</span> { <br>        <span class="hljs-keyword">using</span> other = FixedAlloc&lt;U, PoolSize&gt;; <br>    }; <br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>此时你就需要指定其 rebind, 如果没有这个 rebind, 在
+<code>allocator_traits</code> 中则会使用默认的 <code>rebind</code>, 生成
+<code>FixedAlloc&lt;U&gt;</code> 缺失了 <code>PoolSize</code>,
+编译就会报错</p>
+<h2><span id="propagate-%E4%BC%A0%E6%92%AD%E8%A7%84%E5%88%99">propagate 传播规则</span></h2>
+<p><img data-fancybox="gallery" data-sizes="auto" data-src="/images/propagation%20in%20C++.excalidraw.png" alt="propagation" class="lazyload"> 所谓标准库的传播规则,
+即如果一个容器内部保存了某个分配器对象时, 当这个对象被拷贝, 移动,
+交换时, 改分配器应该采取何种行为.
+<code>propagate_on_container_copy_assignment</code>: 控制拷贝赋值后,
+<code>dst</code> 是否可以接管 <code>src</code> 的分配器. 当其为
+<code>true_type</code> 时,</p>
+<ol type="1">
+<li>用 <code>dst</code> 旧分配器释放自身原有所有内存</li>
+<li>将 <code>src</code> 的分配器完整拷贝一份，赋值给 <code>dst</code>
+的分配器</li>
+<li>使用新拷贝过来的分配器，重新分配内存并拷贝 <code>src</code>
+全部元素</li>
+</ol>
+<p>当其为 <code>false_type</code> 时,</p>
+<ol type="1">
+<li><code>dst</code> 保留自己原本的分配器，不替换</li>
+<li>释放 <code>dst</code> 旧内存</li>
+<li>用 <code>dst</code> 自身分配器开辟内存, 拷贝 <code>src</code>
+元素</li>
+</ol>
+<p>如果 dst 和 src 的分配器不相等时, 则会全量拷贝.
+对于无状态分配器而言无风险, 因为二者等价.</p>
+<p><a target="_blank" rel="noopener" href="https://cppreference.com/cpp/memory/allocator_traits/select_on_container_copy_construction"><code>select_on_container_copy_construction</code></a>
+在拷贝时(拷贝构造时也会触发)会触发该函数, 其是属于
+<code>allocator_traits</code> 下的静态成员函数.
+当你的分配器没有手动定义这个成员时，<code>allocator_traits</code>
+提供默认实现:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-type">static</span> Alloc <span class="hljs-title">select_on_container_copy_construction</span><span class="hljs-params">(<span class="hljs-type">const</span> Alloc&amp; src)</span> </span>{ <br>    <span class="hljs-keyword">return</span> src; <span class="hljs-comment">// 直接返回源分配器副本 </span><br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>对于无状态的分配器默认即可. 对于有状态的分配器可以自行实现, 例如:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> Ty&gt;<br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">YourAlloc</span> {<br>    <span class="hljs-function">YourAlloc <span class="hljs-title">select_on_container_copy_construction</span><span class="hljs-params">(<span class="hljs-type">const</span> StatefulAlloc&amp; src)</span> <span class="hljs-type">const</span> </span>{ <br>        <span class="hljs-comment">// 策略B：共享源内存池，但重置分配统计计数 </span><br>        YourAlloc new_alloc = src; <br>        new_alloc.alloc_cnt = <span class="hljs-number">0</span>; <br>        <span class="hljs-keyword">return</span> new_alloc; <br>        <span class="hljs-comment">/* // 策略A：和默认行为一致，完整复制所有状态 </span><br><span class="hljs-comment">            return src; </span><br><span class="hljs-comment">            // 策略C：全新独立内存池，完全隔离 </span><br><span class="hljs-comment">            YourAlloc separate; separate.pool = std::shared_ptr&lt;char&gt;(new char[4096]);</span><br><span class="hljs-comment">            return separate; </span><br><span class="hljs-comment">        */</span> <br>    }<br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>如果有自定义实现, 则标准库会使用自定义实现</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">namespace</span> std { <br><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">Alloc</span>&gt; <br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">allocator_traits</span> { <br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> T&gt; <span class="hljs-type">static</span> Alloc <span class="hljs-title">select_on_container_copy_construction</span><span class="hljs-params">(<span class="hljs-type">const</span> Alloc&amp; src)</span> </span>{ <br>        <span class="hljs-function"><span class="hljs-keyword">if</span> <span class="hljs-title">constexpr</span> <span class="hljs-params">(has_member_select&lt;Alloc&gt;)</span> </span>{ <br>            <span class="hljs-comment">// 分配器自定义了函数，优先调用自定义版本 </span><br>            <span class="hljs-keyword">return</span> src.<span class="hljs-built_in">select_on_container_copy_construction</span>(src); <br>        } <span class="hljs-keyword">else</span> { <span class="hljs-comment">// 兜底：直接返回源分配器副本 </span><br>            <span class="hljs-keyword">return</span> src; <br>        } <br>    } <br>}; <br>} <span class="hljs-comment">// namespace std;</span><br></code></pre></td></tr></tbody></table></figure>
+<p><code>propagate_on_container_move_assignment</code>:
+移动赋值时是否转移源分配器给目标 当其为 <code>true_type</code> 时,</p>
+<ol type="1">
+<li><code>dst</code> 使用自身旧分配器释放原有内存</li>
+<li>转移 <code>src</code> 的分配器实例给 <code>dst</code>
+(移动语义)</li>
+<li>直接窃取 <code>src</code> 底层缓冲区指针, 零拷贝</li>
+<li><code>src</code> 为空容器</li>
+</ol>
+<p>当其为 <code>false_type</code> 时(默认行为), 不替换 <code>dst</code>
+的分配器, 分两条子逻辑</p>
+<ol type="1">
+<li><code>dst.get_allocator() == src.get_allocator()</code>: 分配器等价,
+则直接窃取缓冲区, 零开销(无状态分配器永远都是这条, 因为都是等价的)</li>
+<li><code>dst.get_allocator() != src.get_allocator()</code>:
+分配器不等价, 不能直接移交内存(即便是移动语义, 也无法零拷贝).
+<ol type="1">
+<li><code>dst</code> 用自身分配器开辟全新缓冲区</li>
+<li>将 <code>src</code> 中所有元素移动构造到新内存</li>
+<li><code>src</code> 销毁时释放自己原有内存</li>
+</ol></li>
+</ol>
+<p>有状态的有状态分配器：必须手动设为 <code>true_type</code></p>
+<p><code>propagate_on_container_swap</code>: 交换两个容器时,
+是否同步交换两者的分配器实例 当其为 <code>true_type</code> 时:
+同时交换容器数据缓冲区, 交换两者分配器内部全部状态. 交换后：a 持有原 b
+的分配器与数据, b 持有原 a 的分配器与数据</p>
+<p>当其为 <code>false_type</code> 时:</p>
+<ul>
+<li>两个分配器必须相等
+<code>a.get_allocator() == b.get_allocator()</code>: 交换缓冲区,
+分配器各自保留</li>
+<li>不相等时 UB.</li>
+</ul>
+<h1><span id="%E5%A4%9A%E6%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8">多态内存分配器</span></h1>
+<p>在C++17中, 标准引入了 PMR (polymorphic memory resource)
+多态内存分配器. 原有的内存分配器太难用了, 内存分配器的之间的拷贝太耗时,
+本质上还是内存资源和内存分配算法没有解耦.</p>
+<p>对于原有的 <code>vector</code> 实际上你很难控制内存分配的次数,
+即便使用 <code>reserve</code> 也会难以避免. 所以一个思路是:
+提前分配内存资源, 然后让 <code>vector</code>
+从这个已经分配好的资源中获取内存,
+这样就不会多次分配内存而是统一使用已经分配好的内存资源, 即 PMR,
+多态内存资源. 例如:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>{<br>    std::array&lt;std::byte, 8192&gt; buffer;<br>    std::pmr::monotonic_buffer_resource pool{<br>        buf.<span class="hljs-built_in">data</span>(), <br>        buf.<span class="hljs-built_in">size</span>()<br>    };<br>    <span class="hljs-comment">// 这两个都要使用 pmr, 由于分配器的转播规则.</span><br>    std::pmr::vector&lt;std::pmr::string&gt; strs { &amp;pool };<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">size_t</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">256</span>; ++i){<br>        strs.<span class="hljs-built_in">emplace_back</span>(<span class="hljs-string">"hello world"</span>);<br>    }<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>相当于上例中的 <code>vector</code> 使用了在栈上分配的内存.</p>
+<p>而所谓”多态”, 则是标准库将内存资源和内存分配算法之间的解耦.
+底层内存资源 <code>memory_source</code> 是一个抽象基类,
+只负责原始内存分配. 而上层的
+<code>std::pmr::polymorphic_allocator&lt;Ty&gt;</code> 则是真正的分配器,
+内部仅持有内存资源的指针.</p>
+<p>既然 memory_source 是一个抽象类, 那自然可以自定义内存资源.
+此时需要继承该类, 并重载对应方法</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">namespace</span> std::pmr { <br><span class="hljs-keyword">class</span> <span class="hljs-title class_">memory_resource</span> { <br><span class="hljs-keyword">public</span>: <span class="hljs-comment">// 对外公共接口（final，不可重写） </span><br>    <span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span> bytes, <span class="hljs-type">size_t</span> alignment = <span class="hljs-keyword">alignof</span>(<span class="hljs-type">max_align_t</span>))</span></span>; <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">(<span class="hljs-type">void</span>* p, <span class="hljs-type">size_t</span> bytes, <span class="hljs-type">size_t</span> alignment = <span class="hljs-keyword">alignof</span>(<span class="hljs-type">max_align_t</span>))</span></span>; <br>    <span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">is_equal</span><span class="hljs-params">(<span class="hljs-type">const</span> memory_resource&amp; other)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>;<br>    <br> <span class="hljs-keyword">protected</span>: <br>     <span class="hljs-comment">// 虚函数，由子类实现真实内存逻辑 </span><br>     <span class="hljs-comment">// 分配内存</span><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span>* <span class="hljs-title">do_allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span>, <span class="hljs-type">size_t</span>)</span> </span>= <span class="hljs-number">0</span>; <br>    <span class="hljs-comment">// 回收内存</span><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">void</span> <span class="hljs-title">do_deallocate</span><span class="hljs-params">(<span class="hljs-type">void</span>*, <span class="hljs-type">size_t</span>, <span class="hljs-type">size_t</span>)</span> </span>= <span class="hljs-number">0</span>; <br>    <span class="hljs-comment">// 判断内存资源是否相等</span><br>    <span class="hljs-function"><span class="hljs-keyword">virtual</span> <span class="hljs-type">bool</span> <span class="hljs-title">do_is_equal</span><span class="hljs-params">(<span class="hljs-type">const</span> memory_resource&amp;)</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span> </span>= <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">memory_resource</span>() = <span class="hljs-keyword">default</span>; <br>    <span class="hljs-keyword">virtual</span> ~<span class="hljs-built_in">memory_resource</span>() = <span class="hljs-keyword">default</span>; <br>    <span class="hljs-built_in">memory_resource</span>(<span class="hljs-type">const</span> memory_resource&amp;) = <span class="hljs-keyword">delete</span>; <br>    memory_resource&amp; <span class="hljs-keyword">operator</span>=(<span class="hljs-type">const</span> memory_resource&amp;) = <span class="hljs-keyword">delete</span>;<br> }; <br> }<br></code></pre></td></tr></tbody></table></figure>
+<p>这里的 <code>memory_source</code> 没有对应的模板 <code>Ty</code>,
+因为内存资源管理的是 bytes 而不在乎什么类型.
+标准已经提供了五种内存资源:</p>
+<ul>
+<li><code>new_delete_resource</code>: 每次分配和释放都会调用
+<code>new</code> 和 <code>delete</code>, 相当于原来的
+<code>std::allocator</code></li>
+<li><code>null_memory_resource</code>:
+返回一个每次分配都会失败的内存资源的指针, 抛出
+<code>std::bad_alloc</code> 异常.</li>
+<li><code>monotonic_buffer_resource</code>: 线性分配内存,
+只增长不局部释放; 仅销毁整体一次性回收</li>
+<li><code>synchronized_pool_resource</code> 和
+<code>unsynchronized_pool_resource</code>: 分块内存池,
+一个线程安全一个线程不安全.</li>
+</ul>
+<p>上层的 <code>std::pmr::polymorphic_allocator&lt;Ty&gt;</code>,
+则符合C++标准对内存分配器的要求</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs Cpp"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> <span class="hljs-title class_">T</span>&gt; <span class="hljs-keyword">class</span> <span class="hljs-title class_">polymorphic_allocator</span> { <br>    memory_resource* mr_; <span class="hljs-comment">// 仅存内存资源指针，无其他状态 </span><br><span class="hljs-keyword">public</span>: <br>    <span class="hljs-comment">// 构造：绑定一个内存资源 </span><br>    <span class="hljs-built_in">polymorphic_allocator</span>(memory_resource* r = <span class="hljs-built_in">get_default_resource</span>()) <span class="hljs-keyword">noexcept</span>; <br>    <span class="hljs-comment">// rebind 天然支持，转换后共用同一个 mr_ </span><br>    <span class="hljs-function"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">class</span> U&gt; <span class="hljs-title">polymorphic_allocator</span><span class="hljs-params">(<span class="hljs-type">const</span> polymorphic_allocator&lt;U&gt;&amp; other)</span> <span class="hljs-keyword">noexcept</span></span>; <br>    <span class="hljs-comment">// 分配T类型对象，底层调用 mr_-&gt;allocate </span><br>    <span class="hljs-function">T* <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-type">size_t</span> n)</span></span>; <br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">deallocate</span><span class="hljs-params">(T* p, <span class="hljs-type">size_t</span> n)</span> <span class="hljs-keyword">noexcept</span></span>; <br>    <span class="hljs-comment">// 获取绑定的内存资源 </span><br>    <span class="hljs-function">memory_resource* <span class="hljs-title">resource</span><span class="hljs-params">()</span> <span class="hljs-type">const</span> <span class="hljs-keyword">noexcept</span></span>; <br>    <span class="hljs-comment">// 内置全套类型别名, allocator_traits 无需兜底 </span><br>    <span class="hljs-keyword">using</span> value_type = T; <br>    <span class="hljs-keyword">using</span> size_type = <span class="hljs-type">size_t</span>; <br>    <span class="hljs-keyword">using</span> difference_type = <span class="hljs-type">ptrdiff_t</span>; <br>    <span class="hljs-comment">// 传播标签全部 true（有状态分配器标准配置） </span><br>    <span class="hljs-keyword">using</span> propagate_on_container_copy_assignment = true_type;<br>    <span class="hljs-keyword">using</span> propagate_on_container_move_assignment = true_type;<br>    <span class="hljs-keyword">using</span> propagate_on_container_swap = true_type; <br>    <span class="hljs-comment">// 拷贝构造自定义函数 select_on_container_copy_construction </span><br>    <span class="hljs-function">polymorphic_allocator <span class="hljs-title">select_on_container_copy_construction</span><span class="hljs-params">(<span class="hljs-type">const</span> polymorphic_allocator&amp;)</span> <span class="hljs-type">const</span></span>; <br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>其核心优势就在于, 由于底层的内存资源都是一样的.
+所以不存在内存的复制.</p>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  </body></html>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/06/26/C-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" title="http:&#x2F;&#x2F;example.com&#x2F;2026&#x2F;06&#x2F;26&#x2F;C-内存分配器&#x2F;" target="_blank" rel="noopener">http:&#x2F;&#x2F;example.com&#x2F;2026&#x2F;06&#x2F;26&#x2F;C-内存分配器&#x2F;</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			  
+			<!-- 先找到与当前文字相同的目录 -->
+			            
+			<!-- 在找到当前文章所在的 index -->
+			            
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/06/12/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96-%E5%87%8F%E5%B0%91%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E6%8B%B7%E8%B4%9D/"> 性能优化: 减少不必要的拷贝</a>
+			</div>
+			                          
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/cpp/">C++</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column">
+	<a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	</body>
+</html>
