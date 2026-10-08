@@ -1,0 +1,574 @@
+<!DOCTYPE html><html lang="en"><head><!-- hexo injector head_begin start --><meta name="robots" content="noindex, nofollow"><!-- hexo injector head_begin end -->
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> 渲染器架构{1}-结构 -  LL's Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link rel="shortcut icon" href="/1.png" type="image/png">
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+	<body>
+		<div class="kira-background" style="background-image: url('/lib/background/bg5.jpg')"></div>
+		<div class="kira-header">
+    <a class="kira-drawer-button mdui-ripple" title="导航栏" onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');">
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL's Blog">
+        <img src="/1.png" alt="Lzorn">
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img src="/1.png" alt="Lzorn">
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>19</div>
+		<div><span>标签</span>8</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a class="kira-list-item mdui-ripple false" href="/" title="回到首页">
+			<i class="kirafont
+					
+						icon-home
+					"></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+			<i class="kirafont
+					
+						icon-container
+					"></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/about.html" title="关于本人">
+			<i class="kirafont
+					
+						icon-user
+					"></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a class="mdui-ripple" href="mailto:your-email@example.com" target="_blank" mdui-tooltip="{content: '邮箱'}" style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);">
+				<i class="kirafont
+					
+						icon-link
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://space.bilibili.com/13063107" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);">
+				<i class="kirafont
+					
+						icon-bilibili
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://github.com/lzorn-lzorn/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);">
+				<i class="kirafont
+					
+						icon-github
+					"></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">5</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">4</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">8</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/编程语言/">
+              编程语言
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/UI-%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">UI 系统</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" style="font-size: 12.5px;">内存分配器</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 12.5px;">数学</a> <a href="/tags/%E6%B8%B2%E6%9F%93/" style="font-size: 17.5px;">渲染</a> <a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">类型系统</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" style="font-size: 10px;">编译器</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		© 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &amp;
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br>
+		
+		
+	</div>
+</div>
+<div class="kira-sidebar-modal" id="sidebar-modal" onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img>
+                </div>
+                <div class="kira-image-now">
+                    <img>
+                </div>
+                <div class="kira-image-next">
+                    <img>
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img data-src="/lib/background/p5/2.jpg" data-sizes="auto" alt="渲染器架构{1}-结构" class="lazyload kira-post-cover-image disabled-kira-image">
+			<h1>渲染器架构{1}-结构</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年10月05日</a>
+			<a><i class="kirafont icon-edit-fill"></i>4.3k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 19 分钟</a>
+		</div>
+		<p>现代渲染是一个 CPU 和 GPU 共同协作的过程. CPU 端往往需要保证将各种资源按照一定的规则传递给 GPU, 而在 GPU 端往往通过 Shader 来实现具体的算法和效果. 对于 CPU 端, 其主体往往分为三个层面: 业务侧面, 渲染侧面 和 RHI 侧面. 这里指代的渲染侧面和业务侧面, 可以理解为实际执行渲染的模块和执行游戏逻辑的模块.<br>业务层负责提交渲染意图, 渲染层用于和 GPU 进行实质交互. 对于三个侧面, 分别代表三个线程(有时渲染线程和RHI也可以是一个线程, 将其分开是UE的策略):</p>
+<ul>
+<li>业务层面: 负责提交渲染意图, 这里的渲染意图可以有若干种具体的实现, 可以将其封装为一个 RenderRequest 对象, 内部存一个当前渲染请求的类型和一个由业务线程指定具体的回调函数(UE实际上就是这么实现的, 但是其没有封装 RenderRequest 对象). 这里需要注意线程同步的时候对共享对象的访问, 此时在渲染线程中会直接拷贝一份对象中重要信息来避免对共享对象的访问. 同时在一帧当中会有很多次渲染意图的提交, 但是本质上都是数据的更新, 之后在本帧的最后业务线程(往往是摄像机组件)会提交一次真正的渲染请求.</li>
+<li>渲染层面: 渲染线程在收到渲染请求时, 此时往往是业务线程的一帧的最后一个请求. 此时渲染线程开始基于所有更新的数据来录制提交给 RHI 线程的绘制命令. 这其中基本包括<ul>
+<li>构建视图数据和计算每个视图的可见性</li>
+<li>构建 PSO 数据</li>
+<li>构建, 编译, 执行渲染依赖图. 渲染依赖图执行完之后就得到了已经录制好的渲染命令</li>
+</ul>
+</li>
+<li>RHI层面: 在收到渲染线程提交的渲染命令之后, 通过动态派发走进对应的API分支, 然后解析渲染命令最后向 GPU 发送绘制调用.</li>
+</ul>
+<p>对于上述的三个线程, 以下称之为 Game线程, 渲染线程 和 RHI线程.</p>
+<blockquote>
+<p>[!note] 三个线程的数据流<br>一帧内数据在三个线程之间单向流动:<br>Game 线程(更新场景数据, 提交渲染意图) → 渲染线程(可见性, PSO, 构建并执行 RDG, 录制命令) → RHI 线程(把平台无关命令转译为具体 API 调用) → GPU。<br>线程之间通过命令队列与同步原语(如 Game 线程的 FrameEndSync)解耦, 从而允许流水线式并行, 避免某一方阻塞拖慢整帧。</p>
+</blockquote>
+<p>对于 GPU 端, 这里特指基于光栅化渲染关系的渲染器, 开发者至少需要实现两种 Shader: Vertex Shader 和 Pixel Shader.<br>Vertex Shader: 顶点着色器主要的功能是处理顶点属性, 并将处理完之后的顶点属性传递给下一个阶段<br>Pixel Shader: 像素着色器往往位于光栅化之后, 是给每一个像素上色的着色器, 这里也是主要算法实现的地方.</p>
+<p>对于像素着色器来说, 其本质是一个数学公式: 输入 CPU 侧传来的数据, 再辅以基于物理的公式, 计算出每个像素的最终颜色——这正是基于物理的真实感渲染(PBR)的核心, 具体内容见下一篇”原理”笔记.</p>
+<h1><span id="game-%E7%BA%BF%E7%A8%8B">Game 线程</span></h1><p>在Game线程中, 常见的需求有三种:</p>
+<h2><span id="%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%E8%AF%B7%E6%B1%82">数据更新请求</span></h2><p>在UE中, 场景中的容器 <code>Actor</code> 想持有某种能力必须携带某个 <code>Component</code>, 而对于渲染而言, 则是 <code>UPrimitiveComponent</code>. 该组件提供向渲染器提交请求的能力.<br>不同的需要渲染的物体使用不同的 <code>UPrimitiveComponent</code> 的子类, 从而提交其对应格式的数据.<br>例如 Game Thread 一个 Tick 结束后, 命令队列的样子</p>
+<figure class="highlight jboss-cli"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">CommandQueue = [<br>    <span class="hljs-string">//</span> <span class="hljs-params">----</span> 状态更新命令<span class="hljs-params">(按发生顺序)</span><span class="hljs-params">----</span><br>    UpdateTransform<span class="hljs-params">(Actor1)</span>,        <span class="hljs-string">//</span> Actor1 移动了<br>    UpdateTransform<span class="hljs-params">(Actor2)</span>,        <span class="hljs-string">//</span> Actor2 移动了<br>    UpdateBoneMatrices<span class="hljs-params">(Char1)</span>,      <span class="hljs-string">//</span> 角色骨骼动画更新<br>    UpdateMaterialParam<span class="hljs-params">(Mat1)</span>,      <span class="hljs-string">//</span> 材质参数变化<br>    AddPrimitive<span class="hljs-params">(NewMesh)</span>,          <span class="hljs-string">//</span> 新物体加入场景<br>    UpdateTransform<span class="hljs-params">(Actor3)</span>,        <span class="hljs-string">//</span> Actor3 被物理推动<br>    UpdateParticleData<span class="hljs-params">(Niagara1)</span>,   <span class="hljs-string">//</span> 粒子系统更新<br>    RemovePrimitive<span class="hljs-params">(OldMesh)</span>,       <span class="hljs-string">//</span> 物体被销毁<br>    UpdateMorphTargets<span class="hljs-params">(Char1)</span>,      <span class="hljs-string">//</span> 角色表情变化<br><br>    <span class="hljs-string">//</span> <span class="hljs-params">----</span> 渲染请求命令<span class="hljs-params">(最后一个)</span><span class="hljs-params">----</span><br>    RenderViewFamily<span class="hljs-params">(ViewFamily)</span>,   <span class="hljs-string">//</span> ← 触发整帧渲染<br>];<br></code></pre></td></tr></tbody></table></figure>
+<p>这里的最后一个渲染请求同时还是一个同步点, 游戏线程会主动调用 <code>FrameEndSync::Sync();</code> 避免Game线程领先太多.<br>同时对于多个渲染请求的情况, 可以选择将其合并为一个请求。而对于多个视口(如分屏)的情况, 每个视口提交的 ViewFamily 是不同的; 不过通常情况下一个独立进程的游戏只有一个视口, 因此也只会有一个 ViewFamily。</p>
+<h2><span id="%E4%B8%BB%E5%B1%8F%E5%B9%95%E6%B8%B2%E6%9F%93%E8%AF%B7%E6%B1%82">主屏幕渲染请求</span></h2><p>在一帧中实际上会提交多种数据更新请求, 但是对于渲染线程而言不会因为每提交一次数据更新就重新渲染一次, 而是在最后一次提交中主动发出实际的渲染命令。</p>
+<blockquote>
+<p>注意: 这里的”延迟”指的是渲染请求被延迟到帧末统一执行(即渲染线程对请求的延迟处理), 而不是”延迟渲染/延迟着色(Deferred Rendering)”——后者是光照阶段的算法, 与这里讨论的线程调度是两回事。<br>虽然上述说的一直都是渲染命令, 但是在 UE 的实现中, 并没有一个 Enum 来定义若干种命令, 而是通过传入会在渲染线程中被调用的回调函数来实现的. 所谓”实际的渲染请求”, 也只不过是在回调函数中调用具体渲染器的 Render 函数. 例如:</p>
+</blockquote>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-built_in">ENQUEUE</span>([ViewFamily, Scene = World-&gt;Scene](FRHICommandListImmediate&amp; RHICmdList) {<br>    FSceneRenderer* Renderer =<br>        FSceneRenderer::<span class="hljs-built_in">CreateSceneRenderer</span>(&amp;ViewFamily, Scene);<br>    Renderer-&gt;<span class="hljs-built_in">Render</span>(RHICmdList);<br>    <span class="hljs-keyword">delete</span> Renderer;<br>});<br></code></pre></td></tr></tbody></table></figure>
+<p>[注]: <code>GameViewportClient</code> 只是 View 的组织者, 因为渲染线程只需要使用 View 的数据, 而不需要对象(直接让渲染线程取对象会有线程的竞态问题), 所以会由 <code>GameViewportClient</code> 组织相机数据. 但是其数据来源依旧来自玩家当前相机的 View 数据</p>
+<h2><span id="%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E8%AF%B7%E6%B1%82">离屏渲染请求</span></h2><p>在实际的游戏场景中, 往往会有各种画中画的场景, 例如: 狙击镜开镜, 小地图, 透光的且映照出内部场景的窗户等等. 面对这种情况, 现代渲染器可能会选择将这个场景单独渲染成一张 RenderTarget, 最后再将 RenderTarget 独立的渲染在屏幕中.<br>这里说的 RenderTarget 实际上是一种离屏渲染, GPU将图形绘制到一个独立的 Image 上, 然后再贴到屏幕上, 这种情况称这张图为 RenderTarget.<br>而且 RenderTarget 的渲染是独立于主屏幕的, 所以可以实现以上的画中画的效果. 在 UE 中该方式对应的 Component 为 <code>USceneCaptureComponent</code>, 其并不是 <code>UPrimitiveComponent</code> 的派生类, 而是独立的.<br>对于这种情况, 会有一个标志<code>bRenderInMainRender</code> </p>
+<ul>
+<li>true: 作为主渲染视口的一部分, 其会作为一个附加 Pass 在主渲染器的流程中, 通过优先级决定谁先谁后.</li>
+<li>false: 独立渲染窗口, 其会先绘制所有的 <code>USceneCaptureComponent</code> 请求的画面至一个离屏的 RenderTarget 上, 然后绘制主屏幕上的场景至 BackBuffer 中, 最后在绘制 UI 时使用 Image 控件对 Render Target 进行采样</li>
+</ul>
+<h1><span id="%E6%B8%B2%E6%9F%93%E7%BA%BF%E7%A8%8B">渲染线程</span></h1><p>在渲染线程这一侧, 我们主要讨论 Render() 被调用时具体发生了什么, 其更能体现出渲染侧面的整体架构. 在实际的光栅化渲染器设计中, 主要需要处理两个点:</p>
+<ol>
+<li>材质</li>
+<li>渲染通道</li>
+</ol>
+<blockquote>
+<p>这两点在后面的 Render 流程中分别对应: “材质”最终落地为 MeshDrawCommand 与 PSO 的构建(ProcessXxxMesh 阶段); “渲染通道”则对应各个 RenderXxx Pass 以及 RDG 对 Pass 的编排。</p>
+</blockquote>
+<p>首先, 为了防止多线程下的数据竞争, 渲染线程会有一个场景, UI的镜像数据用于更新渲染.<br>之后对于 Render 有以下几个步骤:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FDeferredShadingSceneRenderer::Render</span><span class="hljs-params">(FRHICommandListImmediate&amp; RHICmdList)</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-function">FRDGBuilder <span class="hljs-title">GraphBuilder</span><span class="hljs-params">(RHICmdList)</span></span>;<br><br>    <span class="hljs-built_in">InitViews</span>(GraphBuilder);<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 1. Copy each View in ViewFamily base info to SceneView</span><br><span class="hljs-comment">     * 2. Create View Uniform Buffer</span><br><span class="hljs-comment">     * 3. Create GBuffer from RDGBuilder</span><br><span class="hljs-comment">     * 4. Create Depth Buffer (SceneDepth) from RDGBuilder</span><br><span class="hljs-comment">     * 5. Create Velocity Texture from RDGBuilder</span><br><span class="hljs-comment">     * 6. for each Light create Shadow View and Shadow Depth Texture</span><br><span class="hljs-comment">     */</span><br><br>    <span class="hljs-built_in">ComputeVisibility</span>(GraphBuilder);<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * for each SceneView</span><br><span class="hljs-comment">     * 1. FrustumCull</span><br><span class="hljs-comment">     * 2. OcclusionCull</span><br><span class="hljs-comment">     * 3. GetViewRelevance</span><br><span class="hljs-comment">     * 4. Compute Shadow Visibility by Shadow View</span><br><span class="hljs-comment">     */</span><br><br>    <span class="hljs-function">FMeshElementCollector <span class="hljs-title">Collector</span><span class="hljs-params">(GraphBuilder, Scene, Views)</span></span>;<br><br>    <span class="hljs-built_in">GatherDynamicMeshElements</span>(Collector);<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * for each RenderableElementProxy call virtual function GetDynamicMeshElements</span><br><span class="hljs-comment">     * 1. Select LOD depend on Distance, Screen Size, FOV</span><br><span class="hljs-comment">     * 2. Compute LOD Transition</span><br><span class="hljs-comment">     * 3. Get Material Proxy</span><br><span class="hljs-comment">     * 4. Create MeshBatch</span><br><span class="hljs-comment">     * 5. Submit MeshBatch to Collector   </span><br><span class="hljs-comment">     */</span><br>    Collector.<span class="hljs-built_in">ProcessTasks</span>();<br><br>    <span class="hljs-built_in">ProcessPrePassMesh</span>(Collector);<br>    <span class="hljs-built_in">ProcessBasePassMesh</span>(Collector);<br>    <span class="hljs-built_in">ProcessShadowMesh</span>(Collector);<br>    <span class="hljs-built_in">ProcessTranslucencyMesh</span>(Collector);<br>    <span class="hljs-built_in">ProcessVelocityMesh</span>(Collector);<br>    <span class="hljs-built_in">ProcessCustomDepthMesh</span>(Collector);<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * ProcessCollectedMeshes: Mesh -&gt; FMeshDrawCommand, which RHI Thread Handle</span><br><span class="hljs-comment">     * for each call process():</span><br><span class="hljs-comment">     * 1 MeshBatch.GetMaterialProxy() and filter out unnecessary Passes</span><br><span class="hljs-comment">     * 2 MeshBatch.VertexFactory.GetVertexShader(PassType)</span><br><span class="hljs-comment">     * 3 MaterialProxy.GetPixelShader()</span><br><span class="hljs-comment">     * 4 Create PSO (just example from UE, PSO State depend on your RHI Setting)</span><br><span class="hljs-comment">     *   - VertexShader </span><br><span class="hljs-comment">     *   - PixelShader</span><br><span class="hljs-comment">     *   - VertexInput</span><br><span class="hljs-comment">     *   - PrimitiveType </span><br><span class="hljs-comment">     *   - BlendState</span><br><span class="hljs-comment">     *   - DepthStencilState</span><br><span class="hljs-comment">     *   - RasterizerState</span><br><span class="hljs-comment">     *   - RenderTargets.xxx</span><br><span class="hljs-comment">     * 5 Get PSO State Cache by PSO, Pipeline is giant Object. we must be create from Cache file or just one time by async</span><br><span class="hljs-comment">     * 6 Build MeshDrawCommand info</span><br><span class="hljs-comment">     *   - PSO</span><br><span class="hljs-comment">     *   - Shader Binding: Vertex Shader, Pixel Shader</span><br><span class="hljs-comment">     *   - Uniform Buffer (goto 7.)</span><br><span class="hljs-comment">     *   - Texture (goto 7.)</span><br><span class="hljs-comment">     *   - Geometry (goto 8)</span><br><span class="hljs-comment">     * 7 Build ShaderBindings with RDG</span><br><span class="hljs-comment">     *   1 MeshDrawCommand.ShaderBindings.AddUniformBuffer(RHI, MaterialProxy.GetMaterial().GetUniformBuffer)</span><br><span class="hljs-comment">     *   2 MeshDrawCommand.ShaderBindings.AddTexture(ResourceIndex, SamplerIndex, RHI)</span><br><span class="hljs-comment">     *   3 MeshDrawCommand.ShaderBindings.AddUniformBuffer(PrimitiveUniformBufferIndex)</span><br><span class="hljs-comment">     *   4 MeshDrawCommand.ShaderBindings.AddUniformBuffer(VertexFactoryUniformBufferIndex)</span><br><span class="hljs-comment">     *   5 MeshDrawCommand.ShaderBindings.AddUniformBuffer(ViewUniformBufferIndex)</span><br><span class="hljs-comment">     * 8. Build Geometry info</span><br><span class="hljs-comment">     *   - Vertex Buffer</span><br><span class="hljs-comment">     *   - Index Buffer</span><br><span class="hljs-comment">     *   - Index Count</span><br><span class="hljs-comment">     * 9 Add MeshDrawCommand to Collector</span><br><span class="hljs-comment">     */</span><br><br>    <span class="hljs-built_in">RenderPrePass</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderLumenSceneUpdate</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderBasePass</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderShadowDepth</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderLights</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderTranslucency</span>(GraphBuilder);<br>    <span class="hljs-built_in">RenderPostProcessing</span>(GraphBuilder);<br>    <span class="hljs-comment">// for each View AddPass and call CallIndexed, eg:</span><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     *   void FDeferredShadingSceneRenderer::RenderBasePass(FRDGBuilder&amp; GraphBuilder){</span><br><span class="hljs-comment">     *       for (FViewInfo&amp; View : Views){</span><br><span class="hljs-comment">     *           const TArray&lt;FMeshDrawCommand&gt;&amp; Commands = View.BasePassMeshDrawCommands;</span><br><span class="hljs-comment">     *   </span><br><span class="hljs-comment">     *           GraphBuilder.AddPass(</span><br><span class="hljs-comment">     *               RDG_EVENT_NAME("BasePass"),</span><br><span class="hljs-comment">     *               BasePassParameters,</span><br><span class="hljs-comment">     *              ERDGPassFlags::Raster,</span><br><span class="hljs-comment">     *               [&amp;View, &amp;Commands](FRHICommandList&amp; RHICmdList){</span><br><span class="hljs-comment">     *                   RHICmdList.SetRenderTargets({ </span><br><span class="hljs-comment">     *                       View.GBufferA-&gt;GetRHI(), View.GBufferB-&gt;GetRHI(),</span><br><span class="hljs-comment">     *                       View.GBufferC-&gt;GetRHI(), View.GBufferD-&gt;GetRHI() </span><br><span class="hljs-comment">     *                   },</span><br><span class="hljs-comment">     *                   View.SceneDepth-&gt;GetRHI());</span><br><span class="hljs-comment">     *   </span><br><span class="hljs-comment">     *                   for (const FMeshDrawCommand&amp; Cmd : Commands){</span><br><span class="hljs-comment">     *                       RHICmdList.SetPipelineState(Cmd.PipelineState);</span><br><span class="hljs-comment">     *                       ApplyShaderBindings(RHICmdList, Cmd.ShaderBindings);</span><br><span class="hljs-comment">     *                       RHICmdList.SetVertexBuffers(Cmd.VertexBuffers);</span><br><span class="hljs-comment">     *                       RHICmdList.SetIndexBuffer(Cmd.IndexBuffer);</span><br><span class="hljs-comment">     *                       RHICmdList.DrawIndexed(Cmd.IndexCount, 1, Cmd.IndexStart, Cmd.BaseVertex);</span><br><span class="hljs-comment">     *                  }</span><br><span class="hljs-comment">     *               });</span><br><span class="hljs-comment">     *       }</span><br><span class="hljs-comment">     *  </span><br><span class="hljs-comment">     */</span><br><br>    GraphBuilder.<span class="hljs-built_in">Execute</span>();<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 1. Compile() </span><br><span class="hljs-comment">     *   - Pass elimination</span><br><span class="hljs-comment">     *   - Merging</span><br><span class="hljs-comment">     *   - Barrier insertion</span><br><span class="hljs-comment">     *   - Memory aliasing</span><br><span class="hljs-comment">     *   - Topological sort</span><br><span class="hljs-comment">     * 2. Execute()</span><br><span class="hljs-comment">     *   - Alloc GPU Resource form RHI, like RHICmdList.CreateTexture(Tex-&gt;Desc),</span><br><span class="hljs-comment">     *   - Execute the Lambda registered during AddPass execution</span><br><span class="hljs-comment">     * 3. Release Transient Resources</span><br><span class="hljs-comment">     */</span><br>  <br>    RHICmdList.<span class="hljs-built_in">EndFrame</span>();<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>其实上述的一切流程都是基于现代图形API展开的, 或者说站在现代图形API的角度理解会更自然. 以下以Vulkan为例:</p>
+<p>现代图形API的两个核心概念是 Pipeline 和 RenderPass, 其分别代表着光栅化图形流水线, 以及一次渲染中帧缓冲的布局(由哪些附件组成, 分几个子通道, 子通道之间如何依赖). 即现代API将”流水线(Pipeline)”和”帧缓冲布局(RenderPass)”解耦. 所以在渲染器的实现中往往也会将这两个对象分开处理. 其中, </p>
+<ul>
+<li>Pipeline 本身是一个巨大且笨重的对象, 无法做到随时创建和随时使用, 所以对于 Pipeline 渲染器会提前创建好并缓存起来(甚至缓存到文件中), 在使用 Pipeline 时再查找缓存, 如果没有才会进行创建. </li>
+<li>RenderPass 描述的是帧缓冲由哪些附件组成, 分几个子通道, 子通道之间如何依赖</li>
+</ul>
+<p>RenderPass 和 Pipeline 并没一一对应关系. 例如: 对于一个延迟着色流程, 往往会分为两个过程: 几何Pass 和 光照Pass. 其中光照Pass 依赖于几何Pass 产生的 GBuffer. 所以这里定义一个 RenderPass 的两个 SubPass(也可以独立定义两个RenderPass然后中间插入一个屏障, 一个RenderPass 带两个 SubPass 更高效), 第一个子通道写入多个GBuffer(颜色, 法线, PBR属性), 第二个子通道使用这些GBuffer作为输入附件进行光照计算. 对于 Vulkan 来说, 即 第一个子通道输出到多个颜色附件和深度/模板附件, 第二个子通道将这些颜色附件作为输入附件最后输出颜色附件.</p>
+<blockquote>
+<p>[!note] 附件<br>在 Vulkan 中, 附件本质就是一张图, 颜色附件就是存有 RGBA 的图, 深度附件就是记录深度信息的图, 其本质是就是若干带有信息的矩阵.</p>
+</blockquote>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// 附件数量：3 张 G-Buffer + 深度 + 最终颜色输出 = 5</span><br><span class="hljs-type">const</span> <span class="hljs-type">uint32_t</span> numAttachments = <span class="hljs-number">5</span>;<br><br><span class="hljs-comment">// ---------- 1. 附件描述 ----------</span><br>std::array&lt;VkAttachmentDescription, numAttachments&gt; attachments = {};<br><br><span class="hljs-comment">// --- G-Buffer 0: 世界空间位置 (高精度)</span><br>attachments[<span class="hljs-number">0</span>].format         = VK_FORMAT_R16G16B16A16_SFLOAT;  <span class="hljs-comment">// 或 A2B10G10R10</span><br>attachments[<span class="hljs-number">0</span>].samples        = VK_SAMPLE_COUNT_1_BIT;<br>attachments[<span class="hljs-number">0</span>].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;<br>attachments[<span class="hljs-number">0</span>].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;  <span class="hljs-comment">// 光照阶段后不再需要</span><br>attachments[<span class="hljs-number">0</span>].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;<br>attachments[<span class="hljs-number">0</span>].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">0</span>].initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;<br>attachments[<span class="hljs-number">0</span>].finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;<br><br><span class="hljs-comment">// --- G-Buffer 1: 世界空间法线 + 材质粗糙度</span><br>attachments[<span class="hljs-number">1</span>].format         = VK_FORMAT_R16G16B16A16_SFLOAT;  <span class="hljs-comment">// 法线.xyz, 粗糙度.w</span><br>attachments[<span class="hljs-number">1</span>].samples        = VK_SAMPLE_COUNT_1_BIT;<br>attachments[<span class="hljs-number">1</span>].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;<br>attachments[<span class="hljs-number">1</span>].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">1</span>].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;<br>attachments[<span class="hljs-number">1</span>].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">1</span>].initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;<br>attachments[<span class="hljs-number">1</span>].finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;<br><br><span class="hljs-comment">// --- G-Buffer 2: 反照率 + 金属度</span><br>attachments[<span class="hljs-number">2</span>].format         = VK_FORMAT_R8G8B8A8_UNORM;       <span class="hljs-comment">// 反照率.rgb, 金属度.a</span><br>attachments[<span class="hljs-number">2</span>].samples        = VK_SAMPLE_COUNT_1_BIT;<br>attachments[<span class="hljs-number">2</span>].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;<br>attachments[<span class="hljs-number">2</span>].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">2</span>].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;<br>attachments[<span class="hljs-number">2</span>].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">2</span>].initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;<br>attachments[<span class="hljs-number">2</span>].finalLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;<br><br><span class="hljs-comment">// --- 深度 / 模板附件</span><br>attachments[<span class="hljs-number">3</span>].format         = VK_FORMAT_D32_SFLOAT_S8_UINT;   <span class="hljs-comment">// 或 D24S8</span><br>attachments[<span class="hljs-number">3</span>].samples        = VK_SAMPLE_COUNT_1_BIT;<br>attachments[<span class="hljs-number">3</span>].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;<br>attachments[<span class="hljs-number">3</span>].storeOp        = VK_ATTACHMENT_STORE_OP_DONT_CARE; <span class="hljs-comment">// 光照阶段不需要深度</span><br>attachments[<span class="hljs-number">3</span>].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_CLEAR;<br>attachments[<span class="hljs-number">3</span>].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">3</span>].initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;<br>attachments[<span class="hljs-number">3</span>].finalLayout    = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;<br><br><span class="hljs-comment">// --- 最终输出(例如交换链图像，这里假设格式匹配)</span><br>attachments[<span class="hljs-number">4</span>].format         = VK_FORMAT_B8G8R8A8_UNORM;       <span class="hljs-comment">// 或者你的 swapchain 格式</span><br>attachments[<span class="hljs-number">4</span>].samples        = VK_SAMPLE_COUNT_1_BIT;<br>attachments[<span class="hljs-number">4</span>].loadOp         = VK_ATTACHMENT_LOAD_OP_CLEAR;    <span class="hljs-comment">// 也可以 DONT_CARE</span><br>attachments[<span class="hljs-number">4</span>].storeOp        = VK_ATTACHMENT_STORE_OP_STORE;   <span class="hljs-comment">// 需要呈现</span><br>attachments[<span class="hljs-number">4</span>].stencilLoadOp  = VK_ATTACHMENT_LOAD_OP_DONT_CARE;<br>attachments[<span class="hljs-number">4</span>].stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;<br>attachments[<span class="hljs-number">4</span>].initialLayout  = VK_IMAGE_LAYOUT_UNDEFINED;<br>attachments[<span class="hljs-number">4</span>].finalLayout    = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR; <span class="hljs-comment">// 如果需要直接呈现</span><br><br><span class="hljs-comment">// ---------- 2. 子通道引用 ----------</span><br><span class="hljs-comment">// Subpass 0(几何阶段): 输出到 3 个 G-Buffer + 深度</span><br>VkAttachmentReference geoColorRefs[<span class="hljs-number">3</span>] = {<br>                                                     <span class="hljs-comment">// 片段着色器: 在 Pipeline 中指定布局</span><br>    { <span class="hljs-number">0</span>, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }, <span class="hljs-comment">// 对应空间位置 layout(location = 0) out vec4 outPosition;</span><br>    { <span class="hljs-number">1</span>, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }, <span class="hljs-comment">// 对应法线     layout(location = 1) out vec4 outNormal;</span><br>    { <span class="hljs-number">2</span>, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }  <span class="hljs-comment">// 对应纹理坐标 layout(location = 2) out vec4 outAlbedo;</span><br>};<br>VkAttachmentReference geoDepthRef = { <span class="hljs-number">3</span>, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };<br><br><span class="hljs-comment">// Subpass 1(光照阶段): 输入附件引用(读取 G-Buffer)</span><br>VkAttachmentReference lightInputRefs[<span class="hljs-number">3</span>] = {<br>                                                     <span class="hljs-comment">// 片段着色器: 在 Pipeline 中指定布局</span><br>    { <span class="hljs-number">0</span>, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }, <span class="hljs-comment">// layout(input_attachment_index=0, binding=0) uniform subpassInput inputPosition;</span><br>    { <span class="hljs-number">1</span>, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }, <span class="hljs-comment">// layout(input_attachment_index=1, binding=1) uniform subpassInput inputNormal;</span><br>    { <span class="hljs-number">2</span>, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }  <span class="hljs-comment">// layout(input_attachment_index=2, binding=2) uniform subpassInput inputAlbedo;</span><br>};<br><span class="hljs-comment">// 光照阶段的颜色输出(只有最终画面)</span><br><span class="hljs-comment">// layout(location = 0) out vec4 outColor;: 在 Pipeline 中指定布局</span><br>VkAttachmentReference lightColorRef = { <span class="hljs-number">4</span>, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL };<br><br><span class="hljs-comment">// ---------- 3. 子通道描述 ----------</span><br>VkSubpassDescription subpasses[<span class="hljs-number">2</span>] = {};<br><br>subpasses[<span class="hljs-number">0</span>].pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;<br>subpasses[<span class="hljs-number">0</span>].colorAttachmentCount    = <span class="hljs-number">3</span>;<br>subpasses[<span class="hljs-number">0</span>].pColorAttachments       = geoColorRefs;<br>subpasses[<span class="hljs-number">0</span>].pDepthStencilAttachment = &amp;geoDepthRef;<br><br>subpasses[<span class="hljs-number">1</span>].pipelineBindPoint       = VK_PIPELINE_BIND_POINT_GRAPHICS;<br>subpasses[<span class="hljs-number">1</span>].inputAttachmentCount    = <span class="hljs-number">3</span>;                    <span class="hljs-comment">// 读取 3 张 G-Buffer</span><br>subpasses[<span class="hljs-number">1</span>].pInputAttachments       = lightInputRefs;<br>subpasses[<span class="hljs-number">1</span>].colorAttachmentCount    = <span class="hljs-number">1</span>;<br>subpasses[<span class="hljs-number">1</span>].pColorAttachments       = &amp;lightColorRef;<br><br><span class="hljs-comment">// ---------- 4. 子通道依赖 ----------</span><br>std::array&lt;VkSubpassDependency, 2&gt; dependencies = {};<br><br><span class="hljs-comment">// 依赖 1: 几何阶段完成 → 光照阶段开始(确保 G-Buffer 写入可见)</span><br>dependencies[<span class="hljs-number">0</span>].srcSubpass      = <span class="hljs-number">0</span>;<br>dependencies[<span class="hljs-number">0</span>].dstSubpass      = <span class="hljs-number">1</span>;<br>dependencies[<span class="hljs-number">0</span>].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;<br>dependencies[<span class="hljs-number">0</span>].dstStageMask    = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;<br>dependencies[<span class="hljs-number">0</span>].srcAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;<br>dependencies[<span class="hljs-number">0</span>].dstAccessMask   = VK_ACCESS_INPUT_ATTACHMENT_READ_BIT;<br>dependencies[<span class="hljs-number">0</span>].dependencyFlags = VK_DEPENDENCY_BY_REGION_BIT;  <span class="hljs-comment">// 允许 tile 级并行</span><br><br><span class="hljs-comment">// 依赖 2: 上一帧的最终输出 → 本帧的最终输出(可选，如果帧缓冲复用)</span><br>dependencies[<span class="hljs-number">1</span>].srcSubpass      = VK_SUBPASS_EXTERNAL;<br>dependencies[<span class="hljs-number">1</span>].dstSubpass      = <span class="hljs-number">0</span>;<br>dependencies[<span class="hljs-number">1</span>].srcStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;<br>dependencies[<span class="hljs-number">1</span>].dstStageMask    = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;<br>dependencies[<span class="hljs-number">1</span>].srcAccessMask   = <span class="hljs-number">0</span>;<br>dependencies[<span class="hljs-number">1</span>].dstAccessMask   = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;<br><br><span class="hljs-comment">// ---------- 5. 创建 Render Pass ----------</span><br>VkRenderPassCreateInfo renderPassInfo = {};<br>renderPassInfo.sType           = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;<br>renderPassInfo.attachmentCount = numAttachments;<br>renderPassInfo.pAttachments    = attachments.<span class="hljs-built_in">data</span>();<br>renderPassInfo.subpassCount    = <span class="hljs-number">2</span>;<br>renderPassInfo.pSubpasses      = subpasses;<br>renderPassInfo.dependencyCount = <span class="hljs-built_in">static_cast</span>&lt;<span class="hljs-type">uint32_t</span>&gt;(dependencies.<span class="hljs-built_in">size</span>());<br>renderPassInfo.pDependencies   = dependencies.<span class="hljs-built_in">data</span>();<br><br>VkRenderPass renderPass;<br><span class="hljs-built_in">vkCreateRenderPass</span>(device, &amp;renderPassInfo, <span class="hljs-literal">nullptr</span>, &amp;renderPass);<br></code></pre></td></tr></tbody></table></figure>
+<p>需要澄清的是, 上述 <code>VkRenderPass</code> 的创建只是<strong>声明</strong>了这些 GBuffer 附件的格式与布局(在 <code>VkAttachmentDescription</code> 的 <code>format</code> / <code>initialLayout</code> / <code>finalLayout</code> 里), 它并不会真正创建 GBuffer 图像本身——GBuffer 对应的 <code>VkImage</code> 需要单独创建, 并绑定到帧缓冲(Framebuffer)上才能使用。而着色器如何访问这些 GBuffer(作为 input attachment 还是采样纹理, 绑定到哪个 binding), 则是在 Pipeline 关联的 <code>VkDescriptorSetLayout</code>(<code>VkDescriptorSetLayoutCreateInfo</code>)里声明。</p>
+<blockquote>
+<p>换句话说: <code>VkRenderPass</code> 描述的是”帧缓冲由哪些附件组成, 各附件是什么格式和布局, 分几个子通道, 子通道之间如何依赖”; <code>VkDescriptorSetLayout</code> 描述的是”着色器里通过哪些 binding 去读这些资源”。两者是不同层面的东西。同样地, 更复杂的场景也会使用到更复杂的 RenderPass 和 Pipeline 之间的对应关系.<br>而现代渲染器流程正是在 CPU 端区别了 RenderPass 和 Pipeline 这两个流程. 其主要实现方式是渲染依赖图 RDG(见具体章节). </p>
+</blockquote>
+<h1><span id="rhi-%E7%BA%BF%E7%A8%8B">RHI 线程</span></h1><p>正如之前所言, RHI 单独开一个线程并不是必须的. 但是如果像 UE 一样选择开一个新的线程, RHI 线程的功能是将渲染线程录制的命令转义为 GPU 能识别的格式, 其核心是将各个平台的 API 用统一接口进行分发. 从而实现跨平台.</p>
+<p>RHI 线程的核心职责可以进一步拆分为:</p>
+<ol>
+<li>命令分发: 渲染线程录制的是平台无关的渲染命令(FRHICommandList), RHI 线程通过动态派发把每条命令转译成具体图形 API 的调用(DX12 的 CommandList / Vulkan 的 vkCmdXxx / Metal 的 MTLCommandBuffer)</li>
+<li>资源管理: 统一封装各平台的资源对象(纹理, 缓冲区, 采样器, PSO 等), 对外暴露同一套 RHI 接口</li>
+<li>PSO 管理: 负责 Pipeline State Object 的创建, 缓存与查找(现代 API 中 PSO 是重量级对象, 需要预先创建并缓存)</li>
+<li>内存与屏障: 处理资源的布局转换(layout transition)与内存屏障, 保证 GPU 上资源访问的正确性</li>
+</ol>
+<blockquote>
+<p>把 RHI 单独拆成线程, 本质是让渲染线程专注于”编排”渲染流程, 而把平台相关的”翻译”工作交给 RHI 线程, 从而屏蔽不同图形 API 的差异, 实现跨平台。这也是为什么渲染线程录制的命令需要是”平台无关”的抽象命令。</p>
+</blockquote>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/10/05/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E7%BB%93%E6%9E%84/" title="http://example.com/2026/10/05/渲染器架构-结构/" target="_blank" rel="noopener">http://example.com/2026/10/05/渲染器架构-结构/</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			              
+			<!-- 先找到与当前文字相同的目录 -->
+			         
+			<!-- 在找到当前文章所在的 index -->
+			        
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/10/05/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%8E%9F%E7%90%86/"> 渲染器架构{0}-原理</a>
+			</div>
+			       
+			<!-- 下一篇文章 -->
+			<div class="new">
+				<span>下一章</span>
+				<a href="/2026/10/06/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%AE%9E%E7%8E%B0-%E6%B8%B2%E6%9F%93%E4%BE%9D%E8%B5%96%E5%9B%BE/"> 渲染器架构{2}-实现-渲染依赖图</a>
+			</div>
+			                                          
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/engine-development/">引擎开发</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/%E6%B8%B2%E6%9F%93/" rel="tag">渲染</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js" data-repo="lzorn-lzorn/blog" data-repo-id="R_kgDOQh3wRw" data-category="Announcements" data-category-id="DIC_kwDOQh3wR84DHFJj" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async=""></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column has-toc">
+	<nav class="kira-right-toc"><div class="kira-right-toc-title">目录</div><ul class="kira-right-toc-list"><li class="toc-level-1"><a href="#game-%E7%BA%BF%E7%A8%8B">Game 线程</a></li><li class="toc-level-2"><a href="#%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%E8%AF%B7%E6%B1%82">数据更新请求</a></li><li class="toc-level-2"><a href="#%E4%B8%BB%E5%B1%8F%E5%B9%95%E6%B8%B2%E6%9F%93%E8%AF%B7%E6%B1%82">主屏幕渲染请求</a></li><li class="toc-level-2"><a href="#%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E8%AF%B7%E6%B1%82">离屏渲染请求</a></li><li class="toc-level-1"><a href="#%E6%B8%B2%E6%9F%93%E7%BA%BF%E7%A8%8B">渲染线程</a></li><li class="toc-level-1"><a href="#rhi-%E7%BA%BF%E7%A8%8B">RHI 线程</a></li></ul></nav><a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	
+
+</body></html>

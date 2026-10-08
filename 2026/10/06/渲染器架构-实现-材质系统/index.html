@@ -1,0 +1,537 @@
+<!DOCTYPE html><html lang="en"><head><!-- hexo injector head_begin start --><meta name="robots" content="noindex, nofollow"><!-- hexo injector head_begin end -->
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> 渲染器架构{3}-实现-材质系统 -  LL's Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link rel="shortcut icon" href="/1.png" type="image/png">
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+	<body>
+		<div class="kira-background" style="background-image: url('/lib/background/bg5.jpg')"></div>
+		<div class="kira-header">
+    <a class="kira-drawer-button mdui-ripple" title="导航栏" onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');">
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL's Blog">
+        <img src="/1.png" alt="Lzorn">
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img src="/1.png" alt="Lzorn">
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>19</div>
+		<div><span>标签</span>8</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a class="kira-list-item mdui-ripple false" href="/" title="回到首页">
+			<i class="kirafont
+					
+						icon-home
+					"></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+			<i class="kirafont
+					
+						icon-container
+					"></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/about.html" title="关于本人">
+			<i class="kirafont
+					
+						icon-user
+					"></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a class="mdui-ripple" href="mailto:your-email@example.com" target="_blank" mdui-tooltip="{content: '邮箱'}" style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);">
+				<i class="kirafont
+					
+						icon-link
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://space.bilibili.com/13063107" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);">
+				<i class="kirafont
+					
+						icon-bilibili
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://github.com/lzorn-lzorn/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);">
+				<i class="kirafont
+					
+						icon-github
+					"></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">5</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">4</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">8</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/编程语言/">
+              编程语言
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/UI-%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">UI 系统</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" style="font-size: 12.5px;">内存分配器</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 12.5px;">数学</a> <a href="/tags/%E6%B8%B2%E6%9F%93/" style="font-size: 17.5px;">渲染</a> <a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">类型系统</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" style="font-size: 10px;">编译器</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		© 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &amp;
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br>
+		
+		
+	</div>
+</div>
+<div class="kira-sidebar-modal" id="sidebar-modal" onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img>
+                </div>
+                <div class="kira-image-now">
+                    <img>
+                </div>
+                <div class="kira-image-next">
+                    <img>
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img data-src="/lib/background/p5/2.jpg" data-sizes="auto" alt="渲染器架构{3}-实现-材质系统" class="lazyload kira-post-cover-image disabled-kira-image">
+			<h1>渲染器架构{3}-实现-材质系统</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年10月06日</a>
+			<a><i class="kirafont icon-edit-fill"></i>1.4k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 6 分钟</a>
+		</div>
+		<h1><span id="%E7%9D%80%E8%89%B2%E5%99%A8">着色器</span></h1><p>在真实的引擎中, 并不会让使用者自己手写大量着色器, 而是引擎会有大量提前写好的着色器和着色器模版. 所以将使用者写的 Shader 和引擎提供的 Shader 组合起来, 是现代引擎需要提供的功能.</p>
+<h2><span id="uber-shadershader-template">Uber Shader(Shader Template)</span></h2><p>所谓着色器模版, 本质上一个字符串匹配和替换. 例如 引擎内置一个模板文件 <code>MaterialTemplate.hlsl</code>, 内置了占位符 <code>%USER_MATERIAL_STRUCT%</code> 和 <code>%USER_MATERIAL_CODE%</code></p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// MaterialTemplate.hlsl —— 引擎提供的 Uber Shader 骨架</span><br><br><span class="hljs-comment">// ===== 引擎公共部分 =====</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">VSOutput</span> {<br>    float4 position : SV_Position;<br>    float3 worldPos : TEXCOORD0;<br>    float3 normal   : TEXCOORD1;<br>    float2 uv       : TEXCOORD2;<br>    float4 tangent  : TEXCOORD3;<br>};<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">GBufferOutput</span> {<br>    float4 albedo   : SV_Target0;  <span class="hljs-comment">// rgb: baseColor, a: metallic</span><br>    float4 normal   : SV_Target1;  <span class="hljs-comment">// rgb: worldNormal, a: roughness</span><br>    float4 position : SV_Target2;  <span class="hljs-comment">// xyz: worldPos</span><br>};<br><br><span class="hljs-comment">// ===== 用户逻辑占位符 =====</span><br><span class="hljs-comment">// %USER_MATERIAL_STRUCT%  —— 用户自定义的 uniform / 纹理声明</span><br><span class="hljs-comment">// %USER_MATERIAL_CODE%    —— 用户自定义的材质计算函数</span><br><br><span class="hljs-comment">// ===== 引擎提供的 G-Buffer 打包函数 =====</span><br><span class="hljs-function">GBufferOutput <span class="hljs-title">PackGBuffer</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    float3 worldPos,</span></span><br><span class="hljs-params"><span class="hljs-function">    float3 worldNormal,</span></span><br><span class="hljs-params"><span class="hljs-function">    float3 baseColor,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">float</span>  metallic,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">float</span>  roughness)</span></span><br><span class="hljs-function"></span>{<br>    GBufferOutput o;<br>    o.albedo   = <span class="hljs-built_in">float4</span>(baseColor, metallic);<br>    o.normal   = <span class="hljs-built_in">float4</span>(worldNormal, roughness);<br>    o.position = <span class="hljs-built_in">float4</span>(worldPos, <span class="hljs-number">1.0</span>);<br>    <span class="hljs-keyword">return</span> o;<br>}<br><br><span class="hljs-comment">// ===== 像素着色器入口 =====</span><br><span class="hljs-function">GBufferOutput <span class="hljs-title">MainPS</span><span class="hljs-params">(VSOutput input)</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-comment">// 1. 调用用户逻辑, 获取材质属性</span><br>    MaterialAttributes attr = <span class="hljs-built_in">EvaluateMaterial</span>(input);<br><br>    <span class="hljs-comment">// 2. 引擎统一处理 G-Buffer 打包</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">PackGBuffer</span>(<br>        input.worldPos,<br>        <span class="hljs-built_in">normalize</span>(attr.normal),<br>        attr.baseColor,<br>        attr.metallic,<br>        attr.roughness);<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>使用者使用某种方式, 例如 UE 的材质节点, 或者直接使用 Json 等格式, 翻译器将其转化为 HLSL 代码.<br>以json为例:</p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">{</span><br>  <span class="hljs-attr">"name"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"BrickWall"</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">"parameters"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>    <span class="hljs-attr">"baseColorTexture"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"brick_albedo.png"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"normalTexture"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"brick_normal.png"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"roughnessValue"</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0.8</span><br>  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">"logic"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span><br>    <span class="hljs-attr">"baseColor"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"sample(baseColorTexture, uv).rgb * float3(1.0, 0.8, 0.6)"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"normal"</span><span class="hljs-punctuation">:</span>    <span class="hljs-string">"perturbNormal(sample(normalTexture, uv).rgb, tangent, normal)"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"roughness"</span><span class="hljs-punctuation">:</span> <span class="hljs-string">"roughnessValue"</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">"metallic"</span><span class="hljs-punctuation">:</span>  <span class="hljs-string">"0.0"</span><br>  <span class="hljs-punctuation">}</span><br><span class="hljs-punctuation">}</span><br></code></pre></td></tr></tbody></table></figure>
+<p>解析并翻译为两段 hlsl,<br>转义 uniform 声明, 并写入 <code>%USER_MATERIAL_STRUCT%</code></p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs cpp">Texture2D baseColorTexture : <span class="hljs-built_in">register</span>(t0);<br>Texture2D normalTexture    : <span class="hljs-built_in">register</span>(t1);<br>SamplerState linearSampler : <span class="hljs-built_in">register</span>(s0);<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">MaterialAttributes</span> {<br>    float3 baseColor;<br>    float3 normal;<br>    <span class="hljs-type">float</span>  roughness;<br>    <span class="hljs-type">float</span>  metallic;<br>};<br></code></pre></td></tr></tbody></table></figure>
+
+<p>转义材质函数, 并写入 <code>%USER_MATERIAL_CODE%</code></p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function">MaterialAttributes <span class="hljs-title">EvaluateMaterial</span><span class="hljs-params">(VSOutput input)</span></span><br><span class="hljs-function"></span>{<br>    MaterialAttributes attr;<br>    float2 uv = input.uv;<br><br>    attr.baseColor = <span class="hljs-built_in">sample</span>(baseColorTexture, uv).rgb * <span class="hljs-built_in">float3</span>(<span class="hljs-number">1.0</span>, <span class="hljs-number">0.8</span>, <span class="hljs-number">0.6</span>);<br>    attr.normal    = <span class="hljs-built_in">perturbNormal</span>(<span class="hljs-built_in">sample</span>(normalTexture, uv).rgb, input.tangent, input.normal);<br>    attr.roughness = <span class="hljs-number">0.8</span>;<br>    attr.metallic  = <span class="hljs-number">0.0</span>;<br><br>    <span class="hljs-keyword">return</span> attr;<br>}<br></code></pre></td></tr></tbody></table></figure>
+<p>所以其本质就是字符串解析替换引擎.</p>
+<h2><span id="%E7%BC%96%E8%AF%91%E7%89%B9%E5%8C%96">编译特化</span></h2><p>对于不用材质需要的不同功能, 例如某些材质需要遮罩, 另外的不需要, 以json为例</p>
+<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">{</span><br>  <span class="hljs-attr">"features"</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span> <span class="hljs-attr">"masked"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">"twoSided"</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span> <span class="hljs-punctuation">}</span><br><span class="hljs-punctuation">}</span><br></code></pre></td></tr></tbody></table></figure>
+<p>翻译器生成不同的宏定义, 并在引擎填充文件的时候插入宏定义</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">define</span> MATERIAL_MASKED 1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> MATERIAL_TWOSIDED 0</span><br><br><span class="hljs-comment">// 使用 #if 控制</span><br><span class="hljs-meta">#<span class="hljs-keyword">if</span> MATERIAL_MASKED</span><br>    <span class="hljs-keyword">if</span> (attr.baseColor.a &lt; <span class="hljs-number">0.5</span>) discard;<br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></tbody></table></figure>
+<p>但是实际上不需要使用宏来控制, 只需要把所有宏的排列组合, 然后给每一种可能以 lazy + cache 的方式生成不同的 Shader 即可. 即 Shader 变体.</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ShaderCache</span> {<br>    std::unordered_map&lt;<span class="hljs-type">uint64_t</span>, ShaderBlob&gt; cache;<br><br>    <span class="hljs-function">ShaderBlob* <span class="hljs-title">getOrCompile</span><span class="hljs-params">(<span class="hljs-type">const</span> ShaderMacros&amp; macros, <span class="hljs-type">const</span> std::string&amp; materialCode)</span> </span>{<br>        <span class="hljs-type">uint64_t</span> key = <span class="hljs-built_in">hash</span>(macros) ^ <span class="hljs-built_in">hash</span>(materialCode);<br>        <span class="hljs-keyword">auto</span> it = cache.<span class="hljs-built_in">find</span>(key);<br>        <span class="hljs-keyword">if</span> (it != cache.<span class="hljs-built_in">end</span>()) <span class="hljs-keyword">return</span> &amp;it-&gt;second;<br><br>        <span class="hljs-comment">// 生成完整源文件</span><br>        std::string source = <span class="hljs-built_in">loadTemplate</span>(<span class="hljs-string">"MaterialTemplate.hlsl"</span>);<br>        source = <span class="hljs-built_in">replace</span>(source, <span class="hljs-string">"%USER_MATERIAL_STRUCT%"</span>, <span class="hljs-built_in">generateStruct</span>(materialCode));<br>        source = <span class="hljs-built_in">replace</span>(source, <span class="hljs-string">"%USER_MATERIAL_CODE%"</span>,   <span class="hljs-built_in">generateFunc</span>(materialCode));<br>        source = <span class="hljs-built_in">prependMacros</span>(source, macros);<br><br>        <span class="hljs-comment">// 编译</span><br>        ShaderBlob blob = <span class="hljs-built_in">compileHLSL</span>(source, <span class="hljs-string">"MainPS"</span>, <span class="hljs-string">"ps_5_0"</span>);<br>        cache[key] = blob;<br>        <span class="hljs-keyword">return</span> &amp;cache[key];<br>    }<br>};<br></code></pre></td></tr></tbody></table></figure>
+<p>这里有两种方案:</p>
+<ol>
+<li>首先翻译器会先生成带有一堆 #if 的Shader源码, 然后在编译的时候, 根据这些宏不同的组合编译为不同的Shader变体. (这里的宏作为字符串可以直接存在C++中).</li>
+<li>在生成 Shader源码的时候就直接生成不同的 Shader 源码, 而不是生成一个大文件再做分支.</li>
+</ol>
+<p>这两种方案都是可以的</p>
+<h2><span id="%E5%85%89%E7%85%A7%E7%9D%80%E8%89%B2%E5%99%A8">光照着色器</span></h2><p>在 UE 中光照部分是由引擎定义的, 所以这里的着色器代码完全使用引擎的开发者提前写好的着色器. 例如 Lambert 漫反射的光照模型</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// DeferredLight.hlsl —— 引擎全局光照着色器</span><br><br>Texture2D&lt;float4&gt; gAlbedo   : <span class="hljs-built_in">register</span>(t0);<br>Texture2D&lt;float4&gt; gNormal   : <span class="hljs-built_in">register</span>(t1);<br>Texture2D&lt;float4&gt; gPosition : <span class="hljs-built_in">register</span>(t2);<br><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">Light</span> {<br>    float3 position;<br>    float3 color;<br>    <span class="hljs-type">float</span>  radius;<br>    <span class="hljs-type">float</span>  intensity;<br>};<br><br>StructuredBuffer&lt;Light&gt; lights : <span class="hljs-built_in">register</span>(t3);<br><br><span class="hljs-function">float4 <span class="hljs-title">MainPS</span><span class="hljs-params">(float4 screenPos : SV_Position, float2 uv : TEXCOORD0)</span> : SV_Target</span><br><span class="hljs-function">{</span><br>    <span class="hljs-comment">// 从 G-Buffer 读取材质属性</span><br>    float4 albedoData   = gAlbedo.<span class="hljs-built_in">Sample</span>(linearSampler, uv);<br>    float4 normalData   = gNormal.<span class="hljs-built_in">Sample</span>(linearSampler, uv);<br>    float4 positionData = gPosition.<span class="hljs-built_in">Sample</span>(linearSampler, uv);<br><br>    float3 albedo    = albedoData.rgb;<br>    <span class="hljs-type">float</span>  metallic  = albedoData.a;<br>    float3 N         = <span class="hljs-built_in">normalize</span>(normalData.rgb);<br>    <span class="hljs-type">float</span>  roughness = normalData.a;<br>    float3 worldPos  = positionData.xyz;<br><br>    <span class="hljs-comment">// 逐光源累积</span><br>    float3 result = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span> (uint i = <span class="hljs-number">0</span>; i &lt; lightCount; ++i) {<br>        float3 L = lights[i].position - worldPos;<br>        <span class="hljs-type">float</span>  dist = <span class="hljs-built_in">length</span>(L);<br>        L /= dist;<br><br>        <span class="hljs-type">float</span> NdotL = <span class="hljs-built_in">saturate</span>(<span class="hljs-built_in">dot</span>(N, L));<br>        <span class="hljs-type">float</span> attenuation = <span class="hljs-built_in">saturate</span>(<span class="hljs-number">1.0</span> - dist / lights[i].radius);<br>        attenuation *= attenuation;<br><br>        <span class="hljs-comment">// 简化 Lambert 漫反射</span><br>        float3 diffuse = albedo * NdotL * attenuation * lights[i].color * lights[i].intensity;<br>        result += diffuse;<br>    }<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">float4</span>(result, <span class="hljs-number">1.0</span>);<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<h1><span id="%E6%9D%90%E8%B4%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0">材质系统的实现</span></h1><p>对于材质系统的设计而言, 我们应该分清楚编辑器和运行时分别承担的功能. 对于材质模版, 已经引擎预先设置好的 Shader 基本属于编辑器的功能.</p>
+<p>引擎编辑器负责将 Shader 从具体的 glsl 或者 hlsl 编译至中间表示的二进制字节码. 游戏运行时负责将二进制字节码实际编译为其 GPU 上实际运行的二进制.</p>
+<blockquote>
+<p>[!note] 热更新<br>对于热更新而言, 一般客户端启动时检测到版本不一致需要热更新时, 会像服务器请求下发新的资源. 此时客户端会告知服务器自己使用的图形 API, 然后会对应下发已经编译好的对应图形API的字节码.<br>对于 steam 这种平台而言, 其提供了更为灵活的内容分发单元Depot, 开发者只要将对应的字节码打包进 Depot 中, 当玩家安装DLC时, Steam 会自动下发. 甚至 Steam 可以自动托管 Shader 源码, 帮开发者自动编译原始的 shader 源码文件.</p>
+</blockquote>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/10/06/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%AE%9E%E7%8E%B0-%E6%9D%90%E8%B4%A8%E7%B3%BB%E7%BB%9F/" title="http://example.com/2026/10/06/渲染器架构-实现-材质系统/" target="_blank" rel="noopener">http://example.com/2026/10/06/渲染器架构-实现-材质系统/</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			              
+			<!-- 先找到与当前文字相同的目录 -->
+			               
+			<!-- 在找到当前文章所在的 index -->
+			                
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/10/06/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%AE%9E%E7%8E%B0-%E6%B8%B2%E6%9F%93%E4%BE%9D%E8%B5%96%E5%9B%BE/"> 渲染器架构{2}-实现-渲染依赖图</a>
+			</div>
+			       
+			<!-- 下一篇文章 -->
+			<div class="new">
+				<span>下一章</span>
+				<a href="/2026/10/07/UI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%B8%83%E5%B1%80%E5%BC%95%E6%93%8E/"> UI系统设计-布局引擎</a>
+			</div>
+			                            
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/engine-development/">引擎开发</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/%E6%B8%B2%E6%9F%93/" rel="tag">渲染</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js" data-repo="lzorn-lzorn/blog" data-repo-id="R_kgDOQh3wRw" data-category="Announcements" data-category-id="DIC_kwDOQh3wR84DHFJj" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async=""></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column has-toc">
+	<nav class="kira-right-toc"><div class="kira-right-toc-title">目录</div><ul class="kira-right-toc-list"><li class="toc-level-1"><a href="#%E7%9D%80%E8%89%B2%E5%99%A8">着色器</a></li><li class="toc-level-2"><a href="#uber-shadershader-template">Uber Shader(Shader Template)</a></li><li class="toc-level-2"><a href="#%E7%BC%96%E8%AF%91%E7%89%B9%E5%8C%96">编译特化</a></li><li class="toc-level-2"><a href="#%E5%85%89%E7%85%A7%E7%9D%80%E8%89%B2%E5%99%A8">光照着色器</a></li><li class="toc-level-1"><a href="#%E6%9D%90%E8%B4%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0">材质系统的实现</a></li></ul></nav><a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	
+
+</body></html>

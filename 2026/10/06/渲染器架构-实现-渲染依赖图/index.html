@@ -1,0 +1,636 @@
+<!DOCTYPE html><html lang="en"><head><!-- hexo injector head_begin start --><meta name="robots" content="noindex, nofollow"><!-- hexo injector head_begin end -->
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> 渲染器架构{2}-实现-渲染依赖图 -  LL's Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link rel="shortcut icon" href="/1.png" type="image/png">
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+	<body>
+		<div class="kira-background" style="background-image: url('/lib/background/bg5.jpg')"></div>
+		<div class="kira-header">
+    <a class="kira-drawer-button mdui-ripple" title="导航栏" onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');">
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL's Blog">
+        <img src="/1.png" alt="Lzorn">
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img src="/1.png" alt="Lzorn">
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>19</div>
+		<div><span>标签</span>8</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a class="kira-list-item mdui-ripple false" href="/" title="回到首页">
+			<i class="kirafont
+					
+						icon-home
+					"></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+			<i class="kirafont
+					
+						icon-container
+					"></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/about.html" title="关于本人">
+			<i class="kirafont
+					
+						icon-user
+					"></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a class="mdui-ripple" href="mailto:your-email@example.com" target="_blank" mdui-tooltip="{content: '邮箱'}" style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);">
+				<i class="kirafont
+					
+						icon-link
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://space.bilibili.com/13063107" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);">
+				<i class="kirafont
+					
+						icon-bilibili
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://github.com/lzorn-lzorn/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);">
+				<i class="kirafont
+					
+						icon-github
+					"></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">5</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">4</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">8</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/编程语言/">
+              编程语言
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/UI-%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">UI 系统</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" style="font-size: 12.5px;">内存分配器</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 12.5px;">数学</a> <a href="/tags/%E6%B8%B2%E6%9F%93/" style="font-size: 17.5px;">渲染</a> <a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">类型系统</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" style="font-size: 10px;">编译器</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		© 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &amp;
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br>
+		
+		
+	</div>
+</div>
+<div class="kira-sidebar-modal" id="sidebar-modal" onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img>
+                </div>
+                <div class="kira-image-now">
+                    <img>
+                </div>
+                <div class="kira-image-next">
+                    <img>
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img data-src="/lib/background/p5/2.jpg" data-sizes="auto" alt="渲染器架构{2}-实现-渲染依赖图" class="lazyload kira-post-cover-image disabled-kira-image">
+			<h1>渲染器架构{2}-实现-渲染依赖图</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年10月06日</a>
+			<a><i class="kirafont icon-edit-fill"></i>2.8k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 12 分钟</a>
+		</div>
+		<h1><span id="%E6%B8%B2%E6%9F%93%E7%BC%96%E6%8E%92">渲染编排</span></h1><p>Render Dependency Graph 本质上是一个 Render Pass 的组合器, 外部通过 <code>addRenderPass</code><br>的方式向内部添加 Pass, 最后通过 <code>Execute</code> 生成 <code>RHIRenderPass</code> 传给 RHI.</p>
+<p>其内部的实现需要满足:</p>
+<ol>
+<li>本身进一步封装 RHI 的实现, 提供能被 RDG 识别和管理的 GPU 资源.</li>
+<li>内部通过 <code>addRenderPass</code> 添加 Pass 节点. 然后通过拓扑排序(Kahn算法)构建 DAG 图</li>
+<li>基于 DAG 图进行别名分析优化</li>
+<li>进行 Pass 合并和屏障生成</li>
+<li>在 RDG 中再次封装 <code>RHIResource</code> 为 <code>RDGResource</code>, 以支持外部 insight 调试</li>
+<li>瞬态内存分配器(Transient Resource Allocator) 来分配 RHI Resource Descriptor</li>
+</ol>
+<h1><span id="rdg-%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B-build---compile---execute">RDG 完整流程: Build -&gt; Compile -&gt; Execute</span></h1><p>RDG 的一次完整执行分为三个阶段: Build(构建), Compile(编译), Execute(执行)。<br>其中 Build 和 Compile 是纯 CPU 侧的”声明 + 分析”过程, 不产生任何 GPU 命令; 真正的 GPU 命令提交发生在 Execute 阶段。</p>
+<h2><span id="build-%E9%98%B6%E6%AE%B5%E5%A3%B0%E6%98%8E%E4%BE%9D%E8%B5%96">Build 阶段(声明依赖)</span></h2><p>Build 阶段通过 <code>RDGBuilder</code> 把”要做什么”声明出来, 只是记录, 不做任何渲染:</p>
+<ol>
+<li>创建资源:<ul>
+<li><code>CreateTexture</code> / <code>CreateBuffer</code> 创建 RDG 资源(瞬态资源, 此时并不分配物理显存, 只拿到一个 <code>FRDGTexture*</code> / <code>FRDGBuffer*</code> 句柄)</li>
+<li><code>RegisterExternalTexture</code> / <code>RegisterExternalBuffer</code> 把外部已存在的资源注册进 RDG(导出资源, 生命周期跨越一帧, 不参与瞬态分配)</li>
+</ul>
+</li>
+<li>添加 Pass:<ul>
+<li><code>AddPass</code> 添加一个渲染 Pass, 通过 <code>RDGPassParameters</code> 声明它读取哪些资源(SRV)与写入哪些资源(RTV/UAV)</li>
+<li>Pass 的回调(lambda)在 Build 阶段不会被执行, 而是被记录下来, 等到 Execute 阶段才被调用</li>
+</ul>
+</li>
+<li>提取资源:<ul>
+<li><code>QueueTextureExtraction</code> 把需要跨帧保留的资源提取出来, 交给上层继续使用</li>
+</ul>
+</li>
+</ol>
+<p>Build 阶段结束时, RDG 内部记录了一张”有向无环图(DAG)”的声明: 节点是 Pass, 边是资源读写依赖。但此时 Pass 之间还没有确定的执行顺序, 也没有做任何内存分配与屏障。</p>
+<h2><span id="compile-%E9%98%B6%E6%AE%B5%E5%88%86%E6%9E%90%E4%BE%9D%E8%B5%96">Compile 阶段(分析依赖)</span></h2><p>Compile 阶段把 Build 声明的 DAG 变成一张拓扑有序, 资源已分配, 屏障已就位的可执行图, 典型步骤:</p>
+<ol>
+<li>拓扑排序: 根据资源读写依赖, 用 Kahn 算法对 Pass 做拓扑排序, 得到从 0 开始的 PassId 序列(即执行顺序, 见下文 [PassId] 说明)</li>
+<li>剔除死代码(Culling): 从最终输出(如 BackBuffer)反向遍历, 把没有被引用到的 Pass 及其资源整条链路裁剪掉, 避免执行无用的渲染工作</li>
+<li>生命周期分析: 扫描排序后的 Pass, 计算每个瞬态资源的存活区间 [FirstTimeRef, LastTimeRef]</li>
+<li>别名分析 + 瞬态分配: 让存活区间不重叠的瞬态资源复用同一块物理显存(即下文的”瞬态内存分配器”)</li>
+<li>屏障生成: 在资源读写状态切换, 以及别名复用边界处自动插入资源屏障, 保证 GPU 数据正确性</li>
+<li>(可选)Pass 合并: 把相邻, 无依赖且兼容的 Pass 合并, 减少状态切换</li>
+</ol>
+<p>Compile 结束后, RDG 得到一张可执行图, 交给 Execute 阶段。</p>
+<h2><span id="execute-%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4-gpu-%E5%91%BD%E4%BB%A4">Execute 阶段(提交 GPU 命令)</span></h2><p>Execute 按 Compile 生成的顺序遍历 Pass, 逐个执行 Build 阶段记录的回调(lambda), 在其中把实际的 RHI 渲染命令提交到命令列表; 瞬态资源在第一次被使用时才真正创建(见下文内存映射表)。</p>
+<blockquote>
+<p>对照本文章开头的描述: <code>addRenderPass</code> 属于 Build 阶段; <code>Execute</code> 属于 Execute 阶段; 而拓扑排序, 别名分析, 屏障生成, 瞬态分配这些都属于 Compile 阶段。</p>
+</blockquote>
+<h1><span id="%E7%9E%AC%E6%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8-transient-resource-allocator">瞬态内存分配器 Transient Resource Allocator</span></h1><p>在实际的一次渲染中, 会出现大量的临时对象(各种资源, 纹理, 缓冲区), 这些对象占据大量显存同时其存活时间非常短(多数资源仅一帧), 称之为瞬态资源. 如果对这些瞬态资源逐一分配显存, 则对于次时代场景来说, 可以瞬间打爆显存.<br>所以瞬态内存分配器的作用是通过分析所有临时资源的生命周期, 让多个资源在不同时间段共用同一段物理显存, 从而实现节约内存.</p>
+<p>其内部的工作流大致为: 资源标记 -&gt; 生命周期分析 -&gt; 区间分配 -&gt; 物理内存实例化<br>在 RDG 内部将纹理或缓冲区分为:</p>
+<ul>
+<li>导出资源: 这类资源需要给 CPU 读取, 亦或是其生命周期跨越了一帧. 其不参与瞬态分配</li>
+<li>瞬态资源: 分配瞬态资源需要通过 <code>RDGBuilder</code> 内部的 create 创建的资源, 且也没有被标记为<br>外部引用的资源. 此时 <code>RDGBuilder</code> 会将其标记为 <code>Transient</code>.</li>
+</ul>
+<p>对于每一个瞬态资源, RDG 会为其建立一个引用该资源的 PassId 集合. 从而计算出存活区间<code>[FirstTimeRef, LastTimeRef]</code> 其中 FirstTimeRef 是第一个被引用的 PassId, LastTimeRef是最后一次被引用的 PassId. 所以只要两个瞬态资源的存活区间不重叠则可以共用同一块缓存.</p>
+<blockquote>
+<p>[PassId]<br>这里的 PassId 是对所有 addRenderPass 之后的节点进行拓扑排序生成的从 0 开始的唯一 Id<br>同时按照 PassId 从小到大排列好, 得到 PassIds 序列</p>
+</blockquote>
+<p>计算区间: 对于每一个 PassIds 序列中的 Pass 检查其所有 Read 和 Write 资源</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">for</span>(<span class="hljs-type">int32_t</span> PassId = <span class="hljs-number">0</span>; PassId &lt; SortedPass.<span class="hljs-built_in">size</span>(); ++PassId)<br>{<br>&nbsp; &nbsp; <span class="hljs-type">const</span> RDGPass* Pass = SortedPass[PassId];<br>&nbsp; &nbsp; <span class="hljs-keyword">for</span>(RDGResource* Resource : Pass-&gt;Reads)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-keyword">if</span> (Resource-&gt;IsTransient)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Resource-&gt;FirstTimeRef = std::<span class="hljs-built_in">min</span>(Resource-&gt;FirstTimeRef, PassId);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Resource-&gt;LastTimeRef = std::<span class="hljs-built_in">max</span>(Resource-&gt;LastTimeRef, PassId);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; }<br><br>&nbsp; &nbsp; <span class="hljs-keyword">for</span>(RDGResource* Resource : Pass-&gt;Writes)<br>&nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; <span class="hljs-keyword">if</span> (Resource-&gt;IsTransient)<br>&nbsp; &nbsp; &nbsp; &nbsp; {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Resource-&gt;FirstTimeRef = std::<span class="hljs-built_in">min</span>(Resource-&gt;FirstTimeRef, PassId);<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Resource-&gt;LastTimeRef = std::<span class="hljs-built_in">max</span>(Resource-&gt;LastTimeRef, PassId);<br>&nbsp; &nbsp; &nbsp; &nbsp; }<br>&nbsp; &nbsp; }<br>}<br><br></code></pre></td></tr></tbody></table></figure>
+
+<p>Example:</p>
+<ul>
+<li>Pass 0: 写入 ShadowDepth</li>
+<li>Pass 1: 读取 ShadowDepth 写入 GBufferA</li>
+<li>Pass 2: 读取 GBufferA, 写入 SceneColor</li>
+</ul>
+<p>处理 Pass 0 时:</p>
+<ul>
+<li>ShadowDepth 的存活区间为 [FirstTimeRef=0, LastTimeRef=0]</li>
+</ul>
+<p>处理 Pass 1 时:</p>
+<ul>
+<li>ShadowDepth 的存活区间更新 [FirstTimeRef=0, LastTimeRef=1]</li>
+<li>GBufferA 的存活区间为 [FirstTimeRef=1, LastTimeRef=1]</li>
+</ul>
+<p>处理 Pass 2 时:</p>
+<ul>
+<li>GBufferA 更新为 [FirstTimeRef=1, LastTimeRef=2]</li>
+<li>若 SceneColor 是瞬态资源则其存活区间更新为 [FirstTimeRef=2, LastTimeRef=2] (但往往不是)</li>
+</ul>
+<p>在得到这个存活区间之后, 瞬态内存分配器的工作环境则已经被准备好了</p>
+<p>Example:</p>
+<ul>
+<li>A: [0, 2] 4MB</li>
+<li>B: [1, 4] 8MB</li>
+<li>C: [3, 4] 3MB</li>
+</ul>
+<p>上述例子中, 所有 FirstTimeRef 是按序排好的</p>
+<ul>
+<li>T0: 分配A, 占用 0-4MB</li>
+<li>T1: 分配B, A 依旧存活, 此时额外分配B, 堆增长 [0, 4MB] -&gt; [0, 4MB] + [4MB, 12MB]</li>
+<li>T2: A死亡, 释放 [0, 4MB]</li>
+<li>T3: 分配C, B 依旧存活, 此刻可以复用 [0, 4MB], 分配 [0, 3MB]</li>
+<li>T4: B, C死亡, 释放 [4MB, 12MB] 和 [0, 3MB]</li>
+</ul>
+<p>此时峰值内存仅仅花费了 12MB 小于预期的 15MB<br>上述例子仅仅是一个简化的例子, 因为在实际分配过程中瞬态内存分配器内部实际上维护了若干个堆,<br>例如颜色纹理, 深度纹理, 缓冲区, UAV等.</p>
+<ul>
+<li>RenderTarget 堆: 用于颜色纹理</li>
+<li>DepthStencil 堆: 用于深度/模版纹理</li>
+<li>Buffer 堆: 顶点缓冲, 结构化缓冲等</li>
+</ul>
+<p>其由于不同资源其要求的对齐也是不同的.</p>
+<p>而由于最终的内存实际上是在 GPU 的显存上, 所以瞬态内存分配器最后输出其实是一张内存映射表:<br>[RDG资源, 堆索引, 偏移量] 在 RDG 执行 Execute() 时, 当某个瞬态资源被第一次使用时, 其会向 RHI 请求在堆的指定偏移处创建对应资源. 其依赖于现代 API 的内存别名机制.</p>
+<ul>
+<li>DX12: 使用 <code>CreatePlacedResource</code> 传入堆内存和指针</li>
+<li>Vulkan: 使用 <code>vkCreateImage</code> 之后通过 <code>vkBindImageMemory</code> 绑定到堆内存的偏移区域</li>
+</ul>
+<p>最后为了防止GPU上的数据竞争: 旧的内存数据还在使用, 新的资源就开始写入的情况. RDG 需要通过显式资源屏障和生命周期同步来解决这个问题.在分配器决定的区间边界上, RDG 会自动插入一个 UAV 屏障或者别名屏障(DX12 Aliasing Barrier 或者 Vulkan 的内存屏障) 其保证在 LastTimeRef 之后的 RenderPass 开始使用新资源之前, 对所有旧资源的访问就必须结束.</p>
+<h1><span id="%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E7%9D%80%E8%89%B2%E5%99%A8">关于计算着色器</span></h1><p>在实际操作中, RDG 本身可以调度的不仅是图形管线, 还有计算管线. 现代渲染器往往需要先调度计算着色器将一些场景信息渲染至一张图集上, 然后再让图形管线依赖该图集. 这个操作本身也是在 RDG 的调度中.</p>
+<p>例如在 UE 中, Lumen 的调度会依赖 SDF 的计算, 而 SDF 是依赖于计算着色器的计算. 相当于图形管线依赖了计算管线的资源. </p>
+<p>Compute Pass 的声明:</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FDeferredShadingSceneRenderer::UpdateGlobalDistanceFieldVolume</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    FRDGBuilder&amp; GraphBuilder,</span></span><br><span class="hljs-params"><span class="hljs-function">    <span class="hljs-type">const</span> FViewInfo&amp; View,</span></span><br><span class="hljs-params"><span class="hljs-function">    FRDGTextureRef GlobalSDFTexture)</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-comment">// 1. 创建输出资源（RDG 管理生命周期）</span><br>    FRDGBufferRef DirtyRegionBuffer = GraphBuilder.<span class="hljs-built_in">CreateBuffer</span>(<br>        FRDGBufferDesc::<span class="hljs-built_in">CreateStructuredDesc</span>(<br>            <span class="hljs-built_in">sizeof</span>(FDirtyRegion), MaxRegions),<br>        <span class="hljs-built_in">TEXT</span>(<span class="hljs-string">"DirtyRegionBuffer"</span>));<br><br>    <span class="hljs-comment">// 2. 声明 Compute Pass</span><br>    FUpdateGlobalSDFCS::FParameters* Params =<br>        GraphBuilder.<span class="hljs-built_in">AllocParameters</span>&lt;FUpdateGlobalSDFCS::FParameters&gt;();<br>    Params-&gt;GlobalSDF = GraphBuilder.<span class="hljs-built_in">CreateUAV</span>(GlobalSDFTexture);<br>    Params-&gt;DirtyRegions = GraphBuilder.<span class="hljs-built_in">CreateSRV</span>(DirtyRegionBuffer);<br>    Params-&gt;NumRegions = NumDirtyRegions;<br><br>    <span class="hljs-comment">// 3. 只声明, 不执行</span><br>    GraphBuilder.<span class="hljs-built_in">AddPass</span>(<br>        <span class="hljs-built_in">RDG_EVENT_NAME</span>(<span class="hljs-string">"UpdateGlobalSDF"</span>),<br>        Params,<br>        ERDGPassFlags::Compute,   <span class="hljs-comment">// ← 标记为 Compute Pass</span><br>        [Params](FRHICommandList&amp; RHICmdList)<br>        {<br>            <span class="hljs-comment">// 这个 Lambda 在 RDG Execute 阶段才执行</span><br>            FComputeShaderUtils::<span class="hljs-built_in">Dispatch</span>(<br>                RHICmdList,<br>                FUpdateGlobalSDFCS::<span class="hljs-built_in">GetComputeShader</span>(),<br>                *Params,<br>                ComputeGroupCount);<br>        });<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>Graphics Pass 的声明</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FDeferredShadingSceneRenderer::RenderLumenCardCapture</span><span class="hljs-params">(</span></span><br><span class="hljs-params"><span class="hljs-function">    FRDGBuilder&amp; GraphBuilder,</span></span><br><span class="hljs-params"><span class="hljs-function">    FViewInfo&amp; View,</span></span><br><span class="hljs-params"><span class="hljs-function">    FRDGTextureRef CardAtlasTexture)</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-comment">// 1. 创建渲染目标</span><br>    FRDGTextureRef CardCaptureRT = GraphBuilder.<span class="hljs-built_in">CreateTexture</span>(<br>        FRDGTextureDesc::<span class="hljs-built_in">Create2D</span>(<br>            AtlasSize, PF_FloatRGBA,<br>            FClearValueBinding::Black,<br>            TexCreate_RenderTargetable | TexCreate_ShaderResource),<br>        <span class="hljs-built_in">TEXT</span>(<span class="hljs-string">"CardCaptureRT"</span>));<br><br>    <span class="hljs-comment">// 2. 声明 Graphics Pass</span><br>    FRenderTargetBinding RenderTargets[] = {<br>        <span class="hljs-built_in">FRenderTargetBinding</span>(CardCaptureRT, ERenderTargetLoadAction::EClear)<br>    };<br><br>    GraphBuilder.<span class="hljs-built_in">AddPass</span>(<br>        <span class="hljs-built_in">RDG_EVENT_NAME</span>(<span class="hljs-string">"LumenCardCapture"</span>),<br>        { },  <span class="hljs-comment">// 输入</span><br>        { CardCaptureRT },  <span class="hljs-comment">// 输出</span><br>        ERDGPassFlags::Raster,   <span class="hljs-comment">// ← 标记为 Graphics Pass</span><br>        [&amp;View, CardCaptureRT](FRHICommandList&amp; RHICmdList)<br>        {<br>            <span class="hljs-comment">// 这个 Lambda 在 RDG Execute 阶段才执行</span><br>            RHICmdList.<span class="hljs-built_in">SetRenderTargets</span>({ CardCaptureRT-&gt;<span class="hljs-built_in">GetRHI</span>() }, <span class="hljs-literal">nullptr</span>);<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">const</span> FMeshDrawCommand&amp; Cmd : View.CardCaptureCommands)<br>            {<br>                RHICmdList.<span class="hljs-built_in">SetPipelineState</span>(Cmd.PipelineState);<br>                <span class="hljs-built_in">ApplyShaderBindings</span>(RHICmdList, Cmd.ShaderBindings);<br>                RHICmdList.<span class="hljs-built_in">DrawIndexed</span>(Cmd.IndexCount, <span class="hljs-number">1</span>,<br>                    Cmd.IndexStart, Cmd.BaseVertex);<br>            }<br>        });<br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>其在 Compile 阶段会推导依赖</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// ============================================================</span><br><span class="hljs-comment">// FRDGBuilder::Compile()</span><br><span class="hljs-comment">// 分析所有 Pass 的输入输出, 推导依赖关系</span><br><span class="hljs-comment">// ============================================================</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FRDGBuilder::Compile</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-comment">// ---- 1. 为每个资源记录：谁写它、谁读它 ----</span><br>    <span class="hljs-comment">// 例如 GlobalSDFTexture：</span><br>    <span class="hljs-comment">//   写者：UpdateGlobalSDF (Compute)</span><br>    <span class="hljs-comment">//   读者：TraceMeshSDFs (Compute), SampleGlobalSDF (Graphics)</span><br>    <span class="hljs-comment">//         ↓</span><br>    <span class="hljs-comment">//   推导出依赖：UpdateGlobalSDF → TraceMeshSDFs</span><br>    <span class="hljs-comment">//              UpdateGlobalSDF → SampleGlobalSDF</span><br><br>    <span class="hljs-comment">// ---- 2. 拓扑排序 ----</span><br>    TArray&lt;FRDGPass*&gt; SortedPasses = <span class="hljs-built_in">TopologicalSort</span>(Passes);<br>    <span class="hljs-comment">// 例如结果：</span><br>    <span class="hljs-comment">//   [1] UpdateGlobalSDF        (Compute)</span><br>    <span class="hljs-comment">//   [2] UpdateSurfaceCache     (Graphics)</span><br>    <span class="hljs-comment">//   [3] UpdateVoxelLighting    (Compute)</span><br>    <span class="hljs-comment">//   [4] TraceMeshSDFs          (Compute)</span><br>    <span class="hljs-comment">//   [5] ScreenProbeGather      (Compute)</span><br>    <span class="hljs-comment">//   [6] RenderDiffuseIndirect  (Graphics)</span><br><br>    <span class="hljs-comment">// ---- 3. 插入资源屏障 ----</span><br>    <span class="hljs-built_in">InsertBarriers</span>(SortedPasses);<br>    <span class="hljs-comment">// 例如：</span><br>    <span class="hljs-comment">//   UpdateGlobalSDF 写 GlobalSDF (UAV)</span><br>    <span class="hljs-comment">//   TraceMeshSDFs 读 GlobalSDF (SRV)</span><br>    <span class="hljs-comment">//     ↓</span><br>    <span class="hljs-comment">//   在两者之间插入 Barrier:</span><br>    <span class="hljs-comment">//     GlobalSDF: UAV → SRV</span><br>}<br></code></pre></td></tr></tbody></table></figure>
+
+<p>最后在执行录制时, 便会生成对应的命令</p>
+<figure class="highlight cpp"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-comment">// ============================================================</span><br><span class="hljs-comment">// FRDGBuilder::ExecutePasses()</span><br><span class="hljs-comment">// 按拓扑排序的结果, 依次录制每个 Pass 的命令</span><br><span class="hljs-comment">// ============================================================</span><br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">FRDGBuilder::ExecutePasses</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>{<br>    <span class="hljs-comment">// 注意：以下所有调用都是"录制", 不是"执行"</span><br>    <span class="hljs-comment">// Compute 和 Graphics 命令被录制到同一个 RHICmdList</span><br><br>    <span class="hljs-keyword">for</span> (FRDGPass* Pass : SortedPasses)<br>    {<br>        RHICmdList.<span class="hljs-built_in">BeginEvent</span>(Pass-&gt;Name);<br><br>        <span class="hljs-comment">// 执行 Pass 的 Lambda（这里才真正"录制"命令）</span><br>        Pass-&gt;<span class="hljs-built_in">ExecuteLambda</span>(RHICmdList);<br>        <span class="hljs-comment">// 例如：</span><br>        <span class="hljs-comment">//   [1] UpdateGlobalSDF Lambda 执行：</span><br>        <span class="hljs-comment">//       RHICmdList.Dispatch(ComputeShader, ...)</span><br>        <span class="hljs-comment">//       → 录制一条 Dispatch 命令</span><br>        <span class="hljs-comment">//</span><br>        <span class="hljs-comment">//   [2] UpdateSurfaceCache Lambda 执行：</span><br>        <span class="hljs-comment">//       RHICmdList.SetRenderTargets(...)</span><br>        <span class="hljs-comment">//       RHICmdList.DrawIndexed(...)</span><br>        <span class="hljs-comment">//       → 录制 DrawCall 命令</span><br>        <span class="hljs-comment">//</span><br>        <span class="hljs-comment">//   [3] UpdateVoxelLighting Lambda 执行：</span><br>        <span class="hljs-comment">//       RHICmdList.Dispatch(ComputeShader, ...)</span><br>        <span class="hljs-comment">//       → 录制另一条 Dispatch 命令</span><br><br>        RHICmdList.<span class="hljs-built_in">EndEvent</span>();<br>    }<br><br>    <span class="hljs-comment">// 最终, RHICmdList.Commands 里混着：</span><br>    <span class="hljs-comment">//   [Dispatch(UpdateGlobalSDF)]</span><br>    <span class="hljs-comment">//   [Barrier(GlobalSDF: UAV→SRV)]</span><br>    <span class="hljs-comment">//   [SetRenderTargets(...)]</span><br>    <span class="hljs-comment">//   [DrawIndexed(...)]</span><br>    <span class="hljs-comment">//   [Barrier(CardAtlas: RTV→SRV)]</span><br>    <span class="hljs-comment">//   [Dispatch(UpdateVoxelLighting)]</span><br>    <span class="hljs-comment">//   ...</span><br>    <span class="hljs-comment">// 它们按顺序被录制到同一个命令列表</span><br>}<br></code></pre></td></tr></tbody></table></figure>
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/10/06/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%AE%9E%E7%8E%B0-%E6%B8%B2%E6%9F%93%E4%BE%9D%E8%B5%96%E5%9B%BE/" title="http://example.com/2026/10/06/渲染器架构-实现-渲染依赖图/" target="_blank" rel="noopener">http://example.com/2026/10/06/渲染器架构-实现-渲染依赖图/</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			              
+			<!-- 先找到与当前文字相同的目录 -->
+			            
+			<!-- 在找到当前文章所在的 index -->
+			            
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/10/05/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E7%BB%93%E6%9E%84/"> 渲染器架构{1}-结构</a>
+			</div>
+			       
+			<!-- 下一篇文章 -->
+			<div class="new">
+				<span>下一章</span>
+				<a href="/2026/10/06/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E5%AE%9E%E7%8E%B0-%E6%9D%90%E8%B4%A8%E7%B3%BB%E7%BB%9F/"> 渲染器架构{3}-实现-材质系统</a>
+			</div>
+			                        
+			<!-- 在找到当前文章所在的 index -->
+			                        
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/10/07/UI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%B8%83%E5%B1%80%E5%BC%95%E6%93%8E/"> UI系统设计-布局引擎</a>
+			</div>
+			       
+			<!-- 下一篇文章 -->
+			<div class="new">
+				<span>下一章</span>
+				<a href="/2026/10/08/UI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E6%96%87%E5%AD%97%E5%A4%84%E7%90%86%E5%BC%95%E6%93%8E/"> UI系统设计-文字处理引擎</a>
+			</div>
+			              
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/engine-development/">引擎开发</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/%E6%B8%B2%E6%9F%93/" rel="tag">渲染</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js" data-repo="lzorn-lzorn/blog" data-repo-id="R_kgDOQh3wRw" data-category="Announcements" data-category-id="DIC_kwDOQh3wR84DHFJj" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async=""></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column has-toc">
+	<nav class="kira-right-toc"><div class="kira-right-toc-title">目录</div><ul class="kira-right-toc-list"><li class="toc-level-1"><a href="#%E6%B8%B2%E6%9F%93%E7%BC%96%E6%8E%92">渲染编排</a></li><li class="toc-level-1"><a href="#rdg-%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B-build---compile---execute">RDG 完整流程: Build -&gt; Compile -&gt; Execute</a></li><li class="toc-level-2"><a href="#build-%E9%98%B6%E6%AE%B5%E5%A3%B0%E6%98%8E%E4%BE%9D%E8%B5%96">Build 阶段(声明依赖)</a></li><li class="toc-level-2"><a href="#compile-%E9%98%B6%E6%AE%B5%E5%88%86%E6%9E%90%E4%BE%9D%E8%B5%96">Compile 阶段(分析依赖)</a></li><li class="toc-level-2"><a href="#execute-%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4-gpu-%E5%91%BD%E4%BB%A4">Execute 阶段(提交 GPU 命令)</a></li><li class="toc-level-1"><a href="#%E7%9E%AC%E6%80%81%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8-transient-resource-allocator">瞬态内存分配器 Transient Resource Allocator</a></li><li class="toc-level-1"><a href="#%E5%85%B3%E4%BA%8E%E8%AE%A1%E7%AE%97%E7%9D%80%E8%89%B2%E5%99%A8">关于计算着色器</a></li></ul></nav><a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	
+
+</body></html>

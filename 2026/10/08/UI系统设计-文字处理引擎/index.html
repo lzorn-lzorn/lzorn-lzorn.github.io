@@ -1,0 +1,684 @@
+<!DOCTYPE html><html lang="en"><head><!-- hexo injector head_begin start --><meta name="robots" content="noindex, nofollow"><!-- hexo injector head_begin end -->
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+<link rel="stylesheet" href="/css/layout.css">
+
+		
+		<title> UI系统设计-文字处理引擎 -  LL's Blog</title>
+		<!-- <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css" /> -->
+		<!-- <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script> -->
+		
+<link rel="stylesheet" href="/lib/mdui/mdui.min.css">
+
+		
+<script src="/lib/mdui/mdui.min.js"></script>
+
+		<!-- lazyload -->
+		
+<script src="/lib/lazysizes.js"></script>
+
+		<!-- smooth-scrolling -->
+		
+<script src="/lib/smooth-scrolling.js"></script>
+
+		<!-- highlight -->
+		
+<link rel="stylesheet" href="/lib/highlight/atom-one-dark.min.css">
+
+		
+<script src="/lib/highlight/highlight.min.js"></script>
+
+		<!-- 预置 kiraicon -->
+		
+<link rel="stylesheet" href="/lib/iconfont/iconfont.css">
+
+		
+		<link rel="shortcut icon" href="/1.png" type="image/png">
+		
+<link rel="stylesheet" href="/deps/css/APlayer.min.css">
+
+		
+			
+				
+<link rel="stylesheet" href="/custom.css">
+
+			
+		
+		
+<script src="/deps/js/APlayer.min.js"></script>
+<script src="/deps/js/Meting.min.js"></script>
+
+	<meta name="generator" content="Hexo 7.3.0"><style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+	<body>
+		<div class="kira-background" style="background-image: url('/lib/background/bg5.jpg')"></div>
+		<div class="kira-header">
+    <a class="kira-drawer-button mdui-ripple" title="导航栏" onclick="document.querySelector('.kira-sidebar-modal').classList.add('show');document.querySelector('.kira-sidebar#sidebar').classList.add('show');">
+        <i class="kirafont icon-menu"></i>
+    </a>
+    <a href="/" title="LL's Blog">
+        <img src="/1.png" alt="Lzorn">
+    </a>
+</div>
+		<div class="kira-body">
+			<div class="kira-sidebar" id="sidebar">
+	<div class="kira-avatar mdui-ripple">
+		<a href="/1.png" title="Lzorn">
+			<img src="/1.png" alt="Lzorn">
+		</a>
+	</div>
+	<div class="kira-count">
+		<div><span>文章</span>19</div>
+		<div><span>标签</span>8</div>
+		<div><span>分类</span>5</div>
+	</div>
+	<div class="kira-list">
+		
+		<a class="kira-list-item mdui-ripple false" href="/" title="回到首页">
+			<i class="kirafont
+					
+						icon-home
+					"></i>
+			<div class="kira-list-item-content">
+				回到首页
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/archive.html" title="文章归档">
+			<i class="kirafont
+					
+						icon-container
+					"></i>
+			<div class="kira-list-item-content">
+				文章归档
+			</div>
+		</a>
+		
+		<a class="kira-list-item mdui-ripple false" href="/about.html" title="关于本人">
+			<i class="kirafont
+					
+						icon-user
+					"></i>
+			<div class="kira-list-item-content">
+				关于本人
+			</div>
+		</a>
+		
+	</div>
+	<aside id="kira-sidebar">
+		
+			<div class="kira-widget-wrap">
+	<div class="kira-widget kira-social">
+		
+			<a class="mdui-ripple" href="mailto:your-email@example.com" target="_blank" mdui-tooltip="{content: '邮箱'}" style="color: rgb(255, 87, 34); background-color: rgba(255, 87, 34, .15);">
+				<i class="kirafont
+					
+						icon-link
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://space.bilibili.com/13063107" target="_blank" mdui-tooltip="{content: '哔哩哔哩'}" style="color: rgb(231, 106, 141); background-color: rgba(231, 106, 141, .15);">
+				<i class="kirafont
+					
+						icon-bilibili
+					"></i>
+			</a>
+		
+			<a class="mdui-ripple" href="https://github.com/lzorn-lzorn/" target="_blank" mdui-tooltip="{content: 'GitHub'}" style="color: rgb(25, 23, 23); background-color: rgba(25, 23, 23, .15);">
+				<i class="kirafont
+					
+						icon-github
+					"></i>
+			</a>
+		
+	</div>
+</div>
+
+		
+			
+  <div class="kira-widget-wrap">
+    <h3 class="kira-widget-title">分类</h3>
+    <div class="kira-widget">
+      <ul class="category-list">
+        
+        
+
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/cpp/">
+              C++
+            </a>
+            <span class="category-list-count">5</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/Hexo/">
+              Hexo
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/UE/">
+              UE
+            </a>
+            <span class="category-list-count">4</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/engine-development/">
+              引擎开发
+            </a>
+            <span class="category-list-count">8</span>
+          </li>
+        
+          <li class="category-list-item">
+            <a class="category-list-link" href="/categories/编程语言/">
+              编程语言
+            </a>
+            <span class="category-list-count">1</span>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+		
+			
+	<div class="kira-widget-wrap">
+		<div id="randomtagcloud" class="kira-widget tagcloud kira-rainbow">
+			<a href="/tags/C/" style="font-size: 20px;">C++</a> <a href="/tags/UE/" style="font-size: 15px;">UE</a> <a href="/tags/UI-%E7%B3%BB%E7%BB%9F/" style="font-size: 12.5px;">UI 系统</a> <a href="/tags/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" style="font-size: 12.5px;">内存分配器</a> <a href="/tags/%E6%95%B0%E5%AD%A6/" style="font-size: 12.5px;">数学</a> <a href="/tags/%E6%B8%B2%E6%9F%93/" style="font-size: 17.5px;">渲染</a> <a href="/tags/%E7%B1%BB%E5%9E%8B%E7%B3%BB%E7%BB%9F/" style="font-size: 10px;">类型系统</a> <a href="/tags/%E7%BC%96%E8%AF%91%E5%99%A8/" style="font-size: 10px;">编译器</a>
+		</div>
+		
+	</div>
+
+
+		
+			
+	<div class="kira-widget-wrap">
+		<h3 class="kira-widget-title">
+			Archive
+		</h3>
+		<div class="kira-widget">
+			<ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/">2026</a><span class="archive-list-count">15</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/">2025</a><span class="archive-list-count">4</span></li></ul>
+		</div>
+	</div>
+
+
+		
+	</aside>
+	<div class="kira-copyright">
+		© 2026
+		<a href="/">Lzorn</a>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> &amp;
+		<a href="https://github.com/ch1ny/kira-hexo/" target="_blank">Kira-Hexo</a>
+		<br>
+		
+		
+	</div>
+</div>
+<div class="kira-sidebar-modal" id="sidebar-modal" onclick="(function(self) {
+		self.classList.remove('show');
+		document.querySelector('.kira-sidebar.show#sidebar').classList.remove('show');
+	})(this)"></div>
+			<div class="kira-content">
+				<div id="kira-top-header"></div>
+				<div class="kira-main-content">
+					
+<link rel="stylesheet" href="/css/kira-image.css">
+
+
+<script src="/js/kira-image.js"></script>
+
+<div class="kira-image">
+    <div class="kira-image-modal">
+        <div class="kira-image-header">
+            <div class="kira-image-counter"></div>
+            <div class="kira-image-title"></div>
+            <div class="kira-image-operation">
+                <div class="kira-image-operation-button" id="kira-image-operation-button-zoom">
+                    <i class="kirafont icon-zoom-in"></i>
+                </div>
+                <div class="kira-image-operation-button" id="kira-image-operation-button-close">
+                    <i class="kirafont icon-close"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kira-image-container">
+            <div class="kira-image-prev-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-left"></i>
+                </div>
+            </div>
+            <div class="kira-image-list">
+                <div class="kira-image-prev">
+                    <img>
+                </div>
+                <div class="kira-image-now">
+                    <img>
+                </div>
+                <div class="kira-image-next">
+                    <img>
+                </div>
+            </div>
+            <div class="kira-image-next-button-panel">
+                <div class="kira-image-exchange-button">
+                    <i class="kirafont icon-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	
+<link rel="stylesheet" href="/css/kira-code-copy.css">
+
+	
+<script src="/js/kira-code-copy.js"></script>
+
+
+<div class="kira-post">
+	<article>
+		
+		<div class="kira-post-cover">
+			<img data-src="/lib/background/p5/7.jpg" data-sizes="auto" alt="UI系统设计-文字处理引擎" class="lazyload kira-post-cover-image disabled-kira-image">
+			<h1>UI系统设计-文字处理引擎</h1>
+		</div>
+		
+		<div class="kira-post-meta kira-rainbow" style="margin:10px 0!important;">
+			<a><i class="kirafont icon-calendar-fill"></i>2026年10月08日</a>
+			<a><i class="kirafont icon-edit-fill"></i>3.8k 字</a>
+			<a><i class="kirafont icon-time-circle-fill"></i>大概 16 分钟</a>
+		</div>
+		<h1><span id="%E6%96%87%E5%AD%97%E7%AE%A1%E7%BA%BF-%E5%AD%97%E8%8A%82-unicode-%E5%AD%97%E4%BD%93-%E7%BC%96%E6%8E%92%E4%B8%8E%E6%B8%B2%E6%9F%93">文字管线: 字节, Unicode, 字体, 编排与渲染</span></h1><h2><span id="%E6%A6%82%E5%BF%B5">概念</span></h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>定义</th>
+<th>不应混淆</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字符集</td>
+<td>字符及其编号的集合; Unicode 为字符分配码点</td>
+<td>字体不是字符编码</td>
+</tr>
+<tr>
+<td>码点</td>
+<td>Unicode 编号，例如 <code>中 = U+4E2D</code>, <code>😀 = U+1F600</code></td>
+<td>码点不是字形编号</td>
+</tr>
+<tr>
+<td>Unicode 标量值</td>
+<td>除代理码点 U+D800..U+DFFF 外的有效 Unicode 码点</td>
+<td>UTF-16 代理项不能单独作为字符</td>
+</tr>
+<tr>
+<td>编码</td>
+<td>将标量值映射到字节或码元，如 UTF-8/16/32</td>
+<td>不是选择字体，也不是源码转义</td>
+</tr>
+<tr>
+<td>码元</td>
+<td>编码的基本单位: UTF-8 为 8 位，UTF-16 为 16 位，UTF-32 为 32 位</td>
+<td><code>string.size()</code> 通常不是字符数; 有效 UTF-32 的码元数是标量数，不是字素簇数</td>
+</tr>
+<tr>
+<td>字素簇</td>
+<td>用户感知的字符单位，可能由多个码点组成</td>
+<td>光标不能简单按字节移动</td>
+</tr>
+<tr>
+<td>字形</td>
+<td>字体中的视觉形状，由字体局部的 glyph ID 标识</td>
+<td>一个码点不一定对应一个字形</td>
+</tr>
+<tr>
+<td>塑形簇</td>
+<td>HarfBuzz 将字形关联回输入位置的分组</td>
+<td>不保证等同完整 Unicode 字素分割</td>
+</tr>
+<tr>
+<td>字体覆盖</td>
+<td>字体能否为字符或序列提供所需字形</td>
+<td>成功解码不代表能显示</td>
+</tr>
+</tbody></table>
+<p>例: <code>😀</code> 是一个码点; UTF-8 为 <code>F0 9F 98 80</code>，UTF-16 为 <code>D83D DE00</code> 两个码元，UTF-32 为 <code>0001F600</code>.UTF-16/32 保存成字节时还需约定大小端.<code>e</code> 加 U+0301 可以显示为一个带重音字母; <code>fi</code> 可被字体塑形成连字; ZWJ emoji 可由多个码点合成一个字形.</p>
+<h2><span id="%E5%85%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%81%8C%E8%B4%A3">全流程与职责</span></h2><div class="mermaid">flowchart TD
+    Bytes[原始字节及编码约定] --&gt; Decode[严格解码为 Unicode]
+    Decode --&gt; UTF32[内部 UTF-32 标量文本]
+    UTF32 --&gt; Segment[段落, 方向, 脚本, 语言与分段]
+    Fonts[当前字体及有序回退链] --&gt; Shape[字体匹配与 HarfBuzz 塑形]
+    Segment --&gt; Shape
+    Shape --&gt; Layout[换行, 行度量, 字形位置与光标]
+    Layout --&gt; Raster[FreeType 栅格化字形]
+    Raster --&gt; Atlas[RGBA 图集及 GPU 纹理]
+    Layout --&gt; Snapshot[TextLayout 快照]
+    Atlas --&gt; Snapshot
+    Snapshot --&gt; Paint[PaintContext 生成带 UV 的四边形]
+    Paint --&gt; GPU[UIDrawList 与 GPU 混合输出]</div>
+
+<p>上图是完整管线的职责分解，不表示当前实现已具备完整分段能力.本仓库只有显式段落换行, run 方向推断, 简化空白换行与缺字簇回退，尚没有完整双向段落算法和脚本 itemization.</p>
+<h2><span id="%E8%BE%93%E5%85%A5-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81">输入, 编码与解码</span></h2><p>应用通过 <code>getCurrentTextEncoding()</code> / <code>setCurrentTextEncoding()</code> 访问唯一的 <code>Options.Text.Encoding</code> 状态.设置影响后续创建的 TextWidget，已有控件保留自己的 TextConfig 副本，不自动重解释已有字节.Custom 要求配置解码器.</p>
+<p><code>encodeText(std::u32string_view, Config)</code> 显式把 UTF-32 源文本编码为指定 UTF8/16/32 字节，遵循 ByteOrder, 保留 NUL, 不添加 BOM; <code>App.encodeText(std::u32string_view)</code> 重载使用应用当前配置.Main 用一份 UTF-32 示例 <code>U"Hello, 你好 氼, A€中😀"</code> 构造匹配配置的输入，不再按编码写分支.真实输入若已按配置编码，直接传给 <code>createTextWidget()</code>，不要重复 encode.Custom 只有解码器，不支持此编码操作.</p>
+<ul>
+<li><code>getTextBytes()</code> 仅暴露原始字节; C++ 的 <code>string</code>, <code>u16string</code>, <code>u32string</code> 类型不替调用方选择编码.</li>
+<li><code>TextConfig.Encoding</code> 决定如何解释字节; UTF-16/32 使用 <code>ByteOrder</code>.编码错误可能导致乱码或异常，与字体无关.</li>
+<li>TextWidget 构造与 <code>setText()</code> 在原始字节边界按 TextConfig 调用 <code>decodeTextToUTF32()</code>，直接得到内部 UTF-32，不经过 UTF-8 输出包装.<code>TextService::createTextLayout()</code> 的文本参数只接受 <code>std::u32string_view</code>，<code>TextLayout::Text</code> 拥有 <code>std::u32string</code>.</li>
+<li><code>CustomDecoder</code> 仍接收原始字节并返回 UTF-8; 其输出立即经严格验证转换为 UTF-32，不作为内部存储.缺少解码器会报错，解码器自身异常原样传播.</li>
+<li>现有 <code>decodeText()</code> 返回 UTF-8，<code>encodeText(std::string_view UTF8, Config)</code> 及 <code>App.encodeText(std::string_view UTF8)</code> 接收 UTF-8，仅保留兼容用途: 分别包装 UTF-32 解码后转 UTF-8, UTF-8 转 UTF-32 后编码，不是内部管线入口.</li>
+<li>当前非法输入抛异常: UTF-8 过长编码, 非法续字节, 截断, 非法标量; UTF-16 不配对代理项; UTF-32 非法标量.没有自动猜编码或替换成 U+FFFD.</li>
+<li>当前不自动剥离 BOM，不做 NFC/NFD 规范化.若文件输入需要这些能力，应在输入层明确策略，避免悄悄改动编辑器原文.</li>
+<li>源码 <code>\u4E2D</code> 是编译器转义; 运行时读到字符 <code>\</code>, <code>u</code>, <code>4</code> 等不会自动执行转义.解码和解析转义是不同操作.</li>
+</ul>
+<p>独立 <a href="../include/Editor/Unicode.hpp">Unicode.hpp</a>/<a href="../src/Unicode.cpp">Unicode.cpp</a> 提供六个两两转换 API: <code>utf8ToUTF32()</code>, <code>utf16ToUTF32()</code>, <code>utf32ToUTF8()</code>, <code>utf32ToUTF16()</code>, <code>utf8ToUTF16()</code>, <code>utf16ToUTF8()</code>.转换参数为相应编码的码元视图; UTF-16/32 的这些转换不涉及字节序，返回值拥有存储.<code>decodeTextToUTF32()</code> 和 UTF-32 源的 <code>encodeText()</code> 则负责配置指定的原始字节及字节序.所有转换严格验证，保留 NUL, 已有 BOM 和标量顺序，不做规范化.<code>validateUTF32()</code> 拒绝代理标量及超过 U+10FFFF 的码元，允许 NUL 和非字符.</p>
+<p>有效 UTF-32 的每个码元对应一个 Unicode 标量，因此码点随机访问为 O(1); 这不等于字素簇随机访问，也不自动提供正确的光标导航.每个标量占四字节，对 ASCII 和多数常用文本比 UTF-8 占用更多内存.UTF-8 仍适合文件, SDL 文本事件, 剪贴板和网络等外部边界，并非只用于网络; 进入内部布局前必须按真实编码转换.SDL 事件的 UTF-8 编码不随应用 TextConfig 改变.</p>
+<p>代码入口: <a href="../src/TextConfig.cpp">TextConfig.cpp</a>, <a href="../src/TextWidget.cpp">TextWidget.cpp</a>.</p>
+<h2><span id="%E5%AD%97%E4%BD%93%E9%9B%86%E5%90%88-%E5%BD%93%E5%89%8D%E5%AD%97%E4%BD%93%E4%B8%8E%E5%9B%9E%E9%80%80">字体集合, 当前字体与回退</span></h2><p>本节的 headless 指测试编译目标: <code>EditorTestApplication</code> 私有定义 <code>EDITOR_TEST_NO_GPU=1</code>，关闭应用字体初始化和 Renderer 创建.正式程序没有运行时 GPU 开关; 该测试宏不影响正式 <code>EditorApplication</code>.</p>
+<p>配置由 <code>GenericApplication</code> 持有的 <code>ApplicationOptions</code> 保存: </p>
+<table>
+<thead>
+<tr>
+<th>字段 / 接口</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DefaultFontPaths</code></td>
+<td>有序默认文字字体候选; 路径列表，不是打包字体或 OS 字体数据库</td>
+</tr>
+<tr>
+<td><code>EmojiFontPaths</code></td>
+<td>有序 emoji 字体候选，包含 Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji</td>
+</tr>
+<tr>
+<td><code>FontPath</code> / <code>getCurrentFontPath()</code></td>
+<td>当前主字体文件路径</td>
+</tr>
+<tr>
+<td><code>Text.FallbackFontPaths</code> / <code>getFallbackFontPaths()</code></td>
+<td>有序缺字回退路径链; 不是撤销历史中的”回滚”</td>
+</tr>
+</tbody></table>
+<p>GPU 初始化规则: 主字体为空则取首个存在的默认候选; 无可用候选则初始化失败.回退链为空时，追加所有存在的默认文字候选，再追加 emoji 候选，排除主字体路径和重复字符串; 显式非空回退链按原顺序保留.文件存在仅是初筛，是否为支持的 Unicode 字体由 TextService 加载时验证.headless 模式只保存配置，不要求字体文件存在.</p>
+<p><code>--font</code> 仍指定主字体.通过 <code>ApplicationOptions</code> 可以自定义候选集合及回退链.当前空回退链表示使用默认链，没有单独的”禁用自动回退”开关.配置初始化后只读，没有运行时字体切换接口; 不写入磁盘.TextWidget 保存配置副本并拥有独立 TextService，加载字体, 保存句柄; 应用保存的是路径而不是服务局部句柄.既有快照不会因为外部配置修改而自动重排.</p>
+<p>候选默认不再包含固定路径.<code>DiscoverSystemFonts</code> 默认开启: GPU 初始化时，对空候选集合使用 OS 查询自动填充; macOS 调用 CoreText，Windows 调用 DirectWrite，Linux 调用 Fontconfig.显式非空候选集合不被覆盖; 关闭发现可完全使用自定义字体，headless 初始化不触发查询.Linux 构建需要 Fontconfig 开发包.</p>
+<p>发现模块对系统字体路径去重，用 FreeType 检查第零个 face 的 Unicode 覆盖: 可缩放且包含 A 的文字字体按中文/欧元覆盖与非粗斜体偏好排序，最多保留四个; 包含 U+1F600 且声明彩色能力的字体归入 emoji 集合，最多保留两个.排序相同时按路径顺序稳定选择.这是有限样本启发式，不是 OS 默认 UI 字体匹配或完整字符集覆盖保证.彩色能力也不保证所有彩色格式都能渲染.</p>
+<p>当前用 <code>FT_New_Face(..., 0, ...)</code> 打开第零个 face; TTC 可以包含多个 face，目前未暴露 face index，可能遗漏其他 face 的覆盖.OS API 目前仅用于发现字体文件，未承担文本排版.实现见 <a href="../src/SystemFonts.cpp">SystemFonts.cpp</a>.</p>
+<p>代码入口: <a href="../include/Editor/GenericApplication.hpp">GenericApplication.hpp</a>, <a href="../src/GenericApplication.cpp">GenericApplication.cpp</a>, <a href="../src/TextService.cpp">TextService.cpp</a>.</p>
+<h2><span id="%E5%AD%97%E4%BD%93%E6%98%A0%E5%B0%84-%E5%A1%91%E5%BD%A2%E4%B8%8E%E7%BC%BA%E5%AD%97%E5%9B%9E%E9%80%80">字体映射, 塑形与缺字回退</span></h2><ol>
+<li>设置字号及物理像素尺度.FreeType 为可缩放字体设置尺寸; 固定尺寸字体选择最接近的 strike，再记录缩放比例.</li>
+<li>HarfBuzz 读取内部 UTF-32 输入，cluster 使用标量索引，不再使用 UTF-8 字节偏移.字体 <code>cmap</code> 提供初始字符映射，字体中的 GSUB/GPOS 等规则可能执行连字, 替换, 附标定位和字距调整.</li>
+<li>结果为 glyph ID, cluster, <code>x/y_advance</code> 与 <code>x/y_offset</code>.advance 移动排版笔，offset 只改变当前字形相对排版笔的位置.</li>
+<li>当前主字体结果的某个 cluster 含 glyph ID 0 时，将该簇的输入范围交给回退字体重新塑形; 取首个没有 glyph ID 0 的非空结果.字形编号只在各自字体中有效，因此结果同时记录字体句柄.</li>
+<li>全部回退失败则保留主字体缺字结果，可能显示 <code>.notdef</code> 方框，而非保证每个输入都可见.</li>
+</ol>
+<p>回退应保留足够的上下文; 孤立塑形可能破坏阿拉伯文连接等上下文规则.当前按主字体簇替换是简化方案，并非完整跨字体复杂脚本排版.emoji 回退也不是检查字符是否位于某个 emoji 范围: 主字体没有字形时才尝试后续字体.</p>
+<p>VS15/VS16 可以请求文本/emoji 呈现; 肤色修饰, 区域旗帜, ZWJ 序列依赖序列塑形和字体覆盖.主字体有单色字形就可能不触发缺字回退，所以”能显示”不等于”按预期显示彩色 emoji”.</p>
+<h2><span id="%E7%BC%96%E6%8E%92-%E5%9F%BA%E7%BA%BF%E4%B8%8E%E5%B0%BA%E5%AF%B8">编排, 基线与尺寸</span></h2><ul>
+<li>逻辑字号 <code>Size</code> 与 <code>PixelScale</code> 相乘得到物理尺寸.代码中的 <code>PixelSize</code> 实际保存 26.6 定点尺寸，即物理像素乘 64; 布局坐标再除以 PixelScale 回到逻辑单位.</li>
+<li>当前行的 ascent/descent/height 取主字体和所有配置回退字体的最大度量，即使回退未使用也可能增大行高.这避免裁剪，但不是精确的逐行已使用字体度量.</li>
+<li>同行共用基线; 字形顶部由 baseline, 塑形 offset 和 FreeType <code>bitmap_top</code> 决定.相同基线不保证可见图像顶部, 底部或中心一致.</li>
+<li>拉丁 x-height, 中文方形字面, emoji 透明留白和字体 bearing 不同; 相同字号不是相同可见高度.固定尺寸缩放还有像素取整.对齐诊断应先显示基线及字形边界，再考虑光学校正，不能直接按底边对齐所有字形.</li>
+<li>当前按 CR/LF 分段，软换行只在部分空白字符后的安全簇边界尝试; 不支持完整 Unicode 行断规则, 中文标点禁则, 自动断词或整段混合 BiDi.</li>
+<li><code>TextLayout</code> 保存已生成的字形, 光标和 Metrics.<code>measure()</code> 返回现有尺寸; <code>arrange()</code> 记录分配区域，不按新宽度自动重新塑形或换行.</li>
+<li><code>TextGlyph::Cluster</code>, <code>TextCaret::Offset</code>, <code>hitTest()</code> 返回值及 <code>getCaretRect()</code> 的偏移参数均为内部 UTF-32 标量索引（码点索引），不是 UTF-8 字节偏移, 原始输入字节偏移或 UTF-16 码元索引.当前光标位置只按塑形簇边界构建，不额外生成逐码点或连字内部 caret，不等于完整编辑器的字素导航, 选择区域或双向文本光标策略.</li>
+</ul>
+<h2><span id="%E5%AD%97%E5%BD%A2%E5%9B%BE%E5%83%8F-%E5%9B%BE%E9%9B%86%E4%B8%8E-gpu">字形图像, 图集与 GPU</span></h2><p>FreeType 用 <code>FT_LOAD_COLOR</code> 加载字形: 普通轮廓经栅格化得到灰度覆盖率，位图字体可能直接提供位图.当前接受 GRAY, MONO, BGRA; 不宣称覆盖全部 COLR v1/SVG 等彩色格式.PNG 位图需要构建时 libpng 支持.</p>
+<ul>
+<li>普通字形存白色 RGB + 覆盖率 alpha，着色时乘文字 Tint.</li>
+<li>BGRA 彩色位图为预乘颜色; 上传前交换通道并反预乘，转为渲染器要求的直通 RGBA8.绘制时 RGB tint 为白色，只继承文字 alpha.</li>
+<li>固定 strike 位图当前以最近邻采样缩放，不是高质量滤波; 缩小质量可独立改进，不应改变编码或字体选择.</li>
+<li>图集页固定 1024×1024，采用 shelf 分配，字形周围保留一像素透明边界.缓存键是字体句柄, glyph ID, 请求物理尺寸; 同一 glyph ID 在不同字体间不能共享.</li>
+<li><code>TextLayout</code> 中每个字形保存 Texture, Bounds, UV, Cluster, Colored.PaintContext 将其转成四边形和批次，不再解码或塑形.</li>
+<li>GPU 使用 HLSL 着色器采样图集并结合顶点颜色/透明度混合.Widget 与 GPU 后端通过 UIDrawList 解耦.</li>
+<li>图集创建/上传/销毁只能在帧外; TextService 必须先于它引用的 Renderer 销毁.快照的纹理句柄只有在所属服务和图集仍存活时有效.</li>
+</ul>
+<p>代码入口: <a href="../include/Editor/TextLayout.hpp">TextLayout.hpp</a>, <a href="../src/PaintContext.cpp">PaintContext.cpp</a>, <a href="../src/UIRenderer.cpp">UIRenderer.cpp</a>.</p>
+<h2><span id="os-%E6%8E%92%E7%89%88%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%9B%BF%E4%BB%A3%E4%BD%8D%E7%BD%AE">OS 排版服务的替代位置</span></h2><p>CoreText, DirectWrite，以及 Linux 的字体匹配/布局栈，可以提供系统字体发现, 匹配, 回退和更成熟的文本布局.它们不必接管应用的 GPU 绘制: 可将平台排版结果转换为统一的 TextLayout，再生成字形纹理.FreeType/HarfBuzz 路径便于统一实现和使用内置字体，但完整段落算法, 字体发现和回退上下文需要额外维护.不同后端的字形位置, 字体选择与像素输出不应假定完全相同.</p>
+<h2><span id="%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%E4%B8%8E%E9%AA%8C%E8%AF%81">故障定位与验证</span></h2><table>
+<thead>
+<tr>
+<th>症状</th>
+<th>优先检查</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>乱码或解码异常</td>
+<td>输入字节, Encoding, ByteOrder, 截断, 代理项; 不是先换字体</td>
+</tr>
+<tr>
+<td>方框或缺字符</td>
+<td>cmap/序列覆盖, 实际字体 face, glyph ID 0, 回退顺序</td>
+</tr>
+<tr>
+<td>emoji 单色或被染黑</td>
+<td>呈现选择, 实际选中字体, 彩色格式支持, Colored 标志及 tint</td>
+</tr>
+<tr>
+<td>emoji 高低不齐</td>
+<td>共用基线, bitmap bearing, offset, strike 缩放, 透明留白</td>
+</tr>
+<tr>
+<td>清晰度差</td>
+<td>PixelScale, 物理字号, 位图重采样, GPU 纹理采样</td>
+</tr>
+<tr>
+<td>换行或光标错误</td>
+<td>字素/塑形簇边界, BiDi, advance, 换行规则与重新布局时机</td>
+</tr>
+<tr>
+<td>偶发 GPU 错误</td>
+<td>帧外上传规则, 纹理句柄寿命, 服务与 renderer 析构顺序</td>
+</tr>
+</tbody></table>
+<p>验证不能只看”未崩溃”: 应检查真实字形非缺字, 图集 alpha 非空, emoji 非灰色 RGB, 基线/边界, 缓存复用, UTF8/16/32 等价输入, 不同 DPI 和布局宽度.当前 UITextChinese / UITextEmoji 使用真实字体检查字形及彩色图集; GPU 三帧 smoke 证明路径可运行，不等于最终窗口像素已比对.</p>
+
+    <div id="global-aplayer"></div>
+    <script>
+      if (typeof APlayer !== 'undefined') {
+        const ap = new APlayer({
+          container: document.getElementById('global-aplayer'),
+          fixed: true,
+          mini: true,
+          autoplay: false,
+          theme: '#FF6347',
+          loop: 'all',
+          order: 'list',
+          preload: 'auto',
+          volume: 0.4,
+          mutex: true,
+          listFolded: false,
+          listMaxHeight: 200,
+          audio: [
+            {
+              name: '魔法使いの夜～メインテーマ',
+              artist: '深澤秀行',
+              url: '/music/magic-night.mp3',
+              cover: '/music/cover.jpg',
+              lrc: '/music/magic-night.lrc'
+            }
+          ]
+        });
+      }
+    </script>
+  <script src="/lib/mermaid.min.js"></script><script>if (window.mermaid) { mermaid.initialize({ startOnLoad: true }); }</script>
+	</article>
+
+	 
+    <div class="kira-post-copyright">
+        <strong>Author：</strong>Lzorn<br>
+        <strong>Link：</strong><a href="http://example.com/2026/10/08/UI%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E6%96%87%E5%AD%97%E5%A4%84%E7%90%86%E5%BC%95%E6%93%8E/" title="http://example.com/2026/10/08/UI系统设计-文字处理引擎/" target="_blank" rel="noopener">http://example.com/2026/10/08/UI系统设计-文字处理引擎/</a><br>
+        
+            <strong>版权声明：</strong>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/cn/deed.zh" target="_blank">CC BY-NC-SA 3.0 CN</a> 协议进行许可
+        
+    </div>
+
+  
+	<div class="kira-post-nav">
+		<nav class="post-nav">
+			              
+			<!-- 先找到与当前文字相同的目录 -->
+			                        
+			<!-- 在找到当前文章所在的 index -->
+			                            
+			<!-- 上一篇文章 -->
+			<div class="old">
+				<span>上一章</span>
+				<a href="/2026/10/07/%E6%B8%B2%E6%9F%93%E5%99%A8%E6%9E%B6%E6%9E%84-%E7%BB%86%E8%8A%82-%E7%9D%80%E8%89%B2%E5%99%A8%E8%AF%AD%E8%A8%80/"> 渲染器架构{2}-实现-渲染依赖图</a>
+			</div>
+			              
+		</nav>
+	</div>
+	
+	<div class="kira-post-meta kira-rainbow">
+		
+			<a class="kirafont icon-container-fill -link" href="/categories/engine-development/">引擎开发</a>
+		
+		
+			<a class="kirafont icon-tag-fill -none-link" href="/tags/C/" rel="tag">C++</a> <a class="kirafont icon-tag-fill -none-link" href="/tags/UI-%E7%B3%BB%E7%BB%9F/" rel="tag">UI 系统</a>
+		
+	</div>
+	
+	<div class="kira-post-footer">
+		
+
+		
+	<div class="giscus"></div>
+  
+    <script src="https://giscus.app/client.js" data-repo="lzorn-lzorn/blog" data-repo-id="R_kgDOQh3wRw" data-category="Announcements" data-category-id="DIC_kwDOQh3wR84DHFJj" data-mapping="pathname" data-strict="0" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="zh-CN" data-loading="lazy" crossorigin="anonymous" async=""></script>
+  
+
+	</div>
+	
+</div>
+
+				</div>
+			</div>
+			<div class="kira-right-column has-toc">
+	<nav class="kira-right-toc"><div class="kira-right-toc-title">目录</div><ul class="kira-right-toc-list"><li class="toc-level-1"><a href="#%E6%96%87%E5%AD%97%E7%AE%A1%E7%BA%BF-%E5%AD%97%E8%8A%82-unicode-%E5%AD%97%E4%BD%93-%E7%BC%96%E6%8E%92%E4%B8%8E%E6%B8%B2%E6%9F%93">文字管线: 字节, Unicode, 字体, 编排与渲染</a></li><li class="toc-level-2"><a href="#%E6%A6%82%E5%BF%B5">概念</a></li><li class="toc-level-2"><a href="#%E5%85%A8%E6%B5%81%E7%A8%8B%E4%B8%8E%E8%81%8C%E8%B4%A3">全流程与职责</a></li><li class="toc-level-2"><a href="#%E8%BE%93%E5%85%A5-%E7%BC%96%E7%A0%81%E4%B8%8E%E8%A7%A3%E7%A0%81">输入, 编码与解码</a></li><li class="toc-level-2"><a href="#%E5%AD%97%E4%BD%93%E9%9B%86%E5%90%88-%E5%BD%93%E5%89%8D%E5%AD%97%E4%BD%93%E4%B8%8E%E5%9B%9E%E9%80%80">字体集合, 当前字体与回退</a></li><li class="toc-level-2"><a href="#%E5%AD%97%E4%BD%93%E6%98%A0%E5%B0%84-%E5%A1%91%E5%BD%A2%E4%B8%8E%E7%BC%BA%E5%AD%97%E5%9B%9E%E9%80%80">字体映射, 塑形与缺字回退</a></li><li class="toc-level-2"><a href="#%E7%BC%96%E6%8E%92-%E5%9F%BA%E7%BA%BF%E4%B8%8E%E5%B0%BA%E5%AF%B8">编排, 基线与尺寸</a></li><li class="toc-level-2"><a href="#%E5%AD%97%E5%BD%A2%E5%9B%BE%E5%83%8F-%E5%9B%BE%E9%9B%86%E4%B8%8E-gpu">字形图像, 图集与 GPU</a></li><li class="toc-level-2"><a href="#os-%E6%8E%92%E7%89%88%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%9B%BF%E4%BB%A3%E4%BD%8D%E7%BD%AE">OS 排版服务的替代位置</a></li><li class="toc-level-2"><a href="#%E6%95%85%E9%9A%9C%E5%AE%9A%E4%BD%8D%E4%B8%8E%E9%AA%8C%E8%AF%81">故障定位与验证</a></li></ul></nav><a onclick="document.querySelector('#kira-top-header').scrollIntoView({behavior: 'smooth'});" class="kira-backtotop" aria-label="回到顶部" title="回到顶部">
+		<button class="mdui-fab mdui-ripple">
+			<i class="kirafont icon-caret-up"></i>
+		</button>
+	</a>
+</div>
+
+		</div>
+	
+
+</body></html>
